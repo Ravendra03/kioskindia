@@ -119,7 +119,8 @@
                   }}
                 {%- else -%}
                   <div class="product-categories__card-placeholder" aria-hidden="true">
-                    {% render 'icon', name: block.settings.placeholder_icon | default: 'package', size: 48 %}
+                    {%- assign icon_name = block.settings.placeholder_icon | default: 'package' -%}
+                    {% render 'icon', name: icon_name, size: 48 %}
                   </div>
                 {%- endif -%}
 

@@ -291,7 +291,7 @@
         "step": 8,
         "unit": "px",
         "label": "Logo width",
-        "default": "160"
+        "default": 160
       },
       {
         "type": "checkbox",
