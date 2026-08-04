@@ -114,6 +114,11 @@
               {%- if product.description != blank -%}
                 <p class="product-card__desc">{{ product.description | strip_html | truncate: 80 }}</p>
               {%- endif -%}
+
+              <div class="product-card__specs">
+                <span class="tech-spec-pill">{% render 'icon', name: 'check-circle', size: 12 %} ISO 9001</span>
+                <span class="tech-spec-pill">{% render 'icon', name: 'factory', size: 12 %} In-House Mfg</span>
+              </div>
               <div class="product-card__footer">
                 <div class="product-card__price">
                   {%- if product.compare_at_price > product.price -%}
@@ -171,6 +176,11 @@
                 {%- if block.settings.description != blank -%}
                   <p class="product-card__desc">{{ block.settings.description | truncate: 80 }}</p>
                 {%- endif -%}
+
+                <div class="product-card__specs">
+                  <span class="tech-spec-pill">{% render 'icon', name: 'check-circle', size: 12 %} ISO 9001</span>
+                  <span class="tech-spec-pill">{% render 'icon', name: 'factory', size: 12 %} Factory Direct</span>
+                </div>
                 <div class="product-card__footer">
                   <div class="product-card__price">
                     {%- if block.settings.price != blank -%}

@@ -75,6 +75,17 @@
               {{ section.settings.cta_secondary_text }}
             </a>
           {%- endif -%}
+
+          {%- if settings.contact_phone != blank -%}
+            <a
+              href="tel:{{ settings.contact_phone_raw }}"
+              class="btn btn--ghost hero__hotline"
+              aria-label="Call B2B Sales Direct Hotline"
+            >
+              <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'phone', size: 18 %}</span>
+              <span>Direct Sales: {{ settings.contact_phone }}</span>
+            </a>
+          {%- endif -%}
         </div>
 
         {%- comment -%} Trust Badges Strip {%- endcomment -%}
