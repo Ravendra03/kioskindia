@@ -1,11 +1,5 @@
 {%- comment -%}
-  MAXWELL CONTACT CTA & INQUIRY FORM SECTION
-  ─────────────────────────────────────────────────────────────────────────────
-  Features:
-  - B2B Lead capture contact form
-  - Direct factory contact info, map link, phone & email badges
-  - All form fields wired to Shopify contact form submission handler
-  ─────────────────────────────────────────────────────────────────────────────
+  MAXWELL CONTACT CTA & INQUIRY FORM SECTION — ENTERPRISE EDITION
 {%- endcomment -%}
 
 <section
@@ -21,16 +15,19 @@
 
         {%- comment -%} Left Info Column {%- endcomment -%}
         <div class="contact-cta__info">
-          <span class="eyebrow eyebrow--light">{{ section.settings.eyebrow | default: "Get In Touch" }}</span>
+          <div class="eyebrow eyebrow--light">
+            <span class="eyebrow__dot" aria-hidden="true"></span>
+            {{ section.settings.eyebrow | default: "Get In Touch" }}
+          </div>
           <h2 class="contact-cta__title" id="contact-cta-heading">{{ section.settings.heading | default: "Ready to Build Your Custom Solution?" }}</h2>
           <p class="contact-cta__desc">{{ section.settings.subtitle | default: "Send us your project specifications or request a custom quote from our engineering team." }}</p>
 
           <div class="contact-cta__details">
             {%- if settings.contact_phone != blank -%}
               <a href="tel:{{ settings.contact_phone_raw }}" class="contact-cta__item">
-                <span class="contact-cta__icon">{% render 'icon', name: 'phone', size: 20 %}</span>
+                <span class="contact-cta__icon" aria-hidden="true">{% render 'icon', name: 'phone', size: 20 %}</span>
                 <div>
-                  <strong class="contact-cta__label">Call Sales</strong>
+                  <strong class="contact-cta__label">Call Sales Direct</strong>
                   <span class="contact-cta__val">{{ settings.contact_phone }}</span>
                 </div>
               </a>
@@ -38,7 +35,7 @@
 
             {%- if settings.contact_email != blank -%}
               <a href="mailto:{{ settings.contact_email }}" class="contact-cta__item">
-                <span class="contact-cta__icon">{% render 'icon', name: 'email', size: 20 %}</span>
+                <span class="contact-cta__icon" aria-hidden="true">{% render 'icon', name: 'email', size: 20 %}</span>
                 <div>
                   <strong class="contact-cta__label">Email Inquiry</strong>
                   <span class="contact-cta__val">{{ settings.contact_email }}</span>
@@ -47,9 +44,9 @@
             {%- endif -%}
 
             <div class="contact-cta__item">
-              <span class="contact-cta__icon">{% render 'icon', name: 'map-pin', size: 20 %}</span>
+              <span class="contact-cta__icon" aria-hidden="true">{% render 'icon', name: 'map-pin', size: 20 %}</span>
               <div>
-                <strong class="contact-cta__label">Factory Location</strong>
+                <strong class="contact-cta__label">Factory Unit</strong>
                 <span class="contact-cta__val">{{ settings.contact_address_short | default: "Vatwa GIDC, Ahmedabad, Gujarat" }}</span>
               </div>
             </div>
@@ -62,7 +59,7 @@
             {%- if form.posted_successfully? -%}
               <div class="alert alert--success" role="alert">
                 {% render 'icon', name: 'check-circle', size: 20 %}
-                <span>Thank you! Your inquiry has been submitted. Our engineering sales team will contact you shortly.</span>
+                <span>Thank you! Your inquiry has been submitted. Our engineering sales team will contact you within 24 hours.</span>
               </div>
             {%- endif -%}
 
@@ -79,7 +76,7 @@
               </div>
 
               <div class="form-group">
-                <label for="contact-email" class="form-label">Email Address *</label>
+                <label for="contact-email" class="form-label">Business Email *</label>
                 <input type="email" id="contact-email" name="contact[email]" class="form-input" placeholder="name@company.com" required>
               </div>
 
@@ -89,19 +86,19 @@
               </div>
 
               <div class="form-group">
-                <label for="contact-company" class="form-label">Company / Organization</label>
+                <label for="contact-company" class="form-label">Company Name</label>
                 <input type="text" id="contact-company" name="contact[company]" class="form-input" placeholder="Company Name">
               </div>
 
               <div class="form-group form-group--full">
                 <label for="contact-message" class="form-label">Project Requirements / Specifications *</label>
-                <textarea id="contact-message" name="contact[body]" class="form-textarea" rows="4" placeholder="Tell us about product type, quantity, and custom specifications required..." required></textarea>
+                <textarea id="contact-message" name="contact[body]" class="form-textarea" rows="4" placeholder="Describe product type, quantity, and custom specifications required..." required></textarea>
               </div>
             </div>
 
             <button type="submit" class="btn btn--accent btn--lg contact-cta__submit">
               Submit RFP / Request Quote
-              {% render 'icon', name: 'arrow-right', size: 18 %}
+              <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 18 %}</span>
             </button>
           {%- endform -%}
         </div>
@@ -115,11 +112,12 @@
 
 <style>
   .contact-cta__card {
-    background: linear-gradient(135deg, #001f40 0%, var(--color-primary) 50%, var(--color-secondary) 100%);
+    background: radial-gradient(circle at 10% 20%, #002244 0%, #001226 100%);
     border-radius: var(--radius-2xl);
-    padding: var(--space-12);
+    padding: clamp(2rem, 5vw, 4rem);
     color: var(--color-white);
     box-shadow: var(--shadow-2xl);
+    border: 1px solid rgba(255, 255, 255, 0.12);
   }
 
   .contact-cta__grid {
@@ -136,7 +134,7 @@
   }
 
   .contact-cta__title {
-    font-size: clamp(var(--text-2xl), 3vw, var(--text-4xl));
+    font-size: clamp(2rem, 3vw, 3.2rem);
     font-weight: 800;
     color: var(--color-white);
     margin: 0;
@@ -145,7 +143,8 @@
 
   .contact-cta__desc {
     font-size: var(--text-base);
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.8);
+    line-height: var(--leading-relaxed);
     margin: 0;
   }
 
@@ -165,10 +164,11 @@
   }
 
   .contact-cta__icon {
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     border-radius: var(--radius-md);
-    background-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -189,12 +189,13 @@
     font-weight: var(--font-weight-semibold);
   }
 
-  /* Form */
+  /* Form Wrap */
   .contact-cta__form-wrap {
     background-color: var(--color-white);
     border-radius: var(--radius-xl);
-    padding: var(--space-8);
+    padding: clamp(1.5rem, 3vw, 2.5rem);
     color: var(--color-text);
+    box-shadow: var(--shadow-xl);
   }
 
   .form-grid {
@@ -212,46 +213,15 @@
     margin-top: var(--space-6);
   }
 
-  .alert {
-    padding: var(--space-4);
-    border-radius: var(--radius-md);
-    font-size: var(--text-sm);
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    margin-bottom: var(--space-4);
-  }
-
-  .alert--success {
-    background-color: #d1fae5;
-    color: #065f46;
-  }
-
-  .alert--error {
-    background-color: #fee2e2;
-    color: #991b1b;
-  }
-
   @media (max-width: 1024px) {
     .contact-cta__grid {
       grid-template-columns: 1fr;
-      gap: var(--space-8);
-    }
-
-    .contact-cta__card {
-      padding: var(--space-8);
     }
   }
 
   @media (max-width: 640px) {
     .form-grid {
       grid-template-columns: 1fr;
-    }
-    .contact-cta__card {
-      padding: var(--space-6);
-    }
-    .contact-cta__form-wrap {
-      padding: var(--space-5);
     }
   }
 </style>
@@ -285,6 +255,7 @@
     {
       "name": "Contact CTA Form"
     }
-  ]
+  ],
+  "enabled_on": { "templates": ["*"] }
 }
 {% endschema %}

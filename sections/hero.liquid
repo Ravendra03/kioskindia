@@ -1,221 +1,167 @@
 {%- comment -%}
-  MAXWELL HERO SECTION
-  ─────────────────────────────────────────────────────────────────────────────
-  Features:
-  - Full-viewport height (100dvh)
-  - Background image with gradient overlay OR solid gradient
-  - Animated headline (word-by-word reveal)
-  - Sub-headline with fade-in
-  - Dual CTA buttons (primary + outline)
-  - Stat cards (3 blocks: animated counters)
-  - Floating geometric accent shapes
-  - Smooth scroll indicator
-  - Fully responsive (mobile portrait / landscape)
-  ─────────────────────────────────────────────────────────────────────────────
+  MAXWELL HERO SECTION — ULTRA PREMIUM ENTERPRISE EDITION
 {%- endcomment -%}
 
 {%- liquid
-  assign has_image = false
-  if section.settings.bg_image != blank
-    assign has_image = true
-  endif
-  assign overlay_opacity = section.settings.overlay_opacity | times: 0.01
+  assign stat_blocks = section.blocks | where: 'type', 'stat'
+  assign trust_blocks = section.blocks | where: 'type', 'trust_badge'
 -%}
 
 <section
-  class="hero{% if has_image %} hero--has-image{% endif %}"
-  id="hero-section"
-  aria-label="Hero banner"
-  style="
-    --hero-overlay-opacity: {{ overlay_opacity }};
-    --hero-min-height: {{ section.settings.min_height }}vh;
-  "
+  class="hero-section"
+  id="hero"
+  aria-label="{{ section.settings.heading }}"
+  style="--hero-min-height: {{ section.settings.min_height | default: 90 }}vh; --hero-overlay-opacity: {{ section.settings.overlay_opacity | default: 80 | divided_by: 100.0 }};"
 >
-
-  {%- comment -%} ── Background Layer ────────────────────────────────────── {%- endcomment -%}
-  <div class="hero__bg" aria-hidden="true">
-    {%- if has_image -%}
+  {%- comment -%} Background Image or Mesh Gradient {%- endcomment -%}
+  <div class="hero__bg-wrap" aria-hidden="true">
+    {%- if section.settings.bg_image != blank -%}
       {{
         section.settings.bg_image
-        | image_url: width: 1920
+        | image_url: width: 2560
         | image_tag:
           class: 'hero__bg-image',
-          alt: '',
+          alt: section.settings.heading,
           loading: 'eager',
           fetchpriority: 'high',
-          width: 1920,
-          height: 1080
+          width: 2560
       }}
+    {%- else -%}
+      <div class="hero__bg-mesh"></div>
     {%- endif -%}
-    <div class="hero__bg-overlay"></div>
-    {%- comment -%} Subtle geometric pattern overlay {%- endcomment -%}
-    <div class="hero__bg-pattern" aria-hidden="true"></div>
+    <div class="hero__overlay"></div>
   </div>
 
-  {%- comment -%} ── Floating Accent Shapes ──────────────────────────────── {%- endcomment -%}
-  <div class="hero__shapes" aria-hidden="true">
-    <span class="hero__shape hero__shape--1"></span>
-    <span class="hero__shape hero__shape--2"></span>
-    <span class="hero__shape hero__shape--3"></span>
-  </div>
-
-  {%- comment -%} ── Content Grid ────────────────────────────────────────── {%- endcomment -%}
   <div class="container hero__container">
-    <div class="hero__content-col">
+    <div class="hero__grid">
 
-      {%- comment -%} Eyebrow tag {%- endcomment -%}
-      {%- if section.settings.eyebrow != blank -%}
-        <div class="hero__eyebrow" data-animate="fade-up">
-          <span class="hero__eyebrow-dot" aria-hidden="true"></span>
-          {{ section.settings.eyebrow }}
-        </div>
-      {%- endif -%}
+      {%- comment -%} Left Column: Main Headline & CTAs {%- endcomment -%}
+      <div class="hero__content">
+        {%- if section.settings.eyebrow != blank -%}
+          <div class="eyebrow eyebrow--light" data-animate="fade-up">
+            <span class="eyebrow__dot" aria-hidden="true"></span>
+            {{ section.settings.eyebrow }}
+          </div>
+        {%- endif -%}
 
-      {%- comment -%} Main Headline — animated word-by-word {%- endcomment -%}
-      {%- if section.settings.heading != blank -%}
-        <h1
-          class="hero__heading"
-          data-hero-headline
-          data-animate="fade-up"
-          data-delay="100"
-        >
+        <h1 class="hero__heading" data-animate="fade-up" data-delay="100" data-hero-headline>
           {{ section.settings.heading }}
         </h1>
-      {%- endif -%}
 
-      {%- comment -%} Sub-headline {%- endcomment -%}
-      {%- if section.settings.subheading != blank -%}
-        <p class="hero__subheading" data-animate="fade-up" data-delay="200">
-          {{ section.settings.subheading }}
-        </p>
-      {%- endif -%}
-
-      {%- comment -%} CTA Buttons {%- endcomment -%}
-      <div class="hero__ctas" data-animate="fade-up" data-delay="300">
-        {%- if section.settings.cta_primary_text != blank -%}
-          <a
-            href="{{ section.settings.cta_primary_url | default: '/collections/all' }}"
-            class="btn btn--primary btn--xl"
-            id="hero-primary-cta"
-          >
-            {{ section.settings.cta_primary_text }}
-            <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 20 %}</span>
-          </a>
+        {%- if section.settings.subheading != blank -%}
+          <p class="hero__subheading" data-animate="fade-up" data-delay="200">
+            {{ section.settings.subheading }}
+          </p>
         {%- endif -%}
-        {%- if section.settings.cta_secondary_text != blank -%}
-          <a
-            href="{{ section.settings.cta_secondary_url | default: '/pages/contact' }}"
-            class="btn btn--outline-white btn--xl"
-            id="hero-secondary-cta"
-          >
-            {{ section.settings.cta_secondary_text }}
-          </a>
+
+        <div class="hero__ctas" data-animate="fade-up" data-delay="300">
+          {%- if section.settings.cta_primary_text != blank -%}
+            <a
+              href="{{ section.settings.cta_primary_url | default: '/collections/all' }}"
+              class="btn btn--accent btn--lg hero__btn-primary"
+              id="hero-primary-cta"
+            >
+              {{ section.settings.cta_primary_text }}
+              <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 20 %}</span>
+            </a>
+          {%- endif -%}
+
+          {%- if section.settings.cta_secondary_text != blank -%}
+            <a
+              href="{{ section.settings.cta_secondary_url | default: '/pages/contact' }}"
+              class="btn btn--secondary btn--lg hero__btn-secondary"
+              id="hero-secondary-cta"
+            >
+              {{ section.settings.cta_secondary_text }}
+            </a>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Trust Badges Strip {%- endcomment -%}
+        {%- if section.settings.show_trust_badges and trust_blocks.size > 0 -%}
+          <div class="hero__trust" data-animate="fade-up" data-delay="400">
+            {%- for block in trust_blocks -%}
+              <div class="hero__trust-item" {{ block.shopify_attributes }}>
+                {% render 'icon', name: block.settings.icon, size: 16 %}
+                <span>{{ block.settings.text }}</span>
+              </div>
+            {%- endfor -%}
+          </div>
         {%- endif -%}
       </div>
 
-      {%- comment -%} ── Trust Badges ─────────────────────────────────────── {%- endcomment -%}
-      {%- if section.settings.show_trust_badges -%}
-        <div class="hero__trust" data-animate="fade-up" data-delay="400">
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'trust_badge' -%}
-              <div class="hero__trust-item" {{ block.shopify_attributes }}>
-                <span class="hero__trust-icon" aria-hidden="true">
-                  {% render 'icon', name: block.settings.icon, size: 18 %}
-                </span>
-                <span class="hero__trust-text">{{ block.settings.text }}</span>
+      {%- comment -%} Right Column: Floating Stats Card {%- endcomment -%}
+      {%- if stat_blocks.size > 0 -%}
+        <div class="hero__stats-col" data-animate="fade-left" data-delay="300">
+          <div class="hero__stats-card">
+
+            <div class="hero__stats-card-header">
+              <div class="hero__stats-card-icon" aria-hidden="true">
+                {% render 'icon', name: 'award', size: 24 %}
               </div>
+              <div class="hero__stats-card-meta">
+                <span class="hero__stats-card-label">{{ section.settings.stats_card_label | default: 'Our Achievements' }}</span>
+                <span class="hero__stats-card-sub">Industrial Hardware Manufacturing</span>
+              </div>
+            </div>
+
+            <div class="hero__stats-grid">
+              {%- for block in stat_blocks -%}
+                <div class="hero__stat" {{ block.shopify_attributes }}>
+                  <span
+                    class="hero__stat-number"
+                    data-counter="{{ block.settings.number }}"
+                    data-suffix="{{ block.settings.suffix }}"
+                  >
+                    0
+                  </span>
+                  <span class="hero__stat-label">{{ block.settings.label }}</span>
+                </div>
+              {%- endfor -%}
+            </div>
+
+            {%- if section.settings.stats_cta_text != blank -%}
+              <a
+                href="{{ section.settings.stats_cta_url | default: '/pages/about' }}"
+                class="hero__stats-cta"
+              >
+                <span>{{ section.settings.stats_cta_text }}</span>
+                {% render 'icon', name: 'arrow-right', size: 16 %}
+              </a>
             {%- endif -%}
-          {%- endfor -%}
+
+          </div>
         </div>
       {%- endif -%}
 
     </div>
-
-    {%- comment -%} ── Stats Column ────────────────────────────────────────── {%- endcomment -%}
-    {%- assign stat_blocks = section.blocks | where: 'type', 'stat' -%}
-    {%- if stat_blocks.size > 0 -%}
-      <div class="hero__stats-col" data-animate="fade-left" data-delay="200">
-        <div class="hero__stats-card">
-          <div class="hero__stats-card-header">
-            <div class="hero__stats-card-icon" aria-hidden="true">
-              {% render 'icon', name: 'factory', size: 22 %}
-            </div>
-            <span class="hero__stats-card-label">{{ section.settings.stats_card_label | default: 'Our Achievements' }}</span>
-          </div>
-          <div class="hero__stats-grid">
-            {%- for block in stat_blocks -%}
-              <div class="hero__stat" {{ block.shopify_attributes }}>
-                <div class="hero__stat-number">
-                  <span
-                    data-counter="{{ block.settings.number }}"
-                    data-suffix="{{ block.settings.suffix }}"
-                    data-duration="2000"
-                  >{{ block.settings.number }}{{ block.settings.suffix }}</span>
-                </div>
-                <div class="hero__stat-label">{{ block.settings.label }}</div>
-              </div>
-            {%- endfor -%}
-          </div>
-          {%- if section.settings.stats_cta_text != blank -%}
-            <a href="{{ section.settings.stats_cta_url | default: '/collections/all' }}" class="hero__stats-cta">
-              {{ section.settings.stats_cta_text }}
-              {% render 'icon', name: 'arrow-right', size: 16 %}
-            </a>
-          {%- endif -%}
-        </div>
-      </div>
-    {%- endif -%}
-
   </div>
 
-  {%- comment -%} ── Scroll Indicator ────────────────────────────────────── {%- endcomment -%}
   {%- if section.settings.show_scroll_indicator -%}
-    <a
-      href="#main-content-start"
-      class="hero__scroll"
-      aria-label="Scroll down to explore"
-    >
-      <span class="hero__scroll-text">Scroll</span>
-      <span class="hero__scroll-icon" aria-hidden="true">
-        {% render 'icon', name: 'arrow-down', size: 20 %}
-      </span>
+    <a href="#company-overview" class="hero__scroll" aria-label="Scroll to company overview">
+      <span class="hero__scroll-icon">{% render 'icon', name: 'arrow-down', size: 16 %}</span>
+      <span>Scroll</span>
     </a>
   {%- endif -%}
-
 </section>
 
-{%- comment -%} Anchor for scroll indicator {%- endcomment -%}
-<div id="main-content-start" aria-hidden="true"></div>
-
 <style>
-  /* =========================================================================
-     HERO SECTION
-     ========================================================================= */
-
-  .hero {
+  .hero-section {
     position: relative;
-    min-height: min(var(--hero-min-height, 90vh), 100dvh);
+    min-height: var(--hero-min-height, 90vh);
     display: flex;
     align-items: center;
+    color: var(--color-white);
+    background-color: var(--color-bg-dark);
+    padding-top: calc(var(--space-20) + 60px);
+    padding-bottom: var(--space-20);
     overflow: hidden;
-    /* Compensate for sticky header height */
-    margin-top: calc(-72px - 40px); /* header-main + topbar */
-    padding-top: calc(72px + 40px);
   }
 
-  @media (max-width: 767px) {
-    .hero {
-      margin-top: -64px;
-      padding-top: 64px;
-      min-height: 100svh;
-    }
-  }
-
-  /* ── Background ────────────────────────────────────────────────────────── */
-  .hero__bg {
+  .hero__bg-wrap {
     position: absolute;
     inset: 0;
-    z-index: var(--z-below);
+    z-index: 0;
   }
 
   .hero__bg-image {
@@ -223,177 +169,60 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    display: block;
   }
 
-  .hero__bg-overlay {
+  .hero__bg-mesh {
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(15, 76, 129, 0.6) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(245, 130, 32, 0.25) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, #001f40 0%, #000f20 100%);
+  }
+
+  .hero__overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(0, 51, 102, calc(var(--hero-overlay-opacity, 0.9))) 0%,
-      rgba(15, 76, 129, calc(var(--hero-overlay-opacity, 0.8))) 60%,
-      rgba(0, 51, 102, calc(var(--hero-overlay-opacity, 0.7))) 100%
-    );
+    background: linear-gradient(135deg, rgba(0, 15, 32, 0.88) 0%, rgba(0, 34, 68, 0.85) 100%);
   }
 
-  /* No image: use gradient as primary bg */
-  .hero:not(.hero--has-image) .hero__bg-overlay {
-    background: linear-gradient(
-      135deg,
-      #001f40 0%,
-      var(--color-primary) 45%,
-      var(--color-secondary) 100%
-    );
-  }
-
-  /* Subtle grid pattern overlay */
-  .hero__bg-pattern {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-    background-size: 64px 64px;
-    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.6) 0%, transparent 70%);
-  }
-
-  /* ── Geometric Floating Shapes ─────────────────────────────────────────── */
-  .hero__shapes {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    overflow: hidden;
-  }
-
-  .hero__shape {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.12;
-  }
-
-  .hero__shape--1 {
-    width: 500px;
-    height: 500px;
-    background: var(--color-accent);
-    top: -150px;
-    right: -100px;
-    animation: floatShape1 12s ease-in-out infinite;
-  }
-
-  .hero__shape--2 {
-    width: 350px;
-    height: 350px;
-    background: rgba(255, 255, 255, 0.5);
-    bottom: -100px;
-    left: -50px;
-    animation: floatShape2 15s ease-in-out infinite;
-  }
-
-  .hero__shape--3 {
-    width: 250px;
-    height: 250px;
-    background: var(--color-accent);
-    bottom: 20%;
-    right: 30%;
-    animation: floatShape1 10s ease-in-out infinite reverse;
-  }
-
-  @keyframes floatShape1 {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33%       { transform: translate(30px, -20px) scale(1.05); }
-    66%       { transform: translate(-15px, 25px) scale(0.95); }
-  }
-
-  @keyframes floatShape2 {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50%       { transform: translate(20px, -30px) scale(1.08); }
-  }
-
-  /* ── Content Grid ──────────────────────────────────────────────────────── */
   .hero__container {
     position: relative;
-    z-index: var(--z-raised);
+    z-index: 1;
+  }
+
+  .hero__grid {
     display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
+    grid-template-columns: 1.2fr 0.8fr;
     gap: var(--space-12);
-    padding-block: var(--space-20);
-  }
-
-  /* ── Content Column ────────────────────────────────────────────────────── */
-  .hero__content-col {
-    max-width: 680px;
-  }
-
-  /* ── Eyebrow ───────────────────────────────────────────────────────────── */
-  .hero__eyebrow {
-    display: inline-flex;
     align-items: center;
-    gap: var(--space-3);
-    padding: 0.4rem 1rem;
-    background-color: rgba(245, 130, 32, 0.15);
-    border: 1px solid rgba(245, 130, 32, 0.3);
-    border-radius: var(--radius-full);
-    font-size: var(--text-sm);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    color: var(--color-accent);
-    margin-bottom: var(--space-6);
   }
 
-  .hero__eyebrow-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+  .eyebrow__dot {
+    width: 6px;
+    height: 6px;
     background-color: var(--color-accent);
-    flex-shrink: 0;
-    animation: pulseDot 2s ease-in-out infinite;
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--color-accent);
   }
 
-  @keyframes pulseDot {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50%       { transform: scale(1.4); opacity: 0.7; }
-  }
-
-  /* ── Headline ──────────────────────────────────────────────────────────── */
   .hero__heading {
-    font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
+    font-size: clamp(2.4rem, 4vw, 4rem);
     font-weight: 800;
     line-height: 1.1;
-    letter-spacing: -0.03em;
+    letter-spacing: var(--tracking-tight);
     color: var(--color-white);
-    margin-bottom: var(--space-5);
+    margin-bottom: var(--space-4);
   }
 
-  /* Word-by-word animation (applied by HeroTyping JS module) */
-  .hero-word {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: heroWordReveal 0.6s var(--ease-spring) forwards;
-  }
-
-  @keyframes heroWordReveal {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* ── Subheading ────────────────────────────────────────────────────────── */
   .hero__subheading {
-    font-size: clamp(var(--text-base), 2vw, var(--text-xl));
+    font-size: var(--text-base);
+    color: rgba(255, 255, 255, 0.85);
     line-height: var(--leading-relaxed);
-    color: rgba(255, 255, 255, 0.8);
+    max-width: 620px;
     margin-bottom: var(--space-8);
-    max-width: 56ch;
   }
 
-  /* ── CTA Buttons ───────────────────────────────────────────────────────── */
   .hero__ctas {
     display: flex;
     align-items: center;
@@ -402,203 +231,173 @@
     margin-bottom: var(--space-8);
   }
 
-  /* ── Trust Badges ──────────────────────────────────────────────────────── */
   .hero__trust {
     display: flex;
     align-items: center;
     gap: var(--space-6);
     flex-wrap: wrap;
+    padding-top: var(--space-6);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
   }
 
   .hero__trust-item {
     display: flex;
     align-items: center;
     gap: var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-semibold);
     color: rgba(255, 255, 255, 0.75);
-    font-size: var(--text-sm);
-    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
   }
 
-  .hero__trust-icon {
-    display: flex;
+  .hero__trust-item .icon {
     color: var(--color-accent);
   }
 
-  /* ── Stats Card ─────────────────────────────────────────────────────────── */
+  /* Right Stats Card */
   .hero__stats-col {
-    flex-shrink: 0;
+    display: flex;
+    justify-content: flex-end;
   }
 
   .hero__stats-card {
-    background-color: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: var(--radius-xl);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-2xl);
     padding: var(--space-8);
-    min-width: 280px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    width: 100%;
+    max-width: 440px;
+    box-shadow: var(--shadow-2xl);
   }
 
   .hero__stats-card-header {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--space-4);
+    padding-bottom: var(--space-6);
     margin-bottom: var(--space-6);
-    padding-bottom: var(--space-4);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
 
   .hero__stats-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover));
+    color: var(--color-white);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    background-color: var(--color-accent);
-    border-radius: var(--radius-sm);
-    color: var(--color-white);
     flex-shrink: 0;
+    box-shadow: var(--shadow-glow);
+  }
+
+  .hero__stats-card-meta {
+    display: flex;
+    flex-direction: column;
   }
 
   .hero__stats-card-label {
-    font-size: var(--text-sm);
-    font-weight: var(--font-weight-semibold);
-    color: rgba(255, 255, 255, 0.9);
-    letter-spacing: var(--tracking-wide);
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-white);
+  }
+
+  .hero__stats-card-sub {
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.6);
   }
 
   .hero__stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-5);
+    gap: var(--space-6);
     margin-bottom: var(--space-6);
   }
 
   .hero__stat {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: 2px;
   }
 
   .hero__stat-number {
     font-size: var(--text-3xl);
     font-weight: 800;
-    line-height: 1;
     color: var(--color-white);
-    letter-spacing: var(--tracking-tight);
+    line-height: 1;
   }
 
   .hero__stat-label {
     font-size: var(--text-xs);
-    font-weight: var(--font-weight-medium);
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: var(--tracking-wide);
+    color: rgba(255, 255, 255, 0.65);
     text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
   }
 
   .hero__stats-cta {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: var(--space-2);
     font-size: var(--text-sm);
     font-weight: var(--font-weight-semibold);
     color: var(--color-accent);
     text-decoration: none;
-    padding-top: var(--space-4);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    transition: gap var(--transition);
+    transition: color var(--transition);
   }
 
   .hero__stats-cta:hover {
-    gap: var(--space-3);
+    color: var(--color-white);
   }
 
-  /* ── Scroll Indicator ──────────────────────────────────────────────────── */
   .hero__scroll {
     position: absolute;
-    bottom: var(--space-8);
+    bottom: var(--space-6);
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-2);
-    color: rgba(255, 255, 255, 0.6);
-    text-decoration: none;
+    gap: var(--space-1);
     font-size: var(--text-xs);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: var(--tracking-widest);
+    color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
-    transition: color var(--transition);
-    animation: scrollBounce 2s ease-in-out infinite;
+    letter-spacing: var(--tracking-widest);
+    z-index: 2;
+    animation: heroScrollBounce 2s infinite;
   }
 
-  .hero__scroll:hover {
-    color: var(--color-white);
-    animation: none;
-  }
-
-  .hero__scroll-icon {
-    display: flex;
-  }
-
-  @keyframes scrollBounce {
+  @keyframes heroScrollBounce {
     0%, 100% { transform: translateX(-50%) translateY(0); }
-    50%       { transform: translateX(-50%) translateY(6px); }
+    50% { transform: translateX(-50%) translateY(6px); }
   }
 
-  /* ── Responsive ────────────────────────────────────────────────────────── */
   @media (max-width: 1024px) {
-    .hero__container {
+    .hero__grid {
       grid-template-columns: 1fr;
-      padding-block: var(--space-16);
+      gap: var(--space-8);
     }
-
     .hero__stats-col {
-      width: 100%;
+      justify-content: start;
     }
-
     .hero__stats-card {
-      min-width: unset;
-    }
-
-    .hero__stats-grid {
-      grid-template-columns: repeat(4, 1fr);
+      max-width: 100%;
     }
   }
 
-  @media (max-width: 767px) {
-    .hero__container {
-      padding-block: var(--space-12);
-    }
-
+  @media (max-width: 640px) {
     .hero__ctas {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: stretch;
     }
-
-    .hero__ctas .btn {
+    .hero__btn-primary, .hero__btn-secondary {
       width: 100%;
-      justify-content: center;
     }
-
     .hero__stats-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .hero__scroll {
-      display: none;
-    }
-
-    .hero__trust {
-      gap: var(--space-4);
-    }
-  }
-
-  @media (max-width: 480px) {
-    .hero__heading {
-      font-size: var(--text-3xl);
+      grid-template-columns: 1fr 1fr;
     }
   }
 </style>
@@ -664,8 +463,7 @@
     {
       "type": "image_picker",
       "id": "bg_image",
-      "label": "Background image",
-      "info": "Recommended: 1920×1080px or larger. JPG preferred for performance."
+      "label": "Background image"
     },
     {
       "type": "range",
@@ -675,8 +473,7 @@
       "step": 5,
       "unit": "%",
       "label": "Overlay darkness",
-      "default": 80,
-      "info": "Increase to darken image for better text readability"
+      "default": 80
     },
     {
       "type": "range",
@@ -716,7 +513,7 @@
     {
       "type": "checkbox",
       "id": "show_trust_badges",
-      "label": "Show trust badges below CTAs",
+      "label": "Show trust badges",
       "default": true
     },
     {
@@ -735,16 +532,14 @@
         {
           "type": "text",
           "id": "number",
-          "label": "Number (digits only)",
-          "default": "500",
-          "info": "Enter only digits. The counter will animate up to this number."
+          "label": "Number",
+          "default": "500"
         },
         {
           "type": "text",
           "id": "suffix",
           "label": "Suffix",
-          "default": "+",
-          "placeholder": "+, K, %"
+          "default": "+"
         },
         {
           "type": "text",
@@ -764,38 +559,10 @@
           "id": "icon",
           "label": "Icon",
           "options": [
-            {
-              "value": "shield",
-              "label": "Shield"
-            },
-            {
-              "value": "award",
-              "label": "Award"
-            },
-            {
-              "value": "check-circle",
-              "label": "Check Circle"
-            },
-            {
-              "value": "factory",
-              "label": "Factory"
-            },
-            {
-              "value": "truck",
-              "label": "Truck"
-            },
-            {
-              "value": "globe",
-              "label": "Globe"
-            },
-            {
-              "value": "zap",
-              "label": "Lightning"
-            },
-            {
-              "value": "thumbs-up",
-              "label": "Thumbs Up"
-            }
+            { "value": "shield", "label": "Shield" },
+            { "value": "award", "label": "Award" },
+            { "value": "factory", "label": "Factory" },
+            { "value": "truck", "label": "Truck" }
           ],
           "default": "shield"
         },
@@ -825,61 +592,16 @@
         "show_scroll_indicator": true
       },
       "blocks": [
-        {
-          "type": "stat",
-          "settings": {
-            "number": "500",
-            "suffix": "+",
-            "label": "Projects Done"
-          }
-        },
-        {
-          "type": "stat",
-          "settings": {
-            "number": "200",
-            "suffix": "+",
-            "label": "Happy Clients"
-          }
-        },
-        {
-          "type": "stat",
-          "settings": {
-            "number": "8",
-            "suffix": "+",
-            "label": "Years Exp."
-          }
-        },
-        {
-          "type": "stat",
-          "settings": {
-            "number": "20",
-            "suffix": "+",
-            "label": "States Served"
-          }
-        },
-        {
-          "type": "trust_badge",
-          "settings": {
-            "icon": "shield",
-            "text": "ISO Certified"
-          }
-        },
-        {
-          "type": "trust_badge",
-          "settings": {
-            "icon": "factory",
-            "text": "In-House Manufacturing"
-          }
-        },
-        {
-          "type": "trust_badge",
-          "settings": {
-            "icon": "truck",
-            "text": "Pan-India Delivery"
-          }
-        }
+        { "type": "stat", "settings": { "number": "500", "suffix": "+", "label": "Projects Done" } },
+        { "type": "stat", "settings": { "number": "200", "suffix": "+", "label": "Happy Clients" } },
+        { "type": "stat", "settings": { "number": "8", "suffix": "+", "label": "Years Exp." } },
+        { "type": "stat", "settings": { "number": "20", "suffix": "+", "label": "States Served" } },
+        { "type": "trust_badge", "settings": { "icon": "shield", "text": "ISO Certified" } },
+        { "type": "trust_badge", "settings": { "icon": "factory", "text": "In-House Manufacturing" } },
+        { "type": "trust_badge", "settings": { "icon": "truck", "text": "Pan-India Delivery" } }
       ]
     }
-  ]
+  ],
+  "enabled_on": { "templates": ["*"] }
 }
 {% endschema %}

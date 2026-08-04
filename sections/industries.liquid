@@ -1,56 +1,40 @@
 {%- comment -%}
-  MAXWELL INDUSTRIES SECTION
-  ─────────────────────────────────────────────────────────────────────────────
-  Features:
-  - Dark premium background (navy gradient)
-  - 8-tile industry grid with icon + name + hover glow
-  - Optional client/project count per industry
-  - Optional industry stat bar (total industries, states, years)
-  - Each tile is a block editable from Theme Editor
-  - Decorative background grid pattern
-  - Accessible: each tile is a link with proper aria-label
-  ─────────────────────────────────────────────────────────────────────────────
+  MAXWELL INDUSTRIES SECTION — DARK LUXURY EDITION
 {%- endcomment -%}
 
-{%- assign industry_blocks = section.blocks | where: 'type', 'industry' -%}
-{%- assign stat_blocks = section.blocks | where: 'type', 'stat' -%}
+{%- liquid
+  assign stat_blocks = section.blocks | where: 'type', 'stat'
+  assign industry_blocks = section.blocks | where: 'type', 'industry'
+-%}
 
 <section
-  class="section industries"
-  id="industries-served"
+  class="section section--dark industries-section"
+  id="industries"
   aria-labelledby="industries-heading"
 >
-
-  {%- comment -%} Decorative BG elements {%- endcomment -%}
-  <div class="industries__bg" aria-hidden="true">
-    <div class="industries__bg-glow industries__bg-glow--1"></div>
-    <div class="industries__bg-glow industries__bg-glow--2"></div>
-  </div>
-
   <div class="container">
 
-    {%- comment -%} ── Section Header ──────────────────────────────────────── {%- endcomment -%}
     {%- render 'section-header',
       eyebrow: section.settings.eyebrow,
       heading: section.settings.heading,
       subtitle: section.settings.subtitle,
       heading_tag: 'h2',
       align: 'center',
-      theme: 'dark',
+      dark: true,
       section_id: 'industries-heading'
     -%}
 
-    {%- comment -%} ── Stats Bar ───────────────────────────────────────────── {%- endcomment -%}
-    {%- if stat_blocks.size > 0 and section.settings.show_stats -%}
-      <div class="industries__stats" data-animate="fade-up" data-delay="100">
+    {%- comment -%} Stats Counter Bar {%- endcomment -%}
+    {%- if section.settings.show_stats and stat_blocks.size > 0 -%}
+      <div class="industries__stats" data-animate="fade-up">
         {%- for block in stat_blocks -%}
-          <div class="industries__stat" {{ block.shopify_attributes }}>
-            <span class="industries__stat-number">
-              <span
-                data-counter="{{ block.settings.number }}"
-                data-suffix="{{ block.settings.suffix }}"
-                data-duration="1800"
-              >{{ block.settings.number }}{{ block.settings.suffix }}</span>
+          <div class="industries__stat-item" {{ block.shopify_attributes }}>
+            <span
+              class="industries__stat-number"
+              data-counter="{{ block.settings.number }}"
+              data-suffix="{{ block.settings.suffix }}"
+            >
+              0
             </span>
             <span class="industries__stat-label">{{ block.settings.label }}</span>
           </div>
@@ -61,73 +45,38 @@
       </div>
     {%- endif -%}
 
-    {%- comment -%} ── Industry Tiles Grid ─────────────────────────────────── {%- endcomment -%}
+    {%- comment -%} Industry Tiles Grid {%- endcomment -%}
     {%- if industry_blocks.size > 0 -%}
-      <div
-        class="industries__grid"
-        role="list"
-        aria-label="Industries we serve"
-        data-animate="fade-up"
-        data-delay="200"
-      >
+      <div class="industries__grid" data-animate="fade-up" data-delay="100">
         {%- for block in industry_blocks -%}
           <div
-            class="industries__tile-wrapper"
-            role="listitem"
-            data-animate="fade-up"
-            data-delay="{{ forloop.index | times: 50 | plus: 200 }}"
+            class="industry-tile"
+            data-animate="zoom-in"
+            data-delay="{{ forloop.index | times: 50 }}"
             {{ block.shopify_attributes }}
           >
-            {%- if block.settings.link != blank -%}
-              <a
-                href="{{ block.settings.link }}"
-                class="industries__tile"
-                aria-label="{{ block.settings.name }}: {{ block.settings.description }}"
-              >
-            {%- else -%}
-              <div class="industries__tile" tabindex="0">
-            {%- endif -%}
+            <div class="industry-tile__icon-wrap" aria-hidden="true">
+              {% render 'icon', name: block.settings.icon, size: 28 %}
+            </div>
 
-              <div class="industries__tile-icon" aria-hidden="true">
-                {%- if block.settings.icon != blank -%}
-                  {% render 'icon', name: block.settings.icon, size: 36 %}
-                {%- endif -%}
-              </div>
-
-              <div class="industries__tile-content">
-                <span class="industries__tile-name">{{ block.settings.name }}</span>
-                {%- if block.settings.description != blank -%}
-                  <span class="industries__tile-desc">{{ block.settings.description }}</span>
-                {%- endif -%}
-                {%- if block.settings.project_count != blank -%}
-                  <span class="industries__tile-count">{{ block.settings.project_count }}</span>
-                {%- endif -%}
-              </div>
-
-              <div class="industries__tile-arrow" aria-hidden="true">
-                {% render 'icon', name: 'arrow-right', size: 16 %}
-              </div>
-
-              <div class="industries__tile-glow" aria-hidden="true"></div>
-
-            {%- if block.settings.link != blank -%}
-              </a>
-            {%- else -%}
-              </div>
-            {%- endif -%}
+            <div class="industry-tile__content">
+              <h3 class="industry-tile__name">{{ block.settings.name }}</h3>
+              <p class="industry-tile__desc">{{ block.settings.description }}</p>
+              {%- if block.settings.project_count != blank -%}
+                <span class="industry-tile__count">{{ block.settings.project_count }}</span>
+              {%- endif -%}
+            </div>
           </div>
         {%- endfor -%}
       </div>
-    {%- else -%}
-      <p class="industries__empty">Add industry blocks from the Theme Editor to populate this section.</p>
     {%- endif -%}
 
-    {%- comment -%} ── Section CTA ─────────────────────────────────────────── {%- endcomment -%}
+    {%- comment -%} Bottom CTA {%- endcomment -%}
     {%- if section.settings.cta_text != blank -%}
-      <div class="industries__cta" data-animate="fade-up">
+      <div class="industries__cta-wrap" data-animate="fade-up" data-delay="300">
         <a
           href="{{ section.settings.cta_url | default: '/pages/contact' }}"
-          class="btn btn--outline-white btn--lg"
+          class="btn btn--accent btn--lg"
           id="industries-cta"
         >
           {{ section.settings.cta_text }}
@@ -140,313 +89,153 @@
 </section>
 
 <style>
-  /* =========================================================================
-     INDUSTRIES
-     ========================================================================= */
-
-  .industries {
+  .industries-section {
+    background: radial-gradient(circle at 50% 0%, #002b54 0%, #001226 70%);
     position: relative;
-    background: linear-gradient(
-      145deg,
-      #001a33 0%,
-      var(--color-primary) 40%,
-      var(--color-secondary) 80%,
-      #001a33 100%
-    );
     overflow: hidden;
   }
 
-  /* Override section padding for dark sections */
-  .industries.section {
-    padding-block: var(--space-20);
-  }
-
-  /* ── Background Decorations ────────────────────────────────────────────── */
-  .industries__bg {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  .industries__bg-glow {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.15;
-  }
-
-  .industries__bg-glow--1 {
-    width: 600px;
-    height: 600px;
-    background: var(--color-accent);
-    top: -200px;
-    right: -200px;
-  }
-
-  .industries__bg-glow--2 {
-    width: 400px;
-    height: 400px;
-    background: rgba(255, 255, 255, 0.3);
-    bottom: -150px;
-    left: -100px;
-  }
-
-  /* Ensure content sits above bg */
-  .industries .container {
-    position: relative;
-    z-index: var(--z-raised);
-  }
-
-  /* ── Section header dark overrides ────────────────────────────────────── */
-  .industries .eyebrow {
-    border-color: rgba(245, 130, 32, 0.4);
-    background-color: rgba(245, 130, 32, 0.12);
-  }
-
-  /* ── Stats Bar ───────────────────────────────────────────────────────── */
   .industries__stats {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0;
-    background-color: rgba(255, 255, 255, 0.05);
+    gap: var(--space-8);
+    background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-2xl);
     padding: var(--space-6) var(--space-8);
-    margin-bottom: var(--space-14);
-    width: fit-content;
-    margin-inline: auto;
-    backdrop-filter: blur(10px);
+    margin-bottom: var(--space-12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-2xl);
   }
 
-  .industries__stat {
+  .industries__stat-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-1);
-    padding-inline: var(--space-10);
     text-align: center;
+    gap: 2px;
   }
 
   .industries__stat-number {
     font-size: var(--text-3xl);
     font-weight: 800;
-    color: var(--color-white);
+    color: var(--color-accent);
     line-height: 1;
-    letter-spacing: var(--tracking-tight);
   }
 
   .industries__stat-label {
     font-size: var(--text-xs);
     font-weight: var(--font-weight-medium);
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider);
-    white-space: nowrap;
   }
 
   .industries__stat-divider {
     width: 1px;
-    height: 48px;
-    background-color: rgba(255, 255, 255, 0.15);
-    flex-shrink: 0;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.12);
   }
 
-  /* ── Industries Grid ─────────────────────────────────────────────────── */
+  /* Industry Grid */
   .industries__grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-4);
-    margin-bottom: var(--space-14);
+    gap: var(--space-6);
   }
 
-  /* ── Industry Tile ───────────────────────────────────────────────────── */
-  .industries__tile {
-    position: relative;
+  .industry-tile {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     gap: var(--space-4);
-    padding: var(--space-6);
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-xl);
-    text-decoration: none;
-    cursor: pointer;
-    overflow: hidden;
-    transition:
-      background-color var(--transition),
-      border-color var(--transition),
-      transform var(--transition),
-      box-shadow var(--transition);
-    backdrop-filter: blur(8px);
+    transition: transform var(--transition), background-color var(--transition), border-color var(--transition), box-shadow var(--transition);
   }
 
-  .industries__tile:hover,
-  .industries__tile:focus-visible {
-    background-color: rgba(255, 255, 255, 0.1);
+  .industry-tile:hover {
+    transform: translateY(-6px);
+    background: rgba(255, 255, 255, 0.07);
     border-color: rgba(245, 130, 32, 0.5);
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(245, 130, 32, 0.2);
-    outline: none;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), 0 0 20px rgba(245, 130, 32, 0.15);
   }
 
-  .industries__tile:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
-  }
-
-  /* Glow effect on hover */
-  .industries__tile-glow {
-    position: absolute;
-    inset: 0;
-    border-radius: var(--radius-xl);
-    background: radial-gradient(
-      ellipse at 50% 0%,
-      rgba(245, 130, 32, 0.15) 0%,
-      transparent 70%
-    );
-    opacity: 0;
-    transition: opacity var(--transition);
-  }
-
-  .industries__tile:hover .industries__tile-glow {
-    opacity: 1;
-  }
-
-  /* Icon */
-  .industries__tile-icon {
+  .industry-tile__icon-wrap {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, rgba(245, 130, 32, 0.15), rgba(245, 130, 32, 0.05));
+    border: 1px solid rgba(245, 130, 32, 0.25);
+    color: var(--color-accent);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 56px;
-    height: 56px;
-    background-color: rgba(245, 130, 32, 0.15);
-    border-radius: var(--radius-md);
-    color: var(--color-accent);
     flex-shrink: 0;
-    transition: background-color var(--transition), color var(--transition);
-    position: relative;
-    z-index: 1;
+    transition: background var(--transition), color var(--transition), transform var(--transition);
   }
 
-  .industries__tile:hover .industries__tile-icon {
-    background-color: var(--color-accent);
+  .industry-tile:hover .industry-tile__icon-wrap {
+    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover));
     color: var(--color-white);
+    transform: scale(1.05);
   }
 
-  /* Content */
-  .industries__tile-content {
+  .industry-tile__content {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
     flex: 1;
-    position: relative;
-    z-index: 1;
   }
 
-  .industries__tile-name {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-semibold);
+  .industry-tile__name {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-bold);
     color: var(--color-white);
-    line-height: var(--leading-snug);
+    margin: 0;
   }
 
-  .industries__tile-desc {
-    font-size: var(--text-xs);
-    color: rgba(255, 255, 255, 0.6);
+  .industry-tile__desc {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.7);
     line-height: var(--leading-relaxed);
+    margin: 0;
+    flex: 1;
   }
 
-  .industries__tile-count {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    font-size: 0.65rem;
+  .industry-tile__count {
+    display: inline-block;
+    font-size: var(--text-xs);
     font-weight: var(--font-weight-semibold);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
     color: var(--color-accent);
-    margin-top: var(--space-1);
+    margin-top: var(--space-2);
   }
 
-  /* Arrow indicator */
-  .industries__tile-arrow {
-    position: absolute;
-    top: var(--space-5);
-    right: var(--space-5);
-    color: rgba(255, 255, 255, 0.3);
-    transition: color var(--transition), transform var(--transition);
-    z-index: 1;
-  }
-
-  .industries__tile:hover .industries__tile-arrow {
-    color: var(--color-accent);
-    transform: translate(3px, -3px);
-  }
-
-  /* ── CTA ─────────────────────────────────────────────────────────────── */
-  .industries__cta {
+  .industries__cta-wrap {
+    margin-top: var(--space-12);
     text-align: center;
-    margin-top: var(--space-4);
   }
 
-  /* ── Empty State ─────────────────────────────────────────────────────── */
-  .industries__empty {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.5);
-    padding: var(--space-12);
-    border: 2px dashed rgba(255,255,255,0.15);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--space-10);
-  }
-
-  /* ── Responsive ─────────────────────────────────────────────────────── */
   @media (max-width: 1024px) {
     .industries__grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-    .industries__stat {
-      padding-inline: var(--space-6);
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 640px) {
     .industries__grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-3);
+      grid-template-columns: 1fr;
     }
     .industries__stats {
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: var(--space-4);
-      padding: var(--space-5) var(--space-6);
-    }
-    .industries__stat {
-      padding-inline: var(--space-4);
     }
     .industries__stat-divider {
-      display: none;
-    }
-    .industries__tile {
-      padding: var(--space-5);
-    }
-  }
-
-  @media (max-width: 480px) {
-    .industries__grid {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-3);
-    }
-    .industries__tile-icon {
-      width: 46px;
-      height: 46px;
-    }
-    .industries__tile-name {
-      font-size: var(--text-sm);
-    }
-    .industries__tile-arrow {
-      display: none;
+      width: 60px;
+      height: 1px;
     }
   }
 </style>
@@ -457,10 +246,6 @@
   "class": "section-industries",
   "limit": 1,
   "settings": [
-    {
-      "type": "header",
-      "content": "Section Content"
-    },
     {
       "type": "text",
       "id": "eyebrow",
@@ -480,18 +265,10 @@
       "default": "Our solutions are deployed across India's most demanding environments — from smart hospitals to government offices and transit hubs."
     },
     {
-      "type": "header",
-      "content": "Stats Bar"
-    },
-    {
       "type": "checkbox",
       "id": "show_stats",
-      "label": "Show statistics bar",
+      "label": "Show stats bar above tiles",
       "default": true
-    },
-    {
-      "type": "header",
-      "content": "Footer CTA"
     },
     {
       "type": "text",
@@ -507,8 +284,18 @@
   ],
   "blocks": [
     {
+      "type": "stat",
+      "name": "Stat counter",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "number", "label": "Number", "default": "8" },
+        { "type": "text", "id": "suffix", "label": "Suffix", "default": "+" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Industries Served" }
+      ]
+    },
+    {
       "type": "industry",
-      "name": "Industry",
+      "name": "Industry tile",
       "limit": 12,
       "settings": [
         {
@@ -516,99 +303,20 @@
           "id": "icon",
           "label": "Icon",
           "options": [
-            {
-              "value": "hospital",
-              "label": "Healthcare / Hospital"
-            },
-            {
-              "value": "building",
-              "label": "Government / Institution"
-            },
-            {
-              "value": "factory",
-              "label": "Manufacturing"
-            },
-            {
-              "value": "bus",
-              "label": "Transportation / Metro"
-            },
-            {
-              "value": "graduation-cap",
-              "label": "Education"
-            },
-            {
-              "value": "city",
-              "label": "Smart City / Retail"
-            },
-            {
-              "value": "globe",
-              "label": "Airport / Hospitality"
-            },
-            {
-              "value": "shield",
-              "label": "Defense / Security"
-            },
-            {
-              "value": "zap",
-              "label": "Energy / Utilities"
-            },
-            {
-              "value": "package",
-              "label": "Logistics / Warehouse"
-            }
+            { "value": "hospital", "label": "Healthcare / Hospital" },
+            { "value": "building", "label": "Government / Civic" },
+            { "value": "bus", "label": "Transportation / Transit" },
+            { "value": "city", "label": "Retail / Malls" },
+            { "value": "graduation-cap", "label": "Education / Campus" },
+            { "value": "globe", "label": "Hospitality / Hotels" },
+            { "value": "factory", "label": "Manufacturing / Industrial" },
+            { "value": "shield", "label": "Banking & Financial Services" }
           ],
           "default": "hospital"
         },
-        {
-          "type": "text",
-          "id": "name",
-          "label": "Industry name",
-          "default": "Healthcare"
-        },
-        {
-          "type": "text",
-          "id": "description",
-          "label": "Short description",
-          "default": "Patient kiosks, OPD tokens, wayfinding"
-        },
-        {
-          "type": "text",
-          "id": "project_count",
-          "label": "Project count label",
-          "placeholder": "50+ Projects",
-          "info": "Optional e.g. '50+ Projects'"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Link (optional)",
-          "info": "Link to a collection, page, or category filtered view"
-        }
-      ]
-    },
-    {
-      "type": "stat",
-      "name": "Statistic",
-      "limit": 4,
-      "settings": [
-        {
-          "type": "text",
-          "id": "number",
-          "label": "Number (digits only)",
-          "default": "8"
-        },
-        {
-          "type": "text",
-          "id": "suffix",
-          "label": "Suffix",
-          "default": "+"
-        },
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Label",
-          "default": "Industries Served"
-        }
+        { "type": "text", "id": "name", "label": "Industry name", "default": "Healthcare" },
+        { "type": "textarea", "id": "description", "label": "Short description", "default": "Patient self-registration kiosks, OPD token display systems." },
+        { "type": "text", "id": "project_count", "label": "Project count badge (optional)", "default": "80+ Projects" }
       ]
     }
   ],
@@ -623,104 +331,16 @@
         "cta_text": "Discuss Your Project"
       },
       "blocks": [
-        {
-          "type": "stat",
-          "settings": {
-            "number": "8",
-            "suffix": "+",
-            "label": "Industries Served"
-          }
-        },
-        {
-          "type": "stat",
-          "settings": {
-            "number": "20",
-            "suffix": "+",
-            "label": "States Covered"
-          }
-        },
-        {
-          "type": "stat",
-          "settings": {
-            "number": "500",
-            "suffix": "+",
-            "label": "Installations"
-          }
-        },
-        {
-          "type": "industry",
-          "settings": {
-            "icon": "hospital",
-            "name": "Healthcare",
-            "description": "Patient kiosks, OPD tokens, wayfinding signage",
-            "project_count": "80+ Projects"
-          }
-        },
-        {
-          "type": "industry",
-          "settings": {
-            "icon": "building",
-            "name": "Government",
-            "description": "Citizen service kiosks, e-governance terminals",
-            "project_count": "60+ Projects"
-          }
-        },
-        {
-          "type": "industry",
-          "settings": {
-            "icon": "bus",
-            "name": "Transportation",
-            "description": "Metro kiosks, bus terminal displays, ATVM",
-            "project_count": "40+ Projects"
-          }
-        },
-        {
-          "type": "industry",
-          "settings": {
-            "icon": "city",
-            "name": "Retail & Malls",
-            "description": "Wayfinding, self-checkout, digital advertising",
-            "project_count": "70+ Projects"
-          }
-        },
-        {
-          "type": "industry",
-          "settings": {
-            "icon": "graduation-cap",
-            "name": "Education",
-            "description": "Library kiosks, attendance systems, smart boards",
-            "project_count": "35+ Projects"
-          }
-        },
-        {
-          "type": "industry",
-          "settings": {
-            "icon": "globe",
-            "name": "Hospitality",
-            "description": "Hotel check-in kiosks, event registration",
-            "project_count": "30+ Projects"
-          }
-        },
-        {
-          "type": "industry",
-          "settings": {
-            "icon": "factory",
-            "name": "Manufacturing",
-            "description": "Electrical enclosures, control panels, OEM",
-            "project_count": "90+ Projects"
-          }
-        },
-        {
-          "type": "industry",
-          "settings": {
-            "icon": "shield",
-            "name": "Banking & Finance",
-            "description": "ATM surrounds, token display, queue systems",
-            "project_count": "45+ Projects"
-          }
-        }
+        { "type": "stat", "settings": { "number": "8", "suffix": "+", "label": "Industries Served" } },
+        { "type": "stat", "settings": { "number": "20", "suffix": "+", "label": "States Covered" } },
+        { "type": "stat", "settings": { "number": "500", "suffix": "+", "label": "Installations" } },
+        { "type": "industry", "settings": { "icon": "hospital", "name": "Healthcare", "description": "Patient kiosks, OPD tokens, wayfinding signage", "project_count": "80+ Projects" } },
+        { "type": "industry", "settings": { "icon": "building", "name": "Government", "description": "Citizen service kiosks, e-governance terminals", "project_count": "60+ Projects" } },
+        { "type": "industry", "settings": { "icon": "bus", "name": "Transportation", "description": "Metro kiosks, bus terminal displays, ATVM", "project_count": "40+ Projects" } },
+        { "type": "industry", "settings": { "icon": "city", "name": "Retail & Malls", "description": "Wayfinding, self-checkout, digital advertising", "project_count": "70+ Projects" } }
       ]
     }
-  ]
+  ],
+  "enabled_on": { "templates": ["*"] }
 }
 {% endschema %}

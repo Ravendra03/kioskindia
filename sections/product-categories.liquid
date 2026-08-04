@@ -1,16 +1,5 @@
 {%- comment -%}
-  MAXWELL PRODUCT CATEGORIES SECTION
-  ─────────────────────────────────────────────────────────────────────────────
-  Features:
-  - Tab filter: All | Kiosks | Signage | Enclosures | Accessories
-  - Masonry-style responsive card grid
-  - Card hover overlay with description + CTA
-  - Product count badge on each card
-  - Animated filter transition (fade + scale)
-  - Block-based: each card is a Theme Editor block
-  - "View all products" section CTA
-  - Fully accessible: keyboard navigable tabs
-  ─────────────────────────────────────────────────────────────────────────────
+  MAXWELL PRODUCT CATEGORIES SECTION — PREMIUM EDITION
 {%- endcomment -%}
 
 {%- liquid
@@ -19,50 +8,42 @@
 -%}
 
 <section
-  class="section section--alt product-categories"
+  class="section product-categories"
   id="product-categories"
-  aria-labelledby="product-categories-heading"
+  aria-labelledby="categories-heading"
 >
   <div class="container">
 
-    {%- comment -%} ── Section Header ──────────────────────────────────────── {%- endcomment -%}
     {%- render 'section-header',
       eyebrow: section.settings.eyebrow,
       heading: section.settings.heading,
       subtitle: section.settings.subtitle,
       heading_tag: 'h2',
       align: 'center',
-      section_id: 'product-categories-heading'
+      section_id: 'categories-heading'
     -%}
 
-    {%- comment -%} ── Filter Tabs ─────────────────────────────────────────── {%- endcomment -%}
-    {%- if section.settings.show_filter_tabs and category_blocks.size > 0 -%}
+    {%- comment -%} Filter Tabs Bar {%- endcomment -%}
+    {%- if section.settings.show_filter_tabs and all_tabs.size > 0 -%}
       <div
         class="product-categories__tabs"
         role="tablist"
         aria-label="Filter product categories"
         data-animate="fade-up"
-        data-delay="200"
       >
-        {%- comment -%} "All" tab — always present {%- endcomment -%}
         <button
           class="product-categories__tab is-active"
           role="tab"
           aria-selected="true"
-          aria-controls="product-categories-grid"
           data-filter="all"
-          id="tab-all"
-          type="button"
         >
-          All
-          <span class="product-categories__tab-count">{{ category_blocks.size }}</span>
+          All Range
+          <span class="product-categories__tab-badge">{{ category_blocks.size }}</span>
         </button>
 
-        {%- comment -%} Dynamic tabs from comma-separated settings value {%- endcomment -%}
         {%- for tab in all_tabs -%}
           {%- assign tab_clean = tab | strip -%}
           {%- assign tab_handle = tab_clean | handleize -%}
-          {%- comment -%} Count blocks that match this tab {%- endcomment -%}
           {%- assign tab_count = 0 -%}
           {%- for block in category_blocks -%}
             {%- assign block_cat_handle = block.settings.category | handleize -%}
@@ -70,132 +51,85 @@
               {%- assign tab_count = tab_count | plus: 1 -%}
             {%- endif -%}
           {%- endfor -%}
+
           {%- if tab_count > 0 -%}
             <button
               class="product-categories__tab"
               role="tab"
               aria-selected="false"
               data-filter="{{ tab_handle }}"
-              id="tab-{{ tab_handle }}"
-              type="button"
             >
               {{ tab_clean }}
-              <span class="product-categories__tab-count">{{ tab_count }}</span>
+              <span class="product-categories__tab-badge">{{ tab_count }}</span>
             </button>
           {%- endif -%}
         {%- endfor -%}
       </div>
     {%- endif -%}
 
-    {%- comment -%} ── Category Cards Grid ─────────────────────────────────── {%- endcomment -%}
-    <div
-      class="product-categories__grid"
-      id="product-categories-grid"
-      role="tabpanel"
-      aria-label="Product categories"
-      data-animate="fade-up"
-      data-delay="300"
-    >
-      {%- if category_blocks.size > 0 -%}
+    {%- comment -%} Categories Grid {%- endcomment -%}
+    {%- if category_blocks.size > 0 -%}
+      <div class="product-categories__grid" data-animate="fade-up" data-delay="100">
         {%- for block in category_blocks -%}
-          {%- if block.type == 'category' -%}
-            {%- assign cat_handle = block.settings.category | handleize -%}
-            <div
-              class="product-categories__card{% if block.settings.featured %} product-categories__card--featured{% endif %}"
-              data-category="{{ cat_handle }}"
-              data-animate-card
-              {{ block.shopify_attributes }}
-            >
-              {%- comment -%} Card image {%- endcomment -%}
-              <div class="product-categories__card-image">
-                {%- if block.settings.image != blank -%}
-                  {{
-                    block.settings.image
-                    | image_url: width: 700
-                    | image_tag:
-                      class: 'product-categories__card-img',
-                      alt: block.settings.name,
-                      loading: 'lazy',
-                      width: 700
-                  }}
-                {%- else -%}
-                  <div class="product-categories__card-placeholder" aria-hidden="true">
-                    {%- assign icon_name = block.settings.placeholder_icon | default: 'package' -%}
-                    {% render 'icon', name: icon_name, size: 48 %}
-                  </div>
-                {%- endif -%}
-
-                {%- comment -%} Badge: product count or custom label {%- endcomment -%}
-                {%- if block.settings.badge != blank -%}
-                  <span class="badge badge--accent product-categories__badge">
-                    {{ block.settings.badge }}
-                  </span>
-                {%- elsif block.settings.product_count != blank -%}
-                  <span class="badge badge--outline product-categories__badge">
-                    {{ block.settings.product_count }}
-                  </span>
-                {%- endif -%}
-
-                {%- comment -%} Hover overlay {%- endcomment -%}
-                <div class="product-categories__overlay">
-                  <div class="product-categories__overlay-content">
-                    {%- if block.settings.description != blank -%}
-                      <p class="product-categories__overlay-desc">{{ block.settings.description }}</p>
-                    {%- endif -%}
-                    <a
-                      href="{{ block.settings.link | default: '/collections/all' }}"
-                      class="btn btn--outline-white btn--sm"
-                      tabindex="-1"
-                    >
-                      {{ block.settings.cta_text | default: 'Explore' }}
-                      {% render 'icon', name: 'arrow-right', size: 16 %}
-                    </a>
-                  </div>
+          {%- assign category_handle = block.settings.category | default: 'kiosks' | handleize -%}
+          <article
+            class="product-categories__card{% if block.settings.featured %} product-categories__card--featured{% endif %}"
+            data-category="{{ category_handle }}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="product-categories__card-image-wrap">
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 700
+                  | image_tag:
+                    class: 'product-categories__card-img',
+                    alt: block.settings.name,
+                    loading: 'lazy',
+                    width: 700
+                }}
+              {%- else -%}
+                <div class="product-categories__card-placeholder" aria-hidden="true">
+                  {%- assign icon_name = block.settings.placeholder_icon | default: 'package' -%}
+                  {% render 'icon', name: icon_name, size: 48 %}
                 </div>
-              </div>
+              {%- endif -%}
 
-              {%- comment -%} Card footer {%- endcomment -%}
+              {%- if block.settings.badge != blank -%}
+                <span class="badge badge--accent product-categories__badge">
+                  {{ block.settings.badge }}
+                </span>
+              {%- endif -%}
+
+              {%- if block.settings.product_count != blank -%}
+                <span class="product-categories__count-pill">
+                  {{ block.settings.product_count }}
+                </span>
+              {%- endif -%}
+            </div>
+
+            <div class="product-categories__card-body">
+              <span class="product-categories__card-category">{{ block.settings.category }}</span>
+              <h3 class="product-categories__card-title">{{ block.settings.name }}</h3>
+
+              {%- if block.settings.subtitle != blank -%}
+                <p class="product-categories__card-subtitle">{{ block.settings.subtitle }}</p>
+              {%- endif -%}
+
+              <p class="product-categories__card-desc">{{ block.settings.description }}</p>
+
               <div class="product-categories__card-footer">
-                <div class="product-categories__card-info">
-                  <a href="{{ block.settings.link | default: '/collections/all' }}" class="product-categories__card-name">
-                    {{ block.settings.name }}
-                  </a>
-                  {%- if block.settings.subtitle != blank -%}
-                    <span class="product-categories__card-subtitle">{{ block.settings.subtitle }}</span>
-                  {%- endif -%}
-                </div>
                 <a
                   href="{{ block.settings.link | default: '/collections/all' }}"
-                  class="product-categories__card-arrow"
-                  aria-label="View {{ block.settings.name }}"
-                  tabindex="-1"
+                  class="btn btn--primary btn--sm"
                 >
-                  {% render 'icon', name: 'arrow-right', size: 20 %}
+                  {{ block.settings.cta_text | default: 'Explore Category' }}
+                  <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 16 %}</span>
                 </a>
               </div>
-
             </div>
-          {%- endif -%}
+          </article>
         {%- endfor -%}
-      {%- else -%}
-        {%- comment -%} Empty state for Theme Editor {%- endcomment -%}
-        <p class="product-categories__empty">
-          Add product category blocks using the Theme Editor to display cards here.
-        </p>
-      {%- endif -%}
-    </div>
-
-    {%- comment -%} ── Section Footer CTA ───────────────────────────────────── {%- endcomment -%}
-    {%- if section.settings.cta_text != blank -%}
-      <div class="product-categories__footer" data-animate="fade-up">
-        <a
-          href="{{ section.settings.cta_url | default: '/collections/all' }}"
-          class="btn btn--secondary btn--lg"
-          id="product-categories-cta"
-        >
-          {{ section.settings.cta_text }}
-          <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 18 %}</span>
-        </a>
       </div>
     {%- endif -%}
 
@@ -203,27 +137,17 @@
 </section>
 
 <style>
-  /* =========================================================================
-     PRODUCT CATEGORIES
-     ========================================================================= */
-
-  .product-categories {
-    overflow: hidden;
-  }
-
-  /* ── Filter Tabs ──────────────────────────────────────────────────────── */
   .product-categories__tabs {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-2);
     flex-wrap: wrap;
-    justify-content: center;
-    margin-top: var(--space-10);
     margin-bottom: var(--space-10);
+    background-color: var(--color-bg-section);
     padding: var(--space-2);
-    background-color: var(--color-white);
     border-radius: var(--radius-full);
-    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
     width: fit-content;
     margin-inline: auto;
   }
@@ -232,103 +156,76 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    padding: var(--space-2) var(--space-5);
+    padding: 0.6rem 1.25rem;
     font-size: var(--text-sm);
-    font-weight: var(--font-weight-medium);
-    font-family: inherit;
+    font-weight: var(--font-weight-semibold);
     color: var(--color-text-muted);
-    background: none;
+    background: transparent;
     border: none;
     border-radius: var(--radius-full);
     cursor: pointer;
-    white-space: nowrap;
-    transition: background-color var(--transition), color var(--transition), box-shadow var(--transition);
+    transition: color var(--transition), background-color var(--transition), box-shadow var(--transition);
   }
 
   .product-categories__tab:hover {
     color: var(--color-primary);
-    background-color: var(--color-primary-light);
   }
 
   .product-categories__tab.is-active {
-    background-color: var(--color-primary);
     color: var(--color-white);
-    box-shadow: var(--shadow-sm);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    box-shadow: var(--shadow-md);
   }
 
-  .product-categories__tab.is-active:hover {
-    background-color: var(--color-secondary);
-  }
-
-  .product-categories__tab-count {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 20px;
-    height: 20px;
-    padding: 0 5px;
-    font-size: 0.65rem;
+  .product-categories__tab-badge {
+    font-size: 0.7rem;
     font-weight: var(--font-weight-bold);
+    padding: 0.15rem 0.45rem;
     border-radius: var(--radius-full);
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(0, 0, 0, 0.08);
     line-height: 1;
   }
 
-  .product-categories__tab:not(.is-active) .product-categories__tab-count {
-    background-color: var(--color-border);
-    color: var(--color-text-muted);
+  .product-categories__tab.is-active .product-categories__tab-badge {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--color-white);
   }
 
-  /* ── Cards Grid ───────────────────────────────────────────────────────── */
+  /* Grid */
   .product-categories__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-6);
+    gap: var(--space-8);
   }
 
-  /* Featured card spans 2 columns */
-  .product-categories__card--featured {
-    grid-column: span 2;
-  }
-
-  /* ── Individual Card ─────────────────────────────────────────────────── */
   .product-categories__card {
     background-color: var(--color-white);
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-border);
-    transition:
-      box-shadow var(--transition),
-      border-color var(--transition),
-      transform var(--transition);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   }
 
   .product-categories__card:hover {
+    transform: translateY(-6px);
     box-shadow: var(--shadow-xl);
-    border-color: transparent;
-    transform: translateY(-4px);
+    border-color: var(--color-primary-light);
   }
 
-  /* ── Card Image Wrapper ──────────────────────────────────────────────── */
-  .product-categories__card-image {
+  .product-categories__card-image-wrap {
     position: relative;
+    aspect-ratio: 16 / 10;
+    background-color: var(--color-bg-section);
     overflow: hidden;
-    aspect-ratio: 4 / 3;
-    flex-shrink: 0;
-  }
-
-  .product-categories__card--featured .product-categories__card-image {
-    aspect-ratio: 16 / 9;
   }
 
   .product-categories__card-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
     transition: transform var(--duration-slow) var(--ease-out);
   }
 
@@ -336,169 +233,91 @@
     transform: scale(1.06);
   }
 
-  /* Placeholder */
   .product-categories__card-placeholder {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, var(--color-primary-light), var(--color-bg-section));
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--color-primary);
-    opacity: 0.4;
+    opacity: 0.2;
   }
 
-  /* Badge */
   .product-categories__badge {
     position: absolute;
     top: var(--space-4);
     left: var(--space-4);
-    z-index: 2;
   }
 
-  /* ── Hover Overlay ────────────────────────────────────────────────────── */
-  .product-categories__overlay {
+  .product-categories__count-pill {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba(0, 51, 102, 0.92) 0%,
-      rgba(0, 51, 102, 0.5) 50%,
-      transparent 100%
-    );
-    display: flex;
-    align-items: flex-end;
+    bottom: var(--space-4);
+    right: var(--space-4);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-semibold);
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(8px);
+    color: var(--color-white);
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-full);
+  }
+
+  .product-categories__card-body {
     padding: var(--space-6);
-    opacity: 0;
-    transition: opacity var(--transition);
-  }
-
-  .product-categories__card:hover .product-categories__overlay {
-    opacity: 1;
-  }
-
-  .product-categories__overlay-content {
-    transform: translateY(10px);
-    transition: transform var(--transition);
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .product-categories__card:hover .product-categories__overlay-content {
-    transform: translateY(0);
-  }
-
-  .product-categories__overlay-desc {
-    font-size: var(--text-sm);
-    color: rgba(255, 255, 255, 0.9);
-    line-height: var(--leading-relaxed);
-    margin: 0;
-  }
-
-  /* ── Card Footer ──────────────────────────────────────────────────────── */
-  .product-categories__card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-5) var(--space-5);
-    gap: var(--space-3);
-    border-top: 1px solid var(--color-border);
+    gap: var(--space-2);
     flex: 1;
   }
 
-  .product-categories__card-info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-    min-width: 0;
+  .product-categories__card-category {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
   }
 
-  .product-categories__card-name {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-semibold);
+  .product-categories__card-title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-bold);
     color: var(--color-text);
-    text-decoration: none;
-    transition: color var(--transition);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .product-categories__card-name:hover {
-    color: var(--color-primary);
+    margin: 0;
   }
 
   .product-categories__card-subtitle {
     font-size: var(--text-xs);
     color: var(--color-text-muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    margin: 0;
   }
 
-  .product-categories__card-arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    flex-shrink: 0;
-    background-color: var(--color-bg-section);
-    border-radius: var(--radius-sm);
-    color: var(--color-primary);
-    text-decoration: none;
-    transition: background-color var(--transition), color var(--transition), transform var(--transition);
-  }
-
-  .product-categories__card:hover .product-categories__card-arrow {
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    transform: translateX(2px);
-  }
-
-  /* ── Empty State ─────────────────────────────────────────────────────── */
-  .product-categories__empty {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: var(--space-16);
+  .product-categories__card-desc {
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
-    font-size: var(--text-base);
-    background-color: var(--color-bg-section);
-    border-radius: var(--radius-lg);
-    border: 2px dashed var(--color-border);
+    line-height: var(--leading-relaxed);
+    margin-top: var(--space-2);
+    flex: 1;
   }
 
-  /* ── Footer CTA ───────────────────────────────────────────────────────── */
-  .product-categories__footer {
-    margin-top: var(--space-12);
-    text-align: center;
+  .product-categories__card-footer {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
   }
 
-  /* ── Responsive ───────────────────────────────────────────────────────── */
-  @media (max-width: 1200px) {
+  @media (max-width: 1024px) {
     .product-categories__grid {
       grid-template-columns: repeat(2, 1fr);
     }
-    .product-categories__card--featured {
-      grid-column: span 2;
-    }
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 640px) {
     .product-categories__grid {
       grid-template-columns: 1fr;
     }
-    .product-categories__card--featured {
-      grid-column: span 1;
-    }
     .product-categories__tabs {
-      border-radius: var(--radius-xl);
+      border-radius: var(--radius-lg);
       width: 100%;
-    }
-    .product-categories__tab {
-      padding: var(--space-2) var(--space-3);
-      font-size: var(--text-xs);
     }
   }
 </style>
@@ -509,10 +328,6 @@
   "class": "section-product-categories",
   "limit": 1,
   "settings": [
-    {
-      "type": "header",
-      "content": "Section Content"
-    },
     {
       "type": "text",
       "id": "eyebrow",
@@ -532,137 +347,38 @@
       "default": "From interactive kiosks to smart enclosures — browse our full range of custom-built hardware solutions."
     },
     {
-      "type": "header",
-      "content": "Filter Tabs"
-    },
-    {
       "type": "checkbox",
       "id": "show_filter_tabs",
-      "label": "Show filter tabs",
+      "label": "Show category filter tabs",
       "default": true
     },
     {
       "type": "text",
       "id": "filter_tabs",
-      "label": "Filter tab labels",
-      "default": "Kiosks, Signage, Enclosures, Accessories",
-      "info": "Comma-separated. Must match the 'Category' value set on each card block."
-    },
-    {
-      "type": "header",
-      "content": "Footer CTA"
-    },
-    {
-      "type": "text",
-      "id": "cta_text",
-      "label": "Button text",
-      "default": "View All Products"
-    },
-    {
-      "type": "url",
-      "id": "cta_url",
-      "label": "Button link"
+      "label": "Filter tabs (comma separated)",
+      "default": "Kiosks, Signage, Enclosures, Accessories"
     }
   ],
   "blocks": [
     {
       "type": "category",
-      "name": "Product category card",
-      "limit": 12,
+      "name": "Category Card",
       "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Card image",
-          "info": "Recommended: 700×525px. JPG for performance."
-        },
-        {
-          "type": "text",
-          "id": "name",
-          "label": "Category name",
-          "default": "Interactive Kiosks",
-          "placeholder": "Interactive Kiosks"
-        },
-        {
-          "type": "text",
-          "id": "subtitle",
-          "label": "Card subtitle",
-          "default": "Self-service & information kiosks",
-          "placeholder": "Self-service terminals"
-        },
-        {
-          "type": "textarea",
-          "id": "description",
-          "label": "Hover description",
-          "default": "Custom-built touch-screen kiosks for airports, hospitals, retail, and government.",
-          "info": "Shown on card hover overlay"
-        },
-        {
-          "type": "text",
-          "id": "category",
-          "label": "Filter category (must match a filter tab)",
-          "default": "Kiosks",
-          "info": "Enter exactly as one of the filter tab values e.g. 'Kiosks'"
-        },
-        {
-          "type": "text",
-          "id": "product_count",
-          "label": "Product count badge",
-          "placeholder": "12 Products",
-          "info": "Optional. e.g. '12 Products'"
-        },
-        {
-          "type": "text",
-          "id": "badge",
-          "label": "Accent badge text (overrides count)",
-          "placeholder": "Best Seller",
-          "info": "Optional highlight label e.g. 'New', 'Popular'"
-        },
-        {
-          "type": "checkbox",
-          "id": "featured",
-          "label": "Featured card (wider on desktop)",
-          "default": false
-        },
-        {
-          "type": "text",
-          "id": "cta_text",
-          "label": "Overlay button text",
-          "default": "Explore Range"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Card link"
-        },
-        {
-          "type": "select",
-          "id": "placeholder_icon",
-          "label": "Placeholder icon (if no image)",
-          "options": [
-            {
-              "value": "package",
-              "label": "Package"
-            },
-            {
-              "value": "monitor",
-              "label": "Monitor / Screen"
-            },
-            {
-              "value": "layers",
-              "label": "Layers"
-            },
-            {
-              "value": "cog",
-              "label": "Gear / Settings"
-            },
-            {
-              "value": "factory",
-              "label": "Factory"
-            }
-          ],
-          "default": "package"
-        }
+        { "type": "text", "id": "name", "label": "Name", "default": "Interactive Kiosks" },
+        { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Self-service & information terminals" },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "Touch-enabled kiosks for airports, hospitals, retail, banks, and government offices." },
+        { "type": "text", "id": "category", "label": "Category tag for filtering", "default": "Kiosks" },
+        { "type": "text", "id": "product_count", "label": "Product count pill", "default": "18 Products" },
+        { "type": "text", "id": "badge", "label": "Badge label (optional)", "default": "" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "select", "id": "placeholder_icon", "label": "Placeholder icon", "options": [
+          { "value": "monitor", "label": "Monitor" },
+          { "value": "package", "label": "Package" },
+          { "value": "factory", "label": "Factory" },
+          { "value": "layers", "label": "Layers" }
+        ], "default": "monitor" },
+        { "type": "text", "id": "cta_text", "label": "CTA text", "default": "Explore Kiosks" },
+        { "type": "url", "id": "link", "label": "Link" }
       ]
     }
   ],
@@ -674,84 +390,16 @@
         "heading": "Engineered for Every Sector",
         "subtitle": "From interactive kiosks to smart enclosures — browse our full range of custom-built hardware solutions.",
         "show_filter_tabs": true,
-        "filter_tabs": "Kiosks, Signage, Enclosures, Accessories",
-        "cta_text": "View All Products"
+        "filter_tabs": "Kiosks, Signage, Enclosures, Accessories"
       },
       "blocks": [
-        {
-          "type": "category",
-          "settings": {
-            "name": "Interactive Kiosks",
-            "subtitle": "Self-service & information terminals",
-            "description": "Touch-enabled kiosks for airports, hospitals, retail, banks, and government offices.",
-            "category": "Kiosks",
-            "product_count": "18 Products",
-            "featured": true,
-            "cta_text": "Explore Kiosks",
-            "placeholder_icon": "monitor"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "name": "Digital Signage",
-            "subtitle": "Indoor & outdoor display solutions",
-            "description": "High-brightness LED & LCD signage for malls, transit hubs, and corporate offices.",
-            "category": "Signage",
-            "product_count": "14 Products",
-            "cta_text": "Explore Signage",
-            "placeholder_icon": "monitor"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "name": "Smart Lockers",
-            "subtitle": "Secure storage & parcel systems",
-            "description": "Automated locker systems for offices, universities, and e-commerce last-mile delivery.",
-            "category": "Kiosks",
-            "badge": "New",
-            "cta_text": "View Lockers",
-            "placeholder_icon": "locker"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "name": "Electrical Enclosures",
-            "subtitle": "MS, SS & GRP panel boxes",
-            "description": "Powder-coated MS & stainless steel enclosures for industrial and OEM applications.",
-            "category": "Enclosures",
-            "product_count": "22 Products",
-            "cta_text": "View Enclosures",
-            "placeholder_icon": "package"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "name": "Queue Management",
-            "subtitle": "Token & display systems",
-            "description": "Complete queue management hardware for banks, hospitals, and service centres.",
-            "category": "Kiosks",
-            "cta_text": "View Systems",
-            "placeholder_icon": "layers"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "name": "Outdoor Kiosks",
-            "subtitle": "Weather-proof public installations",
-            "description": "IP65-rated outdoor kiosks for metro stations, bus stops, and smart city projects.",
-            "category": "Kiosks",
-            "badge": "Popular",
-            "cta_text": "Explore Outdoor",
-            "placeholder_icon": "factory"
-          }
-        }
+        { "type": "category", "settings": { "name": "Interactive Kiosks", "subtitle": "Self-service & information terminals", "description": "Touch-enabled kiosks for airports, hospitals, retail, banks, and government offices.", "category": "Kiosks", "product_count": "18 Products", "cta_text": "Explore Kiosks", "placeholder_icon": "monitor" } },
+        { "type": "category", "settings": { "name": "Digital Signage", "subtitle": "Indoor & outdoor display solutions", "description": "High-brightness LED & LCD signage for malls, transit hubs, and corporate offices.", "category": "Signage", "product_count": "14 Products", "cta_text": "Explore Signage", "placeholder_icon": "monitor" } },
+        { "type": "category", "settings": { "name": "Smart Lockers", "subtitle": "Secure storage & parcel systems", "description": "Automated locker systems for offices, universities, and e-commerce last-mile delivery.", "category": "Kiosks", "badge": "New", "cta_text": "View Lockers", "placeholder_icon": "package" } },
+        { "type": "category", "settings": { "name": "Electrical Enclosures", "subtitle": "MS, SS & GRP panel boxes", "description": "Powder-coated MS & stainless steel enclosures for industrial and OEM applications.", "category": "Enclosures", "product_count": "22 Products", "cta_text": "View Enclosures", "placeholder_icon": "package" } }
       ]
     }
-  ]
+  ],
+  "enabled_on": { "templates": ["*"] }
 }
 {% endschema %}

@@ -1,15 +1,5 @@
 {%- comment -%}
-  MAXWELL FEATURED PRODUCTS SECTION
-  ─────────────────────────────────────────────────────────────────────────────
-  Features:
-  - Pulls products from a configurable Shopify collection
-  - Manual product blocks as fallback (for stores with no live products yet)
-  - Premium product cards: image hover zoom, price, badge, quick CTA
-  - Badge system: New, Sale, Featured — auto-detects from product tags
-  - "View All" CTA links to the collection
-  - Responsive 4→2→1 grid
-  - All settings editable from Theme Editor
-  ─────────────────────────────────────────────────────────────────────────────
+  MAXWELL FEATURED PRODUCTS SECTION — PREMIUM EDITION
 {%- endcomment -%}
 
 {%- liquid
@@ -28,7 +18,6 @@
 >
   <div class="container">
 
-    {%- comment -%} ── Section Header with inline CTA ─────────────────────── {%- endcomment -%}
     <div class="featured-products__header">
       <div class="featured-products__header-text">
         {%- render 'section-header',
@@ -43,7 +32,7 @@
       {%- if section.settings.cta_text != blank and has_collection -%}
         <a
           href="{{ collection.url }}"
-          class="btn btn--ghost featured-products__header-cta"
+          class="btn btn--secondary featured-products__header-cta"
           data-animate="fade-left"
           id="featured-products-cta"
         >
@@ -53,7 +42,6 @@
       {%- endif -%}
     </div>
 
-    {%- comment -%} ── Products Grid ────────────────────────────────────────── {%- endcomment -%}
     <div
       class="featured-products__grid"
       data-animate="fade-up"
@@ -62,7 +50,6 @@
 
       {%- if has_collection -%}
 
-        {%- comment -%} Render from Shopify collection {%- endcomment -%}
         {%- for product in collection.products limit: products_to_show -%}
           {%- liquid
             assign badge_text = ''
@@ -76,11 +63,6 @@
             elsif product.tags contains 'featured' or product.tags contains 'Featured'
               assign badge_text = 'Featured'
               assign badge_type = 'featured'
-            endif
-            assign discount_pct = 0
-            if product.compare_at_price > product.price
-              assign savings = product.compare_at_price | minus: product.price
-              assign discount_pct = savings | times: 100 | divided_by: product.compare_at_price
             endif
           -%}
           <article class="product-card" aria-label="{{ product.title }}">
@@ -116,11 +98,7 @@
 
                 {%- if badge_text != blank -%}
                   <span class="product-card__badge product-card__badge--{{ badge_type }}">
-                    {%- if discount_pct > 0 -%}
-                      -{{ discount_pct }}%
-                    {%- else -%}
-                      {{ badge_text }}
-                    {%- endif -%}
+                    {{ badge_text }}
                   </span>
                 {%- endif -%}
               </div>
@@ -150,7 +128,6 @@
                 <a
                   href="{{ product.url }}"
                   class="product-card__cta btn btn--primary btn--sm"
-                  aria-label="View {{ product.title }}"
                 >
                   {{ section.settings.card_cta_text | default: 'View Details' }}
                 </a>
@@ -162,7 +139,6 @@
 
       {%- elsif section.blocks.size > 0 -%}
 
-        {%- comment -%} Fallback: manual product blocks from Theme Editor {%- endcomment -%}
         {%- for block in section.blocks -%}
           {%- if block.type == 'product_card' -%}
             <article class="product-card" aria-label="{{ block.settings.title }}" {{ block.shopify_attributes }}>
@@ -216,35 +192,14 @@
           {%- endif -%}
         {%- endfor -%}
 
-      {%- else -%}
-        <div class="featured-products__empty">
-          <p>Select a product collection in Theme Editor, or add manual product blocks to display products here.</p>
-        </div>
       {%- endif -%}
 
     </div>
-
-    {%- comment -%} ── Mobile CTA (hidden on desktop — shows in header) ──── {%- endcomment -%}
-    {%- if section.settings.cta_text != blank -%}
-      <div class="featured-products__mobile-cta" data-animate="fade-up">
-        <a
-          href="{{ collection.url | default: '/collections/all' }}"
-          class="btn btn--secondary"
-        >
-          {{ section.settings.cta_text }}
-          <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 18 %}</span>
-        </a>
-      </div>
-    {%- endif -%}
 
   </div>
 </section>
 
 <style>
-  /* =========================================================================
-     FEATURED PRODUCTS
-     ========================================================================= */
-
   .featured-products__header {
     display: flex;
     align-items: flex-end;
@@ -253,51 +208,27 @@
     margin-bottom: var(--space-10);
   }
 
-  .featured-products__header-text {
-    flex: 1;
-  }
-
-  .featured-products__header-text .section-header {
-    margin-bottom: 0;
-  }
-
-  .featured-products__header-cta {
-    flex-shrink: 0;
-    align-self: center;
-    white-space: nowrap;
-  }
-
-  /* ── Products Grid ─────────────────────────────────────────────────────── */
   .featured-products__grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: var(--space-6);
   }
 
-  /* ── Product Card ──────────────────────────────────────────────────────── */
   .product-card {
     background-color: var(--color-white);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-2xl);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
-    transition:
-      box-shadow var(--transition),
-      border-color var(--transition),
-      transform var(--transition);
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   }
 
   .product-card:hover {
     box-shadow: var(--shadow-xl);
-    border-color: transparent;
-    transform: translateY(-4px);
-  }
-
-  /* ── Card Image ────────────────────────────────────────────────────────── */
-  .product-card__image-link {
-    display: block;
+    border-color: var(--color-primary-light);
+    transform: translateY(-6px);
   }
 
   .product-card__image-wrap {
@@ -323,20 +254,18 @@
 
   .product-card:hover .product-card__image--primary {
     opacity: 0;
-    transform: scale(1.04);
   }
 
   .product-card:hover .product-card__image--secondary {
     opacity: 1;
-    transform: scale(1.04);
+    transform: scale(1.05);
   }
 
   .product-card:hover .product-card__image--primary:only-child {
     opacity: 1;
-    transform: scale(1.06);
+    transform: scale(1.05);
   }
 
-  /* Placeholder */
   .product-card__image-placeholder {
     width: 100%;
     height: 100%;
@@ -347,7 +276,6 @@
     opacity: 0.25;
   }
 
-  /* Badges */
   .product-card__badge {
     position: absolute;
     top: var(--space-3);
@@ -356,10 +284,9 @@
     font-weight: var(--font-weight-bold);
     letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
-    padding: 0.25rem 0.6rem;
+    padding: 0.3rem 0.7rem;
     border-radius: var(--radius-full);
     line-height: 1;
-    z-index: 2;
   }
 
   .product-card__badge--new {
@@ -377,7 +304,6 @@
     color: var(--color-white);
   }
 
-  /* ── Card Body ─────────────────────────────────────────────────────────── */
   .product-card__body {
     padding: var(--space-5);
     display: flex;
@@ -388,7 +314,7 @@
 
   .product-card__vendor {
     font-size: var(--text-xs);
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-bold);
     color: var(--color-accent);
     letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
@@ -396,7 +322,7 @@
 
   .product-card__title {
     font-size: var(--text-base);
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-bold);
     line-height: var(--leading-snug);
     margin: 0;
   }
@@ -412,14 +338,13 @@
   }
 
   .product-card__desc {
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     color: var(--color-text-muted);
     line-height: var(--leading-relaxed);
     margin: 0;
     flex: 1;
   }
 
-  /* ── Card Footer ───────────────────────────────────────────────────────── */
   .product-card__footer {
     display: flex;
     align-items: center;
@@ -430,73 +355,16 @@
     border-top: 1px solid var(--color-border);
   }
 
-  .product-card__price {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-2);
-    flex-wrap: wrap;
-  }
-
-  .product-card__price-regular {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text);
-  }
-
-  .product-card__price-sale {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-bold);
-    color: #e53e3e;
-  }
-
-  .product-card__price-compare {
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    text-decoration: line-through;
-  }
-
+  .product-card__price-regular,
   .product-card__price-label {
     font-size: var(--text-sm);
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-bold);
     color: var(--color-primary);
   }
 
-  /* ── Empty State ───────────────────────────────────────────────────────── */
-  .featured-products__empty {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: var(--space-16);
-    color: var(--color-text-muted);
-    background-color: var(--color-bg-section);
-    border-radius: var(--radius-lg);
-    border: 2px dashed var(--color-border);
-    font-size: var(--text-base);
-  }
-
-  /* ── Mobile CTA ────────────────────────────────────────────────────────── */
-  .featured-products__mobile-cta {
-    display: none;
-    margin-top: var(--space-10);
-    text-align: center;
-  }
-
-  /* ── Responsive ─────────────────────────────────────────────────────────── */
   @media (max-width: 1200px) {
     .featured-products__grid {
       grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  @media (max-width: 1024px) {
-    .featured-products__header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .featured-products__header-cta {
-      display: none;
-    }
-    .featured-products__mobile-cta {
-      display: block;
     }
   }
 
@@ -507,9 +375,13 @@
     }
   }
 
-  @media (max-width: 479px) {
+  @media (max-width: 480px) {
     .featured-products__grid {
       grid-template-columns: 1fr;
+    }
+    .featured-products__header {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 </style>
@@ -520,10 +392,6 @@
   "class": "section-featured-products",
   "limit": 1,
   "settings": [
-    {
-      "type": "header",
-      "content": "Section Content"
-    },
     {
       "type": "text",
       "id": "eyebrow",
@@ -543,14 +411,9 @@
       "default": "Precision-built products trusted by 200+ clients across India."
     },
     {
-      "type": "header",
-      "content": "Products Source"
-    },
-    {
       "type": "collection",
       "id": "collection",
-      "label": "Product collection",
-      "info": "Select a Shopify collection to display. If empty, manual product blocks below will be used."
+      "label": "Product collection"
     },
     {
       "type": "range",
@@ -562,18 +425,10 @@
       "default": 4
     },
     {
-      "type": "header",
-      "content": "Card Settings"
-    },
-    {
       "type": "text",
       "id": "card_cta_text",
       "label": "Card button text",
       "default": "View Details"
-    },
-    {
-      "type": "header",
-      "content": "Section CTA"
     },
     {
       "type": "text",
@@ -588,41 +443,12 @@
       "name": "Manual product card",
       "limit": 8,
       "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Product image"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Product name",
-          "default": "Interactive Kiosk"
-        },
-        {
-          "type": "textarea",
-          "id": "description",
-          "label": "Short description",
-          "default": "Custom-built touch-screen kiosk for self-service applications."
-        },
-        {
-          "type": "text",
-          "id": "price",
-          "label": "Price or quote label",
-          "placeholder": "Get Quote",
-          "info": "Leave blank to show 'Get Quote'"
-        },
-        {
-          "type": "text",
-          "id": "badge",
-          "label": "Badge text",
-          "placeholder": "New Launch"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Product link"
-        }
+        { "type": "image_picker", "id": "image", "label": "Product image" },
+        { "type": "text", "id": "title", "label": "Product name", "default": "Interactive Kiosk" },
+        { "type": "textarea", "id": "description", "label": "Short description", "default": "Custom-built touch-screen kiosk for self-service applications." },
+        { "type": "text", "id": "price", "label": "Price or quote label", "placeholder": "Get Quote" },
+        { "type": "text", "id": "badge", "label": "Badge text", "placeholder": "New Launch" },
+        { "type": "url", "id": "link", "label": "Product link" }
       ]
     }
   ],
@@ -638,40 +464,13 @@
         "cta_text": "View All Products"
       },
       "blocks": [
-        {
-          "type": "product_card",
-          "settings": {
-            "title": "Floor-Standing Interactive Kiosk",
-            "description": "21.5\" touch display, i5 processor, thermal printer, card reader — for airports, hospitals, retail.",
-            "badge": "Best Seller"
-          }
-        },
-        {
-          "type": "product_card",
-          "settings": {
-            "title": "Outdoor Digital Signage Totem",
-            "description": "IP65 weatherproof, 2500-nit brightness, 65\" 4K display for smart city and transit installations.",
-            "badge": "Popular"
-          }
-        },
-        {
-          "type": "product_card",
-          "settings": {
-            "title": "Smart Locker System",
-            "description": "Modular intelligent locker with cloud-based access control for office, campus, and courier use.",
-            "badge": "New"
-          }
-        },
-        {
-          "type": "product_card",
-          "settings": {
-            "title": "Queue Management Kiosk",
-            "description": "Token-dispensing kiosk with SMS alert integration for banks, hospitals, government offices.",
-            "badge": "Featured"
-          }
-        }
+        { "type": "product_card", "settings": { "title": "Floor-Standing Interactive Kiosk", "description": "21.5\" touch display, i5 processor, thermal printer, card reader.", "badge": "Best Seller" } },
+        { "type": "product_card", "settings": { "title": "Outdoor Digital Signage Totem", "description": "IP65 weatherproof, 2500-nit brightness, 65\" 4K display.", "badge": "Popular" } },
+        { "type": "product_card", "settings": { "title": "Smart Locker System", "description": "Modular intelligent locker with cloud-based access control.", "badge": "New" } },
+        { "type": "product_card", "settings": { "title": "Queue Management Kiosk", "description": "Token-dispensing kiosk with SMS alert integration.", "badge": "Featured" } }
       ]
     }
-  ]
+  ],
+  "enabled_on": { "templates": ["*"] }
 }
 {% endschema %}

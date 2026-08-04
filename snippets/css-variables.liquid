@@ -1,122 +1,112 @@
+{%- comment -%}
+  MAXWELL DESIGN SYSTEM — CSS VARIABLES & TOKENS
+  Injected into <head> via layout/theme.liquid
+{%- endcomment -%}
+
 <style>
   :root {
-    /* ── Brand Colors ──────────────────────────────── */
-    --color-primary:          {{ settings.color_primary }};
-    --color-secondary:        {{ settings.color_secondary }};
-    --color-accent:           {{ settings.color_accent }};
+    /* ── Colors ────────────────────────────────────────────────────────────── */
+    --color-primary: {{ settings.color_primary | default: '#003366' }};
+    --color-primary-dark: #002244;
+    --color-primary-light: #e6f0fa;
+    --color-secondary: {{ settings.color_secondary | default: '#0F4C81' }};
+    --color-accent: {{ settings.color_accent | default: '#F58220' }};
+    --color-accent-hover: #e07010;
+    --color-accent-light: rgba(245, 130, 32, 0.1);
+    --color-bg-page: {{ settings.color_bg | default: '#FFFFFF' }};
+    --color-bg-section: {{ settings.color_bg_alt | default: '#F8FAFC' }};
+    --color-bg-dark: #001730;
+    --color-bg-dark-alt: #001020;
+    --color-text: {{ settings.color_text | default: '#111827' }};
+    --color-text-muted: {{ settings.color_text_muted | default: '#6B7280' }};
+    --color-text-light: #9CA3AF;
+    --color-white: #FFFFFF;
+    --color-border: #E5E7EB;
+    --color-border-dark: rgba(255, 255, 255, 0.12);
 
-    /* ── Background Colors ─────────────────────────── */
-    --color-bg:               {{ settings.color_background }};
-    --color-bg-section:       {{ settings.color_background_section }};
+    /* ── Typography ────────────────────────────────────────────────────────── */
+    --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-    /* ── Text Colors ───────────────────────────────── */
-    --color-text:             {{ settings.color_text }};
-    --color-text-muted:       {{ settings.color_text_muted }};
-    --color-border:           {{ settings.color_border }};
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
 
-    /* ── Derived / Utility Colors ──────────────────── */
-    --color-primary-dark:     color-mix(in srgb, {{ settings.color_primary }} 80%, #000);
-    --color-accent-dark:      color-mix(in srgb, {{ settings.color_accent }} 80%, #000);
-    --color-primary-light:    color-mix(in srgb, {{ settings.color_primary }} 10%, #fff);
-    --color-white:            #FFFFFF;
-    --color-black:            #000000;
+    /* Fluid Typography Scale */
+    --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.8125rem);
+    --text-sm: clamp(0.84rem, 0.8rem + 0.2vw, 0.875rem);
+    --text-base: clamp(0.95rem, 0.9rem + 0.25vw, 1rem);
+    --text-lg: clamp(1.1rem, 1rem + 0.5vw, 1.125rem);
+    --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.25rem);
+    --text-2xl: clamp(1.4rem, 1.2rem + 1vw, 1.625rem);
+    --text-3xl: clamp(1.75rem, 1.4rem + 1.5vw, 2.25rem);
+    --text-4xl: clamp(2.2rem, 1.7rem + 2.2vw, 3rem);
+    --text-5xl: clamp(2.8rem, 2rem + 3.5vw, 4rem);
 
-    /* ── Typography ────────────────────────────────── */
-    --font-body:              {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }}, system-ui, sans-serif;
-    --font-size-base:         {{ settings.type_base_size }}px;
-    --font-weight-heading:    {{ settings.type_heading_weight }};
-    --font-weight-normal:     400;
-    --font-weight-medium:     500;
-    --font-weight-semibold:   600;
-    --font-weight-bold:       700;
-
-    /* ── Type Scale (Major Third — 1.250 ratio) ─────── */
-    --text-xs:    0.64rem;    /* ~10px  */
-    --text-sm:    0.80rem;    /* ~13px  */
-    --text-base:  1rem;       /* 16px   */
-    --text-lg:    1.25rem;    /* ~20px  */
-    --text-xl:    1.563rem;   /* ~25px  */
-    --text-2xl:   1.953rem;   /* ~31px  */
-    --text-3xl:   2.441rem;   /* ~39px  */
-    --text-4xl:   3.052rem;   /* ~49px  */
-    --text-5xl:   3.815rem;   /* ~61px  */
-
-    /* ── Line Heights ──────────────────────────────── */
-    --leading-tight:  1.2;
-    --leading-snug:   1.375;
+    --leading-tight: 1.15;
+    --leading-snug: 1.25;
     --leading-normal: 1.5;
-    --leading-relaxed:1.75;
+    --leading-relaxed: 1.65;
 
-    /* ── Letter Spacing ────────────────────────────── */
-    --tracking-tight:  -0.025em;
-    --tracking-normal:  0em;
-    --tracking-wide:    0.025em;
-    --tracking-wider:   0.05em;
-    --tracking-widest:  0.1em;
+    --tracking-tight: -0.025em;
+    --tracking-normal: 0;
+    --tracking-wide: 0.025em;
+    --tracking-wider: 0.05em;
+    --tracking-widest: 0.1em;
 
-    /* ── Layout ────────────────────────────────────── */
-    --container-max:    {{ settings.layout_container_width }};
-    --container-gutter: clamp(1rem, 4vw, 2rem);
-    --section-spacing:  {{ settings.layout_section_spacing }}px;
-    --section-spacing-sm: calc({{ settings.layout_section_spacing }}px * 0.625);
-
-    /* ── Borders & Radius ──────────────────────────── */
-    --radius-xs:   4px;
-    --radius-sm:   {{ settings.layout_border_radius }}px;
-    --radius-md:   calc({{ settings.layout_border_radius }}px * 1.5);
-    --radius-lg:   calc({{ settings.layout_border_radius }}px * 2.5);
-    --radius-xl:   calc({{ settings.layout_border_radius }}px * 3.75);
-    --radius-full: 9999px;
-
-    /* ── Shadows ───────────────────────────────────── */
-    --shadow-xs:  0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-sm:  0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
-    --shadow-md:  0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-    --shadow-lg:  0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-    --shadow-xl:  0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.18);
-    --shadow-primary: 0 8px 32px rgba(0, 51, 102, 0.25);
-    --shadow-accent:  0 8px 24px rgba(245, 130, 32, 0.35);
-
-    /* ── Transitions ───────────────────────────────── */
-    --ease-out:      cubic-bezier(0.4, 0, 0.2, 1);
-    --ease-in:       cubic-bezier(0.4, 0, 1, 1);
-    --ease-in-out:   cubic-bezier(0.4, 0, 0.2, 1);
-    --ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
-    --duration-fast: 150ms;
-    --duration-base: 250ms;
-    --duration-slow: 350ms;
-    --transition:    var(--duration-base) var(--ease-out);
-
-    /* ── Z-Index Scale ─────────────────────────────── */
-    --z-below:    -1;
-    --z-base:      0;
-    --z-raised:    10;
-    --z-dropdown:  100;
-    --z-sticky:    200;
-    --z-overlay:   300;
-    --z-modal:     400;
-    --z-toast:     500;
-
-    /* ── Spacing Scale ─────────────────────────────── */
-    --space-1:  0.25rem;
-    --space-2:  0.5rem;
-    --space-3:  0.75rem;
-    --space-4:  1rem;
-    --space-5:  1.25rem;
-    --space-6:  1.5rem;
-    --space-8:  2rem;
+    /* ── Spacing ───────────────────────────────────────────────────────────── */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
     --space-10: 2.5rem;
     --space-12: 3rem;
     --space-16: 4rem;
     --space-20: 5rem;
     --space-24: 6rem;
-  }
 
-  /* ── Font-face from Shopify CDN ────────────────── */
-  {{ settings.type_primary_font | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'weight', '500' | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'weight', '600' | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'weight', '700' | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'weight', '800' | font_face: font_display: 'swap' }}
+    /* ── Layout ────────────────────────────────────────────────────────────── */
+    --container-width: {{ settings.container_width | default: 1280 }}px;
+    --container-padding: clamp(1.25rem, 4vw, 2.5rem);
+
+    /* ── Border Radius ─────────────────────────────────────────────────────── */
+    --radius-xs: 4px;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --radius-2xl: 28px;
+    --radius-full: 9999px;
+
+    /* ── Shadows ───────────────────────────────────────────────────────────── */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.08), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+    --shadow-xl: 0 20px 40px -4px rgba(0, 51, 102, 0.12), 0 8px 16px -4px rgba(0, 0, 0, 0.04);
+    --shadow-2xl: 0 30px 60px -12px rgba(0, 31, 64, 0.25);
+    --shadow-glow: 0 0 30px rgba(245, 130, 32, 0.35);
+
+    /* ── Transitions ───────────────────────────────────────────────────────── */
+    --duration-fast: 150ms;
+    --duration-base: 250ms;
+    --duration-slow: 400ms;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --transition: var(--duration-base) var(--ease-out);
+
+    /* ── Z-Index Scale ─────────────────────────────────────────────────────── */
+    --z-negative: -1;
+    --z-normal: 1;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-header: 300;
+    --z-overlay: 400;
+    --z-modal: 500;
+    --z-toast: 600;
+  }
 </style>
