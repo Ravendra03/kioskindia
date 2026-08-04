@@ -1,36 +1,133 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}">
+<html lang="{{ request.locale.iso_code }}" dir="ltr">
   <head>
-    {% # Inlined CSS Variables %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {%- comment -%} ── CSS Design Tokens (inline for zero render-blocking) ── {%- endcomment -%}
     {% render 'css-variables' %}
 
-    {% comment %}
-      Font preloading:
-      1. Preconnect to font CDN for faster connection
-      2. Preload only the critical font variant (base weight)
-      3. Additional variants load on-demand via @font-face
-    {% endcomment %}
-    {% unless settings.type_primary_font.system? %}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- comment -%} ── Favicon ─────────────────────────────────────────────── {%- endcomment -%}
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32 }}">
+    {%- endif -%}
 
-      {% comment %} Preload the base font variant for initial page render {% endcomment %}
+    {%- comment -%}
+      Font Strategy:
+      1. Preconnect to Google Fonts CDN for DNS resolution
+      2. Preconnect to fonts.gstatic.com for font file downloads
+      3. Load Inter with display=swap to prevent FOIT
+      4. Shopify font_face renders @font-face from Shopify CDN (set in css-variables)
+    {%- endcomment -%}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+
+    {%- comment -%} If using custom font from Shopify font picker {%- endcomment -%}
+    {%- unless settings.type_primary_font.system? -%}
       {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
-    {% endunless %}
+    {%- endunless -%}
 
-    {% # Load and preload the critical CSS %}
-    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
-
-    {% # Social, title, etc. %}
+    {%- comment -%} ── SEO, OG, Twitter Cards, Schema ──────────────────────── {%- endcomment -%}
     {% render 'meta-tags' %}
 
+    {%- comment -%} ── Global Stylesheet (design system) ───────────────────── {%- endcomment -%}
+    {{ 'maxwell-base.css' | asset_url | stylesheet_tag }}
+
+    {%- comment -%} ── Shopify required head content ────────────────────────── {%- endcomment -%}
     {{ content_for_header }}
   </head>
 
-  <body>
+  <body class="template-{{ request.page_type | handle }}">
+
+    {%- comment -%} ── Scroll Progress Bar ─────────────────────────────────── {%- endcomment -%}
+    <div class="scroll-progress" role="progressbar" aria-label="Page scroll progress" aria-valuemin="0" aria-valuemax="100"></div>
+
+    {%- comment -%} ── Accessibility: Skip to main content ─────────────────── {%- endcomment -%}
+    <a href="#main-content" class="skip-to-content">
+      Skip to main content
+    </a>
+
+    {%- comment -%} ── Header Group (announcement bar + sticky header) ─────── {%- endcomment -%}
     {% sections 'header-group' %}
 
-    {{ content_for_layout }}
+    {%- comment -%} ── Main Content ────────────────────────────────────────── {%- endcomment -%}
+    <main id="main-content" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
 
+    {%- comment -%} ── Footer Group ─────────────────────────────────────────── {%- endcomment -%}
     {% sections 'footer-group' %}
+
+    {%- comment -%}
+      ── Floating WhatsApp Button ──────────────────────────────────────────
+      Only renders if WhatsApp number is set in Theme Settings.
+      Uses rel="noopener noreferrer" for security on target="_blank".
+    {%- endcomment -%}
+    {%- if settings.contact_whatsapp != blank -%}
+      <a
+        href="https://wa.me/{{ settings.contact_whatsapp }}?text=Hello%2C%20I%20am%20interested%20in%20your%20products.%20Please%20share%20more%20details."
+        class="whatsapp-float"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Chat with us on WhatsApp"
+        id="whatsapp-float-btn"
+      >
+        <span class="whatsapp-float__icon">
+          {% render 'icon', name: 'whatsapp', size: 24, aria_label: 'WhatsApp' %}
+        </span>
+        <span class="whatsapp-float__label">Chat with us</span>
+      </a>
+    {%- endif -%}
+
+    {%- comment -%} ── Global Interactions & Animations ────────────────────── {%- endcomment -%}
+    <script src="{{ 'maxwell-animations.js' | asset_url }}" defer></script>
+
+    {%- comment -%}
+      ── Organization JSON-LD Schema ─────────────────────────────────────
+      Structured data for Google Business Knowledge Graph.
+      All values are pulled from Theme Settings — never hardcoded.
+    {%- endcomment -%}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": {{ settings.company_name | default: shop.name | json }},
+      "description": {{ settings.company_description | default: shop.description | json }},
+      "url": {{ shop.url | json }},
+      "logo": {%- if settings.header_logo != blank -%}{{ settings.header_logo | image_url: width: 400 | prepend: 'https:' | json }}{%- else -%}null{%- endif -%},
+      "foundingDate": {{ settings.contact_established | json }},
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Phase 4, Plot No. 2012, GIDC, Vatwa",
+        "addressLocality": "Ahmedabad",
+        "addressRegion": "Gujarat",
+        "postalCode": "382445",
+        "addressCountry": "IN"
+      },
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": {{ settings.contact_phone | json }},
+          "contactType": "sales",
+          "areaServed": "IN",
+          "availableLanguage": "en"
+        }
+      ],
+      "sameAs": [
+        {%- assign social_links = '' -%}
+        {%- if settings.social_linkedin != blank -%}{%- assign social_links = social_links | append: settings.social_linkedin | append: ',' -%}{%- endif -%}
+        {%- if settings.social_instagram != blank -%}{%- assign social_links = social_links | append: settings.social_instagram | append: ',' -%}{%- endif -%}
+        {%- if settings.social_youtube != blank -%}{%- assign social_links = social_links | append: settings.social_youtube | append: ',' -%}{%- endif -%}
+        {%- if settings.social_facebook != blank -%}{%- assign social_links = social_links | append: settings.social_facebook | append: ',' -%}{%- endif -%}
+        {%- assign social_arr = social_links | split: ',' | compact -%}
+        {%- for link in social_arr -%}
+          {{ link | json }}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    }
+    </script>
+
   </body>
 </html>

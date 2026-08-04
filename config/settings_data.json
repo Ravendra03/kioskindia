@@ -1,12 +1,44 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
-  "current": {}
+  "current": {
+    "type": "theme",
+    "sections": {},
+    "blocks": {},
+    "settings": {
+      "type_primary_font": "inter_n4",
+      "type_base_size": 16,
+      "type_heading_weight": "700",
+      "color_primary": "#003366",
+      "color_secondary": "#0F4C81",
+      "color_accent": "#F58220",
+      "color_background": "#FFFFFF",
+      "color_background_section": "#F8FAFC",
+      "color_text": "#111827",
+      "color_text_muted": "#6B7280",
+      "color_border": "#E5E7EB",
+      "layout_container_width": "1320px",
+      "layout_section_spacing": 80,
+      "layout_border_radius": 8,
+      "company_name": "Maxwell Automatic",
+      "company_tagline": "Manufacturer of Interactive Kiosks & Digital Signages",
+      "company_description": "Premium manufacturer of Interactive Kiosks, Digital Signages, and Electrical Enclosures based in Ahmedabad, Gujarat. Serving hospitals, government, corporates and smart city projects across India.",
+      "contact_phone": "+91 79 4254 0370",
+      "contact_phone_raw": "917942540370",
+      "contact_whatsapp": "917942540370",
+      "contact_email": "info@maxwell-automatic.com",
+      "contact_address": "Phase 4, Plot No. 2012, GIDC, Vatwa, Ahmedabad – 382445, Gujarat, India",
+      "contact_address_short": "Vatwa, Ahmedabad – 382445",
+      "contact_gst": "24AABFM4288P1ZS",
+      "contact_established": "2017",
+      "map_embed_url": "https://maps.google.com/maps?q=22.96701,72.64189&z=15&output=embed",
+      "map_directions_url": "https://maps.google.com?q=22.96701000,72.64189000",
+      "header_logo_width": 160,
+      "header_transparent_hero": true,
+      "header_show_topbar": true,
+      "header_cta_text": "Request a Quote",
+      "announcement_show": true,
+      "announcement_bg_color": "#003366",
+      "announcement_text_color": "#FFFFFF"
+    }
+  },
+  "presets": {}
 }

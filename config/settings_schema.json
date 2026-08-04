@@ -1,82 +1,361 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Skeleton",
-    "theme_version": "0.1.0",
-    "theme_author": "Shopify",
+    "theme_name": "Maxwell",
+    "theme_version": "1.0.0",
+    "theme_author": "Maxwell Automatic",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://support.shopify.com/"
   },
   {
-    "name": "t:general.typography",
+    "name": "Typography",
     "settings": [
       {
         "type": "header",
-        "content": "t:general.fonts"
+        "content": "Primary Font"
       },
       {
         "type": "font_picker",
         "id": "type_primary_font",
-        "default": "work_sans_n4",
-        "label": "t:general.primary"
+        "default": "inter_n4",
+        "label": "Primary font"
+      },
+      {
+        "type": "range",
+        "id": "type_base_size",
+        "min": 14,
+        "max": 18,
+        "step": 1,
+        "unit": "px",
+        "label": "Base font size",
+        "default": 16
+      },
+      {
+        "type": "select",
+        "id": "type_heading_weight",
+        "label": "Heading font weight",
+        "options": [
+          { "value": "600", "label": "Semi Bold (600)" },
+          { "value": "700", "label": "Bold (700)" },
+          { "value": "800", "label": "Extra Bold (800)" }
+        ],
+        "default": "700"
       }
     ]
   },
   {
-    "name": "t:general.layout",
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Brand Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "default": "#003366",
+        "label": "Primary color",
+        "info": "Used for header, footer, headings"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "default": "#0F4C81",
+        "label": "Secondary color",
+        "info": "Used for hover states, gradients"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "default": "#F58220",
+        "label": "Accent color",
+        "info": "Used for CTAs, highlights, badges"
+      },
+      {
+        "type": "header",
+        "content": "Background Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "default": "#FFFFFF",
+        "label": "Page background"
+      },
+      {
+        "type": "color",
+        "id": "color_background_section",
+        "default": "#F8FAFC",
+        "label": "Alternate section background"
+      },
+      {
+        "type": "header",
+        "content": "Text Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "default": "#111827",
+        "label": "Primary text"
+      },
+      {
+        "type": "color",
+        "id": "color_text_muted",
+        "default": "#6B7280",
+        "label": "Muted / secondary text"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "default": "#E5E7EB",
+        "label": "Border color"
+      }
+    ]
+  },
+  {
+    "name": "Layout",
     "settings": [
       {
         "type": "select",
-        "id": "max_page_width",
-        "label": "t:labels.page_width",
+        "id": "layout_container_width",
+        "label": "Container max-width",
         "options": [
-          {
-            "value": "90rem",
-            "label": "t:options.page_width.narrow"
-          },
-          {
-            "value": "110rem",
-            "label": "t:options.page_width.wide"
-          }
+          { "value": "1200px", "label": "Narrow (1200px)" },
+          { "value": "1320px", "label": "Standard (1320px)" },
+          { "value": "1440px", "label": "Wide (1440px)" }
         ],
-        "default": "90rem"
+        "default": "1320px"
       },
       {
         "type": "range",
-        "id": "min_page_margin",
-        "min": 10,
-        "max": 100,
-        "step": 1,
+        "id": "layout_section_spacing",
+        "min": 40,
+        "max": 120,
+        "step": 8,
         "unit": "px",
-        "label": "t:labels.page_margin",
-        "default": 20
+        "label": "Section vertical spacing",
+        "default": 80
+      },
+      {
+        "type": "range",
+        "id": "layout_border_radius",
+        "min": 0,
+        "max": 20,
+        "step": 2,
+        "unit": "px",
+        "label": "Card border radius",
+        "default": 8
       }
     ]
   },
   {
-    "name": "t:general.colors",
+    "name": "Company Info",
     "settings": [
       {
-        "type": "color",
-        "id": "background_color",
-        "default": "#FFFFFF",
-        "label": "t:labels.background"
+        "type": "header",
+        "content": "Basic Details"
       },
       {
-        "type": "color",
-        "id": "foreground_color",
-        "default": "#333333",
-        "label": "t:labels.foreground"
+        "type": "text",
+        "id": "company_name",
+        "label": "Company name",
+        "default": "Maxwell Automatic"
+      },
+      {
+        "type": "textarea",
+        "id": "company_tagline",
+        "label": "Company tagline",
+        "default": "Manufacturer of Interactive Kiosks & Digital Signages"
+      },
+      {
+        "type": "textarea",
+        "id": "company_description",
+        "label": "Company short description",
+        "default": "Premium manufacturer of Interactive Kiosks, Digital Signages, and Electrical Enclosures based in Ahmedabad, Gujarat. Serving hospitals, government, corporates and smart city projects across India."
+      },
+      {
+        "type": "header",
+        "content": "Contact Information"
+      },
+      {
+        "type": "text",
+        "id": "contact_phone",
+        "label": "Phone number",
+        "default": "+91 79 4254 0370"
+      },
+      {
+        "type": "text",
+        "id": "contact_phone_raw",
+        "label": "Phone (digits only, for tel: link)",
+        "default": "917942540370"
+      },
+      {
+        "type": "text",
+        "id": "contact_whatsapp",
+        "label": "WhatsApp number (with country code)",
+        "default": "917942540370",
+        "info": "Used for WhatsApp click-to-chat links. Format: 91XXXXXXXXXX"
+      },
+      {
+        "type": "text",
+        "id": "contact_email",
+        "label": "Email address",
+        "default": "info@maxwell-automatic.com"
+      },
+      {
+        "type": "textarea",
+        "id": "contact_address",
+        "label": "Full address",
+        "default": "Phase 4, Plot No. 2012, GIDC, Vatwa, Ahmedabad – 382445, Gujarat, India"
+      },
+      {
+        "type": "text",
+        "id": "contact_address_short",
+        "label": "Short address (for header/footer)",
+        "default": "Vatwa, Ahmedabad – 382445"
+      },
+      {
+        "type": "text",
+        "id": "contact_gst",
+        "label": "GST Number",
+        "default": "24AABFM4288P1ZS"
+      },
+      {
+        "type": "text",
+        "id": "contact_established",
+        "label": "Year established",
+        "default": "2017"
+      },
+      {
+        "type": "header",
+        "content": "Google Maps"
+      },
+      {
+        "type": "text",
+        "id": "map_embed_url",
+        "label": "Google Maps embed URL",
+        "default": "https://maps.google.com/maps?q=22.96701,72.64189&z=15&output=embed",
+        "info": "Go to Google Maps → Share → Embed a map → Copy src URL"
+      },
+      {
+        "type": "text",
+        "id": "map_directions_url",
+        "label": "Google Maps directions URL",
+        "default": "https://maps.google.com?q=22.96701000,72.64189000"
+      }
+    ]
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_linkedin",
+        "label": "LinkedIn URL"
+      },
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube",
+        "label": "YouTube URL"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "url",
+        "id": "social_twitter",
+        "label": "X (Twitter) URL"
+      }
+    ]
+  },
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "header_logo",
+        "label": "Logo image",
+        "info": "Recommended: SVG or PNG with transparent background. Max height 60px."
       },
       {
         "type": "range",
-        "id": "input_corner_radius",
-        "min": 0,
-        "max": 10,
-        "step": 1,
+        "id": "header_logo_width",
+        "min": 80,
+        "max": 280,
+        "step": 8,
         "unit": "px",
-        "label": "t:labels.input_corner_radius",
-        "default": 4
+        "label": "Logo width",
+        "default": "160"
+      },
+      {
+        "type": "checkbox",
+        "id": "header_transparent_hero",
+        "label": "Transparent header on hero",
+        "default": true,
+        "info": "Header becomes transparent when overlapping the hero section"
+      },
+      {
+        "type": "checkbox",
+        "id": "header_show_topbar",
+        "label": "Show top info bar",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "header_cta_text",
+        "label": "Header CTA button text",
+        "default": "Request a Quote"
+      },
+      {
+        "type": "url",
+        "id": "header_cta_url",
+        "label": "Header CTA button link"
+      },
+      {
+        "type": "link_list",
+        "id": "header_menu",
+        "label": "Navigation menu",
+        "default": "main-menu"
+      }
+    ]
+  },
+  {
+    "name": "Announcement Bar",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "announcement_show",
+        "label": "Show announcement bar",
+        "default": true
+      },
+      {
+        "type": "color",
+        "id": "announcement_bg_color",
+        "label": "Background color",
+        "default": "#003366"
+      },
+      {
+        "type": "color",
+        "id": "announcement_text_color",
+        "label": "Text color",
+        "default": "#FFFFFF"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image",
+        "info": "16x16 or 32x32 px .ico, .png, or .gif image"
       }
     ]
   }

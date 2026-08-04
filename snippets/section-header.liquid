@@ -1,0 +1,64 @@
+{%- comment -%}
+  MAXWELL SECTION HEADER SNIPPET
+  Renders a consistent eyebrow + heading + subtitle block.
+
+  Parameters:
+    - eyebrow:    (optional) Small uppercase label above heading
+    - heading:    (required) Main section heading
+    - subtitle:   (optional) Descriptive text below heading
+    - align:      (optional) 'left' | 'center' | 'right' — default: 'left'
+    - theme:      (optional) 'dark' | 'light' — default: 'light'
+    - heading_tag:(optional) h1–h6 — default: 'h2'
+    - cta_text:   (optional) CTA button text
+    - cta_url:    (optional) CTA button URL
+    - cta_style:  (optional) 'ghost' | 'outline' | 'primary' — default: 'ghost'
+    - animate:    (optional) true|false — adds data-animate attributes — default: true
+{%- endcomment -%}
+
+{%- liquid
+  assign align      = align      | default: 'left'
+  assign heading_tag = heading_tag | default: 'h2'
+  assign theme      = theme      | default: 'light'
+  assign cta_style  = cta_style  | default: 'ghost'
+  assign do_animate = animate    | default: true
+  assign section_id_attr = ''
+  if section_id
+    assign section_id_attr = 'id="' | append: section_id | append: '"'
+  endif
+-%}
+
+<div class="section-header{% if align == 'center' %} section-header--center{% elsif align == 'right' %} section-header--right{% endif %}" {{ section_id_attr }}>
+
+  {%- if eyebrow != blank -%}
+    <span class="eyebrow{% if theme == 'dark' %} eyebrow--light{% endif %}"
+      {%- if do_animate %} data-animate="fade-up" data-delay="0"{% endif %}>
+      {{ eyebrow }}
+    </span>
+  {%- endif -%}
+
+  {%- if heading != blank -%}
+    <{{ heading_tag }} class="section-title{% if theme == 'dark' %} section-title--light{% endif %}"
+      {%- if do_animate %} data-animate="fade-up" data-delay="100"{% endif %}>
+      {{ heading }}
+    </{{ heading_tag }}>
+  {%- endif -%}
+
+  {%- if subtitle != blank -%}
+    <p class="section-subtitle{% if theme == 'dark' %} section-subtitle--light{% endif %}"
+      {%- if do_animate %} data-animate="fade-up" data-delay="200"{% endif %}>
+      {{ subtitle }}
+    </p>
+  {%- endif -%}
+
+  {%- if cta_text != blank and cta_url != blank -%}
+    <a href="{{ cta_url }}"
+       class="btn btn--{{ cta_style }} section-header__cta"
+       {%- if do_animate %} data-animate="fade-up" data-delay="300"{% endif %}>
+      {{ cta_text }}
+      {%- if cta_style == 'ghost' -%}
+        <span class="btn__icon">{% render 'icon', name: 'arrow-right', size: 18 %}</span>
+      {%- endif -%}
+    </a>
+  {%- endif -%}
+
+</div>

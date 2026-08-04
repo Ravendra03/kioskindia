@@ -1,77 +1,1320 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+{%- comment -%}
+  MAXWELL MAIN HEADER SECTION
+  ─────────────────────────────────────────────────────────────────────────────
+  Features:
+  - Sticky header with scroll-triggered transparent → solid transition
+  - Top info bar: phone, email, certifications (desktop only)
+  - Logo: image (from settings) or text fallback
+  - Desktop Mega Menu: 3-column dropdowns with featured image panel
+  - Search: slide-in overlay with product search
+  - Request a Quote: accent CTA button
+  - Mobile: hamburger → full-screen drawer with accordion nav
+  - Keyboard accessible: arrow keys, escape, focus trap
+  ─────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
+{%- liquid
+  assign nav_menu = section.settings.nav_menu | default: 'main-menu'
+  assign menu     = linklists[nav_menu]
+-%}
+
+<header
+  class="site-header{% if section.settings.transparent_on_hero %} header--transparent{% endif %}"
+  id="site-header"
+  role="banner"
+>
+
+  {%- comment -%}
+  ─── TOP INFO BAR ──────────────────────────────────────────────────────────
+  Shows only on desktop. Phone, email, trust badges.
+  ─────────────────────────────────────────────────────────────────────────── {%- endcomment -%}
+  {%- if section.settings.show_topbar -%}
+    <div class="header-topbar" aria-label="Contact information">
+      <div class="container header-topbar__inner">
+
+        <div class="header-topbar__left">
+          {%- if settings.contact_phone != blank -%}
+            <a href="tel:{{ settings.contact_phone_raw }}" class="header-topbar__link" aria-label="Call {{ settings.contact_phone }}">
+              {% render 'icon', name: 'phone', size: 14 %}
+              <span>{{ settings.contact_phone }}</span>
+            </a>
+          {%- endif -%}
+          {%- if settings.contact_email != blank -%}
+            <a href="mailto:{{ settings.contact_email }}" class="header-topbar__link" aria-label="Email {{ settings.contact_email }}">
+              {% render 'icon', name: 'email', size: 14 %}
+              <span>{{ settings.contact_email }}</span>
+            </a>
+          {%- endif -%}
+          {%- if settings.contact_address_short != blank -%}
+            <span class="header-topbar__location" aria-label="Location">
+              {% render 'icon', name: 'map-pin', size: 14 %}
+              <span>{{ settings.contact_address_short }}</span>
+            </span>
+          {%- endif -%}
+        </div>
+
+        <div class="header-topbar__right">
+          {%- if section.settings.topbar_badge_1 != blank -%}
+            <span class="header-topbar__badge">{{ section.settings.topbar_badge_1 }}</span>
+          {%- endif -%}
+          {%- if section.settings.topbar_badge_2 != blank -%}
+            <span class="header-topbar__badge">{{ section.settings.topbar_badge_2 }}</span>
+          {%- endif -%}
+          {%- if section.settings.topbar_badge_3 != blank -%}
+            <span class="header-topbar__badge">{{ section.settings.topbar_badge_3 }}</span>
+          {%- endif -%}
+          {%- comment -%} Social Links {%- endcomment -%}
+          <div class="header-topbar__social" aria-label="Social media links">
+            {%- if settings.social_linkedin != blank -%}
+              <a href="{{ settings.social_linkedin }}" target="_blank" rel="noopener noreferrer" class="header-topbar__social-link" aria-label="LinkedIn">
+                {% render 'icon', name: 'linkedin', size: 16 %}
+              </a>
+            {%- endif -%}
+            {%- if settings.social_instagram != blank -%}
+              <a href="{{ settings.social_instagram }}" target="_blank" rel="noopener noreferrer" class="header-topbar__social-link" aria-label="Instagram">
+                {% render 'icon', name: 'instagram', size: 16 %}
+              </a>
+            {%- endif -%}
+            {%- if settings.social_youtube != blank -%}
+              <a href="{{ settings.social_youtube }}" target="_blank" rel="noopener noreferrer" class="header-topbar__social-link" aria-label="YouTube">
+                {% render 'icon', name: 'youtube', size: 16 %}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%}
+  ─── MAIN NAVIGATION BAR ───────────────────────────────────────────────────
+  ─────────────────────────────────────────────────────────────────────────── {%- endcomment -%}
+  <div class="header-main">
+    <div class="container header-main__inner">
+
+      {%- comment -%} ── Logo ─────────────────────────────────────────────── {%- endcomment -%}
+      <a href="{{ routes.root_url }}" class="brand-logo" aria-label="{{ settings.company_name | default: shop.name }} — Home">
+        {%- if settings.header_logo != blank -%}
+          {%- assign logo_width = section.settings.logo_width | default: settings.header_logo_width | default: 160 -%}
+          {{
+            settings.header_logo
+            | image_url: width: logo_width
+            | image_tag:
+              class: 'brand-logo__image',
+              width: logo_width,
+              height: 'auto',
+              alt: settings.company_name | default: shop.name,
+              loading: 'eager',
+              fetchpriority: 'high'
+          }}
+        {%- else -%}
+          {%- comment -%} Text fallback — always renders if no logo uploaded {%- endcomment -%}
+          <div class="brand-logo__text" aria-hidden="true">
+            <span class="brand-logo__name">{{ settings.company_name | default: shop.name }}</span>
+            <span class="brand-logo__tagline">{{ settings.company_tagline | truncate: 36 }}</span>
+          </div>
+        {%- endif -%}
+      </a>
+
+      {%- comment -%} ── Desktop Navigation ────────────────────────────────── {%- endcomment -%}
+      <nav class="header-nav" aria-label="Main navigation">
+        <ul class="header-nav__list" role="list">
+          {%- for link in menu.links -%}
+            {%- liquid
+              assign has_children = false
+              if link.links.size > 0
+                assign has_children = true
+              endif
+              assign is_active = false
+              if link.active
+                assign is_active = true
+              endif
+            -%}
+
+            <li class="header-nav__item{% if has_children %} header-nav__item--has-dropdown{% endif %}{% if is_active %} header-nav__item--active{% endif %}"
+              {%- if has_children %} data-mega-menu-item{%- endif -%}>
+
+              {%- if has_children -%}
+                <button
+                  class="header-nav__link header-nav__link--dropdown"
+                  data-mega-menu-trigger
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  aria-controls="dropdown-{{ forloop.index }}"
+                  type="button"
+                >
+                  {{ link.title }}
+                  <span class="header-nav__chevron" aria-hidden="true">
+                    {% render 'icon', name: 'chevron-down', size: 16 %}
+                  </span>
+                </button>
+
+                {%- comment -%} ── Mega Menu Dropdown Panel ────────────────── {%- endcomment -%}
+                <div
+                  class="mega-menu"
+                  id="dropdown-{{ forloop.index }}"
+                  data-mega-menu-panel
+                  aria-hidden="true"
+                  role="region"
+                  aria-label="{{ link.title }} menu"
+                >
+                  <div class="container">
+                    <div class="mega-menu__inner">
+
+                      {%- comment -%} ── Sub-links grouped in columns ──────── {%- endcomment -%}
+                      <div class="mega-menu__columns">
+                        {%- for child_link in link.links -%}
+                          <div class="mega-menu__column">
+                            {%- if child_link.links.size > 0 -%}
+                              <p class="mega-menu__heading">{{ child_link.title }}</p>
+                              <ul class="mega-menu__sublist" role="list">
+                                {%- for grandchild in child_link.links -%}
+                                  <li>
+                                    <a
+                                      href="{{ grandchild.url }}"
+                                      class="mega-menu__link{% if grandchild.active %} is-active{% endif %}"
+                                    >
+                                      {% render 'icon', name: 'chevron-right', size: 14 %}
+                                      {{ grandchild.title }}
+                                    </a>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            {%- else -%}
+                              <a
+                                href="{{ child_link.url }}"
+                                class="mega-menu__link mega-menu__link--standalone{% if child_link.active %} is-active{% endif %}"
+                              >
+                                {% render 'icon', name: 'chevron-right', size: 14 %}
+                                {{ child_link.title }}
+                              </a>
+                            {%- endif -%}
+                          </div>
+                        {%- endfor -%}
+                      </div>
+
+                      {%- comment -%} ── Featured panel (from section blocks) ─ {%- endcomment -%}
+                      {%- assign featured_block = nil -%}
+                      {%- for block in section.blocks -%}
+                        {%- if block.type == 'mega_menu_feature' and block.settings.menu_item == link.title -%}
+                          {%- assign featured_block = block -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+
+                      {%- if featured_block != nil and featured_block.settings.image != blank -%}
+                        <div class="mega-menu__featured" {{ featured_block.shopify_attributes }}>
+                          <a href="{{ featured_block.settings.link | default: '#' }}" class="mega-menu__featured-card">
+                            {{
+                              featured_block.settings.image
+                              | image_url: width: 400
+                              | image_tag:
+                                class: 'mega-menu__featured-img',
+                                alt: featured_block.settings.heading | default: link.title,
+                                loading: 'lazy',
+                                width: 400
+                            }}
+                            <div class="mega-menu__featured-content">
+                              {%- if featured_block.settings.badge != blank -%}
+                                <span class="badge badge--accent">{{ featured_block.settings.badge }}</span>
+                              {%- endif -%}
+                              <p class="mega-menu__featured-heading">{{ featured_block.settings.heading }}</p>
+                              {%- if featured_block.settings.cta_text != blank -%}
+                                <span class="btn btn--ghost btn--sm">
+                                  {{ featured_block.settings.cta_text }}
+                                  {% render 'icon', name: 'arrow-right', size: 14 %}
+                                </span>
+                              {%- endif -%}
+                            </div>
+                          </a>
+                        </div>
+                      {%- endif -%}
+
+                    </div>
+                  </div>
+                </div>
+
+              {%- else -%}
+                <a
+                  href="{{ link.url }}"
+                  class="header-nav__link{% if is_active %} is-active{% endif %}"
+                  {%- if link.url contains 'http' and link.url != request.origin %} target="_blank" rel="noopener noreferrer"{% endif -%}
+                >
+                  {{ link.title }}
+                </a>
+              {%- endif -%}
+
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+
+      {%- comment -%} ── Header Actions (right side) ───────────────────────── {%- endcomment -%}
+      <div class="header-actions">
+
+        {%- comment -%} Search toggle {%- endcomment -%}
+        <button
+          class="header-actions__btn"
+          data-search-open
+          aria-label="Open search"
+          type="button"
+          id="header-search-btn"
+        >
+          {% render 'icon', name: 'search', size: 22 %}
+        </button>
+
+        {%- comment -%} Request a Quote CTA {%- endcomment -%}
+        {%- if section.settings.cta_text != blank -%}
+          <a
+            href="{{ section.settings.cta_url | default: '/pages/contact' }}"
+            class="btn btn--primary btn--sm header-actions__cta"
+            id="header-cta-btn"
+          >
+            {{ section.settings.cta_text }}
+          </a>
+        {%- endif -%}
+
+        {%- comment -%} Mobile hamburger {%- endcomment -%}
+        <button
+          class="header-actions__hamburger"
+          data-mobile-menu-toggle
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          type="button"
+          id="mobile-menu-btn"
+        >
+          {% render 'icon', name: 'menu', size: 26 %}
+        </button>
+
+      </div>
+    </div>
   </div>
 
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
-        {{ 'icon-account.svg' | inline_asset_content }}
-      </shopify-account>
-    {% endif %}
-
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
-
-      {{ 'icon-cart.svg' | inline_asset_content }}
-    </a>
-  </div>
 </header>
 
-{% stylesheet %}
-  header {
-    height: 5rem;
+{%- comment -%}
+─── SEARCH OVERLAY ──────────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────────────────────── {%- endcomment -%}
+<div
+  class="search-overlay overlay"
+  data-search-overlay
+  role="dialog"
+  aria-modal="true"
+  aria-label="Search products"
+  id="search-overlay"
+>
+  <div class="search-overlay__box">
+    <form action="{{ routes.search_url }}" method="get" class="search-overlay__form" role="search">
+      <input type="hidden" name="type" value="product">
+      <label for="search-overlay-input" class="visually-hidden">Search products</label>
+      <div class="search-overlay__field">
+        <span class="search-overlay__icon">{% render 'icon', name: 'search', size: 24 %}</span>
+        <input
+          type="search"
+          name="q"
+          id="search-overlay-input"
+          class="search-overlay__input"
+          data-search-input
+          placeholder="{{ section.settings.search_placeholder | default: 'Search kiosks, signages, enclosures…' }}"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+        >
+        <button type="button" class="search-overlay__close" data-search-close aria-label="Close search">
+          {% render 'icon', name: 'close', size: 22 %}
+        </button>
+      </div>
+      <p class="search-overlay__hint">Press Enter to search · Esc to close</p>
+    </form>
+  </div>
+</div>
+
+{%- comment -%}
+─── MOBILE MENU DRAWER ──────────────────────────────────────────────────────
+─────────────────────────────────────────────────────────────────────────── {%- endcomment -%}
+<div class="overlay" data-mobile-overlay aria-hidden="true"></div>
+
+<nav
+  class="mobile-menu"
+  id="mobile-menu"
+  data-mobile-menu
+  aria-label="Mobile navigation"
+  aria-hidden="true"
+>
+  <div class="mobile-menu__header">
+    <a href="{{ routes.root_url }}" class="mobile-menu__logo-link" aria-label="{{ settings.company_name | default: shop.name }} — Home">
+      {%- if settings.header_logo != blank -%}
+        {{
+          settings.header_logo
+          | image_url: width: 140
+          | image_tag:
+            width: 140,
+            alt: settings.company_name | default: shop.name,
+            loading: 'eager'
+        }}
+      {%- else -%}
+        <strong class="mobile-menu__logo-text">{{ settings.company_name | default: shop.name }}</strong>
+      {%- endif -%}
+    </a>
+    <button
+      class="mobile-menu__close"
+      data-mobile-menu-close
+      aria-label="Close navigation menu"
+      type="button"
+    >
+      {% render 'icon', name: 'close', size: 24 %}
+    </button>
+  </div>
+
+  <div class="mobile-menu__body">
+    <ul class="mobile-menu__list" role="list">
+      {%- for link in menu.links -%}
+        <li class="mobile-menu__item">
+          {%- if link.links.size > 0 -%}
+            <button
+              class="mobile-menu__link mobile-menu__link--accordion"
+              data-mobile-accordion
+              aria-expanded="false"
+              aria-controls="mobile-accordion-{{ forloop.index }}"
+              type="button"
+            >
+              <span>{{ link.title }}</span>
+              <span class="mobile-menu__chevron" aria-hidden="true">{% render 'icon', name: 'chevron-down', size: 18 %}</span>
+            </button>
+            <ul
+              class="mobile-menu__sublist"
+              id="mobile-accordion-{{ forloop.index }}"
+              role="list"
+            >
+              {%- for child_link in link.links -%}
+                <li class="mobile-menu__subitem">
+                  <a href="{{ child_link.url }}" class="mobile-menu__sublink{% if child_link.active %} is-active{% endif %}">
+                    {{ child_link.title }}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- else -%}
+            <a
+              href="{{ link.url }}"
+              class="mobile-menu__link{% if link.active %} is-active{% endif %}"
+            >
+              {{ link.title }}
+            </a>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+
+  <div class="mobile-menu__footer">
+    {%- if section.settings.cta_text != blank -%}
+      <a
+        href="{{ section.settings.cta_url | default: '/pages/contact' }}"
+        class="btn btn--primary"
+        style="width: 100%"
+      >
+        {{ section.settings.cta_text }}
+      </a>
+    {%- endif -%}
+    <div class="mobile-menu__contact">
+      {%- if settings.contact_phone != blank -%}
+        <a href="tel:{{ settings.contact_phone_raw }}" class="mobile-menu__contact-link">
+          {% render 'icon', name: 'phone', size: 18 %}
+          {{ settings.contact_phone }}
+        </a>
+      {%- endif -%}
+      {%- if settings.contact_email != blank -%}
+        <a href="mailto:{{ settings.contact_email }}" class="mobile-menu__contact-link">
+          {% render 'icon', name: 'email', size: 18 %}
+          {{ settings.contact_email }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+
+</nav>
+
+<style>
+  /* =========================================================================
+     SITE HEADER
+     ========================================================================= */
+
+  /* ── Core Header Shell ──────────────────────────────────────────────────── */
+  .site-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-sticky);
+    transition:
+      background-color var(--duration-slow) var(--ease-out),
+      box-shadow var(--duration-slow) var(--ease-out),
+      transform var(--duration-base) var(--ease-out);
+  }
+
+  /* Transparent state (over hero) */
+  .site-header.header--transparent {
+    background-color: transparent;
+  }
+
+  .site-header.header--transparent .header-topbar {
+    display: none;
+  }
+
+  /* Scrolled state (solid) */
+  .site-header.header--scrolled {
+    background-color: var(--color-white);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .site-header.header--scrolled .header-main {
+    border-bottom: none;
+  }
+
+  /* Hide on scroll down (mobile) */
+  .site-header.header--hidden {
+    transform: translateY(-100%);
+  }
+
+  /* ── Top Info Bar ───────────────────────────────────────────────────────── */
+  .header-topbar {
+    background-color: var(--color-primary);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: var(--text-xs);
+    padding-block: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .header-topbar__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: var(--space-4);
   }
-  header a {
-    position: relative;
+
+  .header-topbar__left,
+  .header-topbar__right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+  }
+
+  .header-topbar__link,
+  .header-topbar__location {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: inherit;
     text-decoration: none;
-    color: var(--color-foreground);
+    white-space: nowrap;
+    transition: color var(--transition);
+  }
+
+  .header-topbar__link:hover {
+    color: var(--color-accent);
+  }
+
+  .header-topbar__badge {
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    background-color: rgba(245, 130, 32, 0.15);
+    color: var(--color-accent);
+    border: 1px solid rgba(245, 130, 32, 0.3);
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  .header-topbar__social {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .header-topbar__social-link {
+    color: rgba(255, 255, 255, 0.7);
+    transition: color var(--transition);
+    display: flex;
+    align-items: center;
+  }
+
+  .header-topbar__social-link:hover {
+    color: var(--color-accent);
+  }
+
+  /* ── Main Nav Bar ───────────────────────────────────────────────────────── */
+  .header-main {
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color var(--duration-slow) var(--ease-out);
+  }
+
+  /* Transparent mode: override background */
+  .header--transparent .header-main {
+    background-color: transparent;
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .header-main__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    height: 72px;
+  }
+
+  /* ── Logo state transitions ──────────────────────────────────────────────── */
+  .header--transparent .brand-logo__name {
+    color: var(--color-white);
+  }
+
+  .header--transparent .brand-logo__tagline {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* ── Desktop Nav ─────────────────────────────────────────────────────────── */
+  .header-nav {
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  header a sup {
-    position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
-  }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
+
+  .header-nav__list {
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    gap: 0;
+    list-style: none;
   }
-{% endstylesheet %}
+
+  .header-nav__item {
+    position: relative;
+  }
+
+  .header-nav__link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+    text-decoration: none;
+    border: none;
+    background: none;
+    font-family: inherit;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    transition: color var(--transition), background-color var(--transition);
+    position: relative;
+  }
+
+  .header-nav__link::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: var(--space-4);
+    right: var(--space-4);
+    height: 2px;
+    background-color: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition);
+    border-radius: var(--radius-full);
+  }
+
+  .header-nav__link:hover::after,
+  .header-nav__link.is-active::after,
+  .header-nav__item.is-open .header-nav__link::after {
+    transform: scaleX(1);
+  }
+
+  .header-nav__link:hover,
+  .header-nav__link.is-active,
+  .header-nav__item.is-open .header-nav__link {
+    color: var(--color-primary);
+  }
+
+  /* Transparent header nav links */
+  .header--transparent .header-nav__link {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .header--transparent .header-nav__link:hover,
+  .header--transparent .header-nav__item.is-open .header-nav__link {
+    color: var(--color-white);
+  }
+
+  .header-nav__chevron {
+    display: flex;
+    align-items: center;
+    transition: transform var(--duration-base) var(--ease-out);
+  }
+
+  .header-nav__item.is-open .header-nav__chevron {
+    transform: rotate(180deg);
+  }
+
+  /* ── Mega Menu Panel ──────────────────────────────────────────────────────── */
+  .mega-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: max(600px, 60vw);
+    max-width: 900px;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-2xl);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity var(--duration-base) var(--ease-out),
+      transform var(--duration-base) var(--ease-out),
+      visibility var(--duration-base);
+    transform: translateX(-50%) translateY(-12px);
+    z-index: var(--z-dropdown);
+  }
+
+  .mega-menu::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 12px;
+    height: 12px;
+    background-color: var(--color-white);
+    border-left: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .header-nav__item.is-open .mega-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .mega-menu > .container {
+    padding: var(--space-6);
+  }
+
+  .mega-menu__inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-6);
+  }
+
+  .mega-menu__columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--space-4) var(--space-6);
+  }
+
+  .mega-menu__heading {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .mega-menu__sublist {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    list-style: none;
+  }
+
+  .mega-menu__link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+    text-decoration: none;
+    border-radius: var(--radius-xs);
+    transition: color var(--transition), background-color var(--transition), padding-left var(--transition);
+  }
+
+  .mega-menu__link:hover,
+  .mega-menu__link.is-active {
+    color: var(--color-primary);
+    background-color: var(--color-primary-light);
+    padding-left: var(--space-3);
+  }
+
+  .mega-menu__link .icon {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    transition: color var(--transition);
+  }
+
+  .mega-menu__link:hover .icon {
+    color: var(--color-accent);
+  }
+
+  .mega-menu__link--standalone {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-semibold);
+    padding: var(--space-3) var(--space-3);
+    margin-bottom: var(--space-1);
+  }
+
+  /* Featured card in mega menu */
+  .mega-menu__featured {
+    width: 200px;
+    flex-shrink: 0;
+  }
+
+  .mega-menu__featured-card {
+    display: block;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    text-decoration: none;
+    background-color: var(--color-bg-section);
+    transition: box-shadow var(--transition);
+  }
+
+  .mega-menu__featured-card:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .mega-menu__featured-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    display: block;
+  }
+
+  .mega-menu__featured-content {
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .mega-menu__featured-heading {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    line-height: var(--leading-snug);
+  }
+
+  /* ── Header Actions ─────────────────────────────────────────────────────── */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-shrink: 0;
+  }
+
+  .header-actions__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    color: var(--color-text);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition), color var(--transition);
+    padding: 0;
+  }
+
+  .header-actions__btn:hover {
+    background-color: var(--color-bg-section);
+    color: var(--color-primary);
+  }
+
+  .header--transparent .header-actions__btn {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .header--transparent .header-actions__btn:hover {
+    color: var(--color-white);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .header-actions__hamburger {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    color: var(--color-text);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition), color var(--transition);
+    padding: 0;
+  }
+
+  .header--transparent .header-actions__hamburger {
+    color: var(--color-white);
+  }
+
+  /* ── Search Overlay ───────────────────────────────────────────────────────── */
+  .search-overlay {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 20vh;
+  }
+
+  .search-overlay__box {
+    width: 100%;
+    max-width: 700px;
+    padding: var(--space-6);
+    transform: translateY(-20px);
+    transition: transform var(--duration-base) var(--ease-out);
+  }
+
+  .search-overlay.is-active .search-overlay__box {
+    transform: translateY(0);
+  }
+
+  .search-overlay__form {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-2xl);
+    overflow: hidden;
+  }
+
+  .search-overlay__field {
+    display: flex;
+    align-items: center;
+    padding: var(--space-4) var(--space-5);
+    gap: var(--space-4);
+  }
+
+  .search-overlay__icon {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    display: flex;
+  }
+
+  .search-overlay__input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: var(--text-xl);
+    font-family: inherit;
+    color: var(--color-text);
+    background: transparent;
+  }
+
+  .search-overlay__input::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  .search-overlay__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    transition: color var(--transition), background-color var(--transition);
+    padding: 0;
+  }
+
+  .search-overlay__close:hover {
+    color: var(--color-text);
+    background-color: var(--color-bg-section);
+  }
+
+  .search-overlay__hint {
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    border-top: 1px solid var(--color-border);
+    text-align: center;
+  }
+
+  /* ── Mobile Menu Drawer ──────────────────────────────────────────────────── */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(380px, 90vw);
+    background-color: var(--color-white);
+    z-index: var(--z-modal);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform var(--duration-slow) var(--ease-out);
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: var(--shadow-2xl);
+  }
+
+  .mobile-menu.is-open {
+    transform: translateX(0);
+  }
+
+  .mobile-menu__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-5) var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  .mobile-menu__logo-text {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+  }
+
+  .mobile-menu__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition), color var(--transition);
+    padding: 0;
+  }
+
+  .mobile-menu__close:hover {
+    background-color: var(--color-bg-section);
+    color: var(--color-text);
+  }
+
+  .mobile-menu__body {
+    flex: 1;
+    padding: var(--space-4) var(--space-4);
+    overflow-y: auto;
+  }
+
+  .mobile-menu__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .mobile-menu__item {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .mobile-menu__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--space-4) var(--space-2);
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+    text-decoration: none;
+    border: none;
+    background: none;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+    border-radius: var(--radius-xs);
+    transition: color var(--transition);
+  }
+
+  .mobile-menu__link:hover,
+  .mobile-menu__link.is-active {
+    color: var(--color-primary);
+  }
+
+  .mobile-menu__chevron {
+    display: flex;
+    align-items: center;
+    transition: transform var(--duration-base) var(--ease-out);
+    color: var(--color-text-muted);
+  }
+
+  .mobile-menu__link--accordion[aria-expanded="true"] .mobile-menu__chevron {
+    transform: rotate(180deg);
+  }
+
+  .mobile-menu__sublist {
+    list-style: none;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    padding-left: var(--space-4);
+    padding-bottom: var(--space-2);
+  }
+
+  .mobile-menu__sublist.is-open {
+    display: flex;
+  }
+
+  .mobile-menu__sublink {
+    display: block;
+    padding: var(--space-3) var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    border-radius: var(--radius-xs);
+    transition: color var(--transition), background-color var(--transition);
+  }
+
+  .mobile-menu__sublink:hover,
+  .mobile-menu__sublink.is-active {
+    color: var(--color-primary);
+    background-color: var(--color-primary-light);
+  }
+
+  .mobile-menu__footer {
+    padding: var(--space-5) var(--space-6);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    flex-shrink: 0;
+  }
+
+  .mobile-menu__contact {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .mobile-menu__contact-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+
+  .mobile-menu__contact-link:hover {
+    color: var(--color-primary);
+  }
+
+  /* ── Responsive: Show/hide hamburger ─────────────────────────────────────── */
+  @media (min-width: 1025px) {
+    .header-actions__hamburger {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .header-nav {
+      display: none;
+    }
+
+    .header-actions__hamburger {
+      display: flex;
+    }
+
+    .header-actions__cta {
+      display: none;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .header-topbar {
+      display: none;
+    }
+
+    .header-main__inner {
+      height: 64px;
+    }
+  }
+
+  /* ── Visually hidden utility ─────────────────────────────────────────────── */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
 
 {% schema %}
 {
-  "name": "t:general.header",
+  "name": "Header",
+  "class": "section-header",
+  "limit": 1,
   "settings": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image",
+      "info": "Recommended: SVG or transparent PNG. Will also use logo from Theme Settings if set."
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 80,
+      "max": 280,
+      "step": 8,
+      "unit": "px",
+      "label": "Logo width (desktop)",
+      "default": 160
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
     },
     {
       "type": "link_list",
-      "id": "customer_account_menu",
-      "label": "t:labels.customer_account_menu",
-      "default": "customer-account-main-menu"
+      "id": "nav_menu",
+      "label": "Navigation menu",
+      "default": "main-menu",
+      "info": "Set up your menu in Navigation. Nested items create mega menu dropdowns."
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent_on_hero",
+      "label": "Transparent header over hero section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Top Info Bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_topbar",
+      "label": "Show top bar (desktop only)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "topbar_badge_1",
+      "label": "Trust badge 1",
+      "default": "ISO Certified"
+    },
+    {
+      "type": "text",
+      "id": "topbar_badge_2",
+      "label": "Trust badge 2",
+      "default": "Make in India"
+    },
+    {
+      "type": "text",
+      "id": "topbar_badge_3",
+      "label": "Trust badge 3",
+      "default": "MSME Registered"
+    },
+    {
+      "type": "header",
+      "content": "CTA Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button label",
+      "default": "Request a Quote"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Search"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder text",
+      "default": "Search kiosks, signages, enclosures…"
     }
-  ]
+  ],
+  "blocks": [
+    {
+      "type": "mega_menu_feature",
+      "name": "Mega menu featured image",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_item",
+          "label": "Exact menu item name",
+          "info": "Must match the nav link title exactly (case-sensitive)",
+          "placeholder": "Products"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Featured image"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge label (optional)",
+          "placeholder": "New Arrival"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Card heading",
+          "placeholder": "Interactive Kiosks"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "CTA link text",
+          "placeholder": "Explore range"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Card link"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "settings": {
+      "show_topbar": true,
+      "transparent_on_hero": true,
+      "cta_text": "Request a Quote",
+      "topbar_badge_1": "ISO Certified",
+      "topbar_badge_2": "Make in India",
+      "topbar_badge_3": "MSME Registered",
+      "logo_width": 160
+    }
+  }
 }
 {% endschema %}

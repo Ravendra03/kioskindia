@@ -1,0 +1,395 @@
+{%- comment -%}
+  ANNOUNCEMENT BAR SECTION
+  ─────────────────────────────────────────────────────────────────────────────
+  Features:
+  - Multiple rotating announcements with auto-cycle
+  - Dismissible (sessionStorage persisted)
+  - Background and text color editable from Theme Editor
+  - Link support per announcement
+  - Accessible with ARIA live region
+  ─────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+
+{%- if section.settings.show_bar and section.blocks.size > 0 -%}
+<div
+  class="announcement-bar"
+  data-announcement-bar
+  role="region"
+  aria-label="Site announcements"
+  style="
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+  "
+  id="announcement-bar-{{ section.id }}"
+>
+  <div class="container announcement-bar__container">
+
+    {%- comment -%} ── Left: Optional contact quick-access ─────────────────── {%- endcomment -%}
+    {%- if section.settings.show_contact_strip -%}
+      <div class="announcement-bar__contact">
+        {%- if settings.contact_phone != blank -%}
+          <a href="tel:{{ settings.contact_phone_raw }}" class="announcement-bar__contact-link" aria-label="Call us: {{ settings.contact_phone }}">
+            {% render 'icon', name: 'phone', size: 14 %}
+            <span>{{ settings.contact_phone }}</span>
+          </a>
+        {%- endif -%}
+        {%- if settings.contact_email != blank -%}
+          <a href="mailto:{{ settings.contact_email }}" class="announcement-bar__contact-link" aria-label="Email us">
+            {% render 'icon', name: 'email', size: 14 %}
+            <span>{{ settings.contact_email }}</span>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── Center: Rotating Announcements ──────────────────────── {%- endcomment -%}
+    <div class="announcement-bar__slider" aria-live="polite" aria-atomic="true">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'announcement' -%}
+          <div
+            class="announcement-bar__item{% if forloop.first %} is-active{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            {%- if block.settings.link != blank -%}
+              <a href="{{ block.settings.link }}" class="announcement-bar__text announcement-bar__text--link">
+                {%- if block.settings.icon != blank -%}
+                  <span class="announcement-bar__icon">{{ block.settings.icon }}</span>
+                {%- endif -%}
+                {{ block.settings.text }}
+                <span class="announcement-bar__cta-arrow">→</span>
+              </a>
+            {%- else -%}
+              <p class="announcement-bar__text">
+                {%- if block.settings.icon != blank -%}
+                  <span class="announcement-bar__icon">{{ block.settings.icon }}</span>
+                {%- endif -%}
+                {{ block.settings.text }}
+              </p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} ── Right: Dismiss + Optional GST badge ─────────────────── {%- endcomment -%}
+    <div class="announcement-bar__actions">
+      {%- if section.settings.show_gst_badge and settings.contact_gst != blank -%}
+        <span class="announcement-bar__gst" aria-label="GST Number: {{ settings.contact_gst }}">
+          GST: {{ settings.contact_gst }}
+        </span>
+      {%- endif -%}
+      {%- if section.settings.show_dismiss -%}
+        <button
+          class="announcement-bar__dismiss"
+          data-announcement-dismiss
+          aria-label="Dismiss announcement"
+          type="button"
+        >
+          {% render 'icon', name: 'close', size: 16 %}
+        </button>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{%- comment -%} ── Auto-rotate script ─────────────────────────────────────── {%- endcomment -%}
+{%- if section.blocks.size > 1 -%}
+<script>
+  (function() {
+    var bar = document.getElementById('announcement-bar-{{ section.id }}');
+    if (!bar) return;
+    var items = bar.querySelectorAll('.announcement-bar__item');
+    if (items.length <= 1) return;
+
+    var current = 0;
+    var interval = {{ section.settings.rotation_interval | times: 1000 }};
+
+    function rotate() {
+      items[current].classList.remove('is-active');
+      current = (current + 1) % items.length;
+      items[current].classList.add('is-active');
+    }
+
+    var timer = setInterval(rotate, interval);
+
+    // Pause on hover / focus
+    bar.addEventListener('mouseenter', function() { clearInterval(timer); });
+    bar.addEventListener('focusin', function() { clearInterval(timer); });
+    bar.addEventListener('mouseleave', function() { timer = setInterval(rotate, interval); });
+    bar.addEventListener('focusout', function() { timer = setInterval(rotate, interval); });
+  })();
+</script>
+{%- endif -%}
+
+{%- endif -%}
+
+<style>
+  /* ── Announcement Bar ───────────────────────────────────────────────────── */
+  .announcement-bar {
+    width: 100%;
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+    position: relative;
+    z-index: calc(var(--z-sticky) + 1);
+    transition: max-height 0.4s var(--ease-out), opacity 0.3s var(--ease-out);
+    overflow: hidden;
+    max-height: 60px;
+  }
+
+  .announcement-bar.is-dismissed {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  .announcement-bar__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: 0.625rem;
+    min-height: 40px;
+  }
+
+  /* Contact strip */
+  .announcement-bar__contact {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    flex-shrink: 0;
+  }
+
+  .announcement-bar__contact-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    opacity: 0.85;
+    text-decoration: none;
+    transition: opacity var(--transition);
+    white-space: nowrap;
+  }
+
+  .announcement-bar__contact-link:hover {
+    opacity: 1;
+  }
+
+  /* Slider */
+  .announcement-bar__slider {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 1.2em;
+  }
+
+  .announcement-bar__item {
+    display: none;
+    animation: announceFadeIn 0.5s var(--ease-out) forwards;
+  }
+
+  .announcement-bar__item.is-active {
+    display: block;
+  }
+
+  @keyframes announceFadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .announcement-bar__text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    margin: 0;
+  }
+
+  .announcement-bar__text--link {
+    text-decoration: none;
+    opacity: 0.9;
+    transition: opacity var(--transition);
+  }
+
+  .announcement-bar__text--link:hover {
+    opacity: 1;
+  }
+
+  .announcement-bar__cta-arrow {
+    font-size: 1.1em;
+    margin-left: var(--space-1);
+  }
+
+  .announcement-bar__icon {
+    font-size: 1em;
+  }
+
+  /* Right actions */
+  .announcement-bar__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-shrink: 0;
+  }
+
+  .announcement-bar__gst {
+    font-size: 0.7rem;
+    letter-spacing: var(--tracking-wider);
+    opacity: 0.65;
+    text-transform: uppercase;
+  }
+
+  .announcement-bar__dismiss {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: none;
+    border: none;
+    color: inherit;
+    opacity: 0.65;
+    cursor: pointer;
+    border-radius: var(--radius-xs);
+    transition: opacity var(--transition), background-color var(--transition);
+    padding: 0;
+  }
+
+  .announcement-bar__dismiss:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  /* Responsive */
+  @media (max-width: 1023px) {
+    .announcement-bar__contact {
+      display: none;
+    }
+    .announcement-bar__gst {
+      display: none;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .announcement-bar__contact {
+      display: none;
+    }
+    .announcement-bar__actions {
+      gap: var(--space-2);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "class": "section-announcement-bar",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_bar",
+      "label": "Show announcement bar",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#003366"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_contact_strip",
+      "label": "Show phone & email on left (desktop only)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_gst_badge",
+      "label": "Show GST number on right",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dismiss",
+      "label": "Allow visitors to dismiss the bar",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "rotation_interval",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Announcement rotation speed",
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Emoji icon (optional)",
+          "placeholder": "🏭",
+          "info": "Paste an emoji to show before the text"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Announcement text",
+          "default": "🏭 India's leading manufacturer of Interactive Kiosks & Digital Signages — Ahmedabad, Gujarat"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optional)"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "announcement",
+        "settings": {
+          "icon": "🏭",
+          "text": "India's leading manufacturer of Interactive Kiosks & Digital Signages — Ahmedabad, Gujarat"
+        }
+      },
+      {
+        "type": "announcement",
+        "settings": {
+          "icon": "🏆",
+          "text": "ISO Certified · 500+ Projects Delivered · Pan-India Service Network"
+        }
+      },
+      {
+        "type": "announcement",
+        "settings": {
+          "icon": "📞",
+          "text": "Get a free quote for your project — Call us at +91 79 4254 0370",
+          "link": "/pages/contact"
+        }
+      }
+    ]
+  },
+  "presets": [
+    {
+      "name": "Announcement Bar"
+    }
+  ]
+}
+{% endschema %}

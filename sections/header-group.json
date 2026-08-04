@@ -1,22 +1,58 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
-  "type": "header",
-  "name": "t:general.header",
+  "type": "sections_group",
+  "name": "Header group",
   "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "show_bar": true,
+        "bg_color": "#003366",
+        "text_color": "#FFFFFF",
+        "show_contact_strip": true,
+        "show_gst_badge": true,
+        "show_dismiss": true,
+        "rotation_interval": 5
+      },
+      "blocks": {
+        "announcement-1": {
+          "type": "announcement",
+          "settings": {
+            "icon": "🏭",
+            "text": "India's leading manufacturer of Interactive Kiosks & Digital Signages — Ahmedabad, Gujarat"
+          }
+        },
+        "announcement-2": {
+          "type": "announcement",
+          "settings": {
+            "icon": "🏆",
+            "text": "ISO Certified · 500+ Projects Delivered · Pan-India Service Network"
+          }
+        },
+        "announcement-3": {
+          "type": "announcement",
+          "settings": {
+            "icon": "📞",
+            "text": "Get a free quote for your project — Call us at +91 79 4254 0370"
+          }
+        }
+      },
+      "block_order": ["announcement-1", "announcement-2", "announcement-3"]
+    },
     "header": {
       "type": "header",
-      "settings": {}
+      "settings": {
+        "logo_width": 160,
+        "nav_menu": "main-menu",
+        "transparent_on_hero": true,
+        "show_topbar": true,
+        "topbar_badge_1": "ISO Certified",
+        "topbar_badge_2": "Make in India",
+        "topbar_badge_3": "MSME Registered",
+        "cta_text": "Request a Quote",
+        "search_placeholder": "Search kiosks, signages, enclosures…"
+      },
+      "blocks": {}
     }
   },
-  "order": [
-    "header"
-  ],
+  "order": ["announcement-bar", "header"]
 }
