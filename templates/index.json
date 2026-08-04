@@ -17,62 +17,86 @@
         "show_scroll_indicator": true
       },
       "blocks": {
-        "stat-1": {
-          "type": "stat",
-          "settings": {
-            "number": "500",
-            "suffix": "+",
-            "label": "Projects Done"
-          }
-        },
-        "stat-2": {
-          "type": "stat",
-          "settings": {
-            "number": "200",
-            "suffix": "+",
-            "label": "Happy Clients"
-          }
-        },
-        "stat-3": {
-          "type": "stat",
-          "settings": {
-            "number": "8",
-            "suffix": "+",
-            "label": "Years Exp."
-          }
-        },
-        "stat-4": {
-          "type": "stat",
-          "settings": {
-            "number": "20",
-            "suffix": "+",
-            "label": "States Served"
-          }
-        },
-        "trust-1": {
-          "type": "trust_badge",
-          "settings": {
-            "icon": "shield",
-            "text": "ISO Certified"
-          }
-        },
-        "trust-2": {
-          "type": "trust_badge",
-          "settings": {
-            "icon": "factory",
-            "text": "In-House Manufacturing"
-          }
-        },
-        "trust-3": {
-          "type": "trust_badge",
-          "settings": {
-            "icon": "truck",
-            "text": "Pan-India Delivery"
-          }
-        }
+        "stat-1": { "type": "stat", "settings": { "number": "500", "suffix": "+", "label": "Projects Done" } },
+        "stat-2": { "type": "stat", "settings": { "number": "200", "suffix": "+", "label": "Happy Clients" } },
+        "stat-3": { "type": "stat", "settings": { "number": "8", "suffix": "+", "label": "Years Exp." } },
+        "stat-4": { "type": "stat", "settings": { "number": "20", "suffix": "+", "label": "States Served" } },
+        "trust-1": { "type": "trust_badge", "settings": { "icon": "shield", "text": "ISO Certified" } },
+        "trust-2": { "type": "trust_badge", "settings": { "icon": "factory", "text": "In-House Manufacturing" } },
+        "trust-3": { "type": "trust_badge", "settings": { "icon": "truck", "text": "Pan-India Delivery" } }
       },
       "block_order": ["stat-1", "stat-2", "stat-3", "stat-4", "trust-1", "trust-2", "trust-3"]
+    },
+    "company-overview": {
+      "type": "company-overview",
+      "settings": {
+        "bg_style": "white",
+        "eyebrow": "About Maxwell Automatic",
+        "heading": "Built on Precision. Driven by Innovation.",
+        "subtitle": "Maxwell Automatic is a premier manufacturer of Interactive Kiosks, Digital Signages, and Electrical Enclosures. Established in 2017 in Ahmedabad, we have grown to serve hospitals, government bodies, corporates, and smart city integrators across India.",
+        "experience_number": "8+",
+        "experience_label": "Years of Excellence",
+        "cta_primary_text": "Company Profile",
+        "show_timeline": true,
+        "timeline_heading": "Our Journey"
+      },
+      "blocks": {
+        "cap-1": { "type": "capability", "settings": { "icon": "factory", "title": "In-House Manufacturing", "description": "End-to-end production at our Ahmedabad GIDC facility" } },
+        "cap-2": { "type": "capability", "settings": { "icon": "shield", "title": "ISO Certified", "description": "Quality management systems meet international standards" } },
+        "cap-3": { "type": "capability", "settings": { "icon": "cog", "title": "Custom Engineering", "description": "OEM & bespoke solutions engineered to spec" } },
+        "cap-4": { "type": "capability", "settings": { "icon": "truck", "title": "Pan-India Delivery", "description": "Reliable logistics to 20+ states across India" } },
+        "ms-1": { "type": "milestone", "settings": { "year": "2017", "event": "Company founded in Vatwa, Ahmedabad" } },
+        "ms-2": { "type": "milestone", "settings": { "year": "2019", "event": "Launched interactive kiosk product line" } },
+        "ms-3": { "type": "milestone", "settings": { "year": "2021", "event": "Crossed 100+ project milestone" } },
+        "ms-4": { "type": "milestone", "settings": { "year": "2023", "event": "Expanded to digital signage & smart lockers" } },
+        "ms-5": { "type": "milestone", "settings": { "year": "2025", "event": "500+ projects, 200+ clients across India" } }
+      },
+      "block_order": ["cap-1", "cap-2", "cap-3", "cap-4", "ms-1", "ms-2", "ms-3", "ms-4", "ms-5"]
+    },
+    "product-categories": {
+      "type": "product-categories",
+      "settings": {
+        "eyebrow": "Our Product Range",
+        "heading": "Engineered for Every Sector",
+        "subtitle": "From interactive kiosks to smart enclosures — browse our full range of custom-built hardware solutions.",
+        "show_filter_tabs": true,
+        "filter_tabs": "Kiosks, Signage, Enclosures, Accessories",
+        "cta_text": "View All Products"
+      },
+      "blocks": {
+        "cat-1": { "type": "category", "settings": { "name": "Interactive Kiosks", "subtitle": "Self-service & information terminals", "description": "Touch-enabled kiosks for airports, hospitals, retail, banks, and government offices.", "category": "Kiosks", "product_count": "18 Products", "featured": true, "cta_text": "Explore Kiosks", "placeholder_icon": "monitor" } },
+        "cat-2": { "type": "category", "settings": { "name": "Digital Signage", "subtitle": "Indoor & outdoor display solutions", "description": "High-brightness LED & LCD signage for malls, transit hubs, and corporate offices.", "category": "Signage", "product_count": "14 Products", "cta_text": "Explore Signage", "placeholder_icon": "monitor" } },
+        "cat-3": { "type": "category", "settings": { "name": "Smart Lockers", "subtitle": "Secure storage & parcel systems", "description": "Automated locker systems for offices, universities, and e-commerce last-mile delivery.", "category": "Kiosks", "badge": "New", "cta_text": "View Lockers", "placeholder_icon": "package" } },
+        "cat-4": { "type": "category", "settings": { "name": "Electrical Enclosures", "subtitle": "MS, SS & GRP panel boxes", "description": "Powder-coated MS & stainless steel enclosures for industrial and OEM applications.", "category": "Enclosures", "product_count": "22 Products", "cta_text": "View Enclosures", "placeholder_icon": "package" } },
+        "cat-5": { "type": "category", "settings": { "name": "Queue Management", "subtitle": "Token & display systems", "description": "Complete queue management hardware for banks, hospitals, and service centres.", "category": "Kiosks", "cta_text": "View Systems", "placeholder_icon": "layers" } },
+        "cat-6": { "type": "category", "settings": { "name": "Outdoor Kiosks", "subtitle": "Weather-proof public installations", "description": "IP65-rated outdoor kiosks for metro stations, bus stops, and smart city projects.", "category": "Kiosks", "badge": "Popular", "cta_text": "Explore Outdoor", "placeholder_icon": "factory" } }
+      },
+      "block_order": ["cat-1", "cat-2", "cat-3", "cat-4", "cat-5", "cat-6"]
+    },
+    "industries": {
+      "type": "industries",
+      "settings": {
+        "eyebrow": "Industries We Serve",
+        "heading": "Powering India's Key Sectors",
+        "subtitle": "Our solutions are deployed across India's most demanding environments — from smart hospitals to government offices and transit hubs.",
+        "show_stats": true,
+        "cta_text": "Discuss Your Project"
+      },
+      "blocks": {
+        "istat-1": { "type": "stat", "settings": { "number": "8", "suffix": "+", "label": "Industries Served" } },
+        "istat-2": { "type": "stat", "settings": { "number": "20", "suffix": "+", "label": "States Covered" } },
+        "istat-3": { "type": "stat", "settings": { "number": "500", "suffix": "+", "label": "Installations" } },
+        "ind-1": { "type": "industry", "settings": { "icon": "hospital", "name": "Healthcare", "description": "Patient kiosks, OPD tokens, wayfinding signage", "project_count": "80+ Projects" } },
+        "ind-2": { "type": "industry", "settings": { "icon": "building", "name": "Government", "description": "Citizen service kiosks, e-governance terminals", "project_count": "60+ Projects" } },
+        "ind-3": { "type": "industry", "settings": { "icon": "bus", "name": "Transportation", "description": "Metro kiosks, bus terminal displays, ATVM", "project_count": "40+ Projects" } },
+        "ind-4": { "type": "industry", "settings": { "icon": "city", "name": "Retail & Malls", "description": "Wayfinding, self-checkout, digital advertising", "project_count": "70+ Projects" } },
+        "ind-5": { "type": "industry", "settings": { "icon": "graduation-cap", "name": "Education", "description": "Library kiosks, attendance systems, smart boards", "project_count": "35+ Projects" } },
+        "ind-6": { "type": "industry", "settings": { "icon": "globe", "name": "Hospitality", "description": "Hotel check-in kiosks, event registration", "project_count": "30+ Projects" } },
+        "ind-7": { "type": "industry", "settings": { "icon": "factory", "name": "Manufacturing", "description": "Electrical enclosures, control panels, OEM", "project_count": "90+ Projects" } },
+        "ind-8": { "type": "industry", "settings": { "icon": "shield", "name": "Banking & Finance", "description": "ATM surrounds, token display, queue systems", "project_count": "45+ Projects" } }
+      },
+      "block_order": ["istat-1", "istat-2", "istat-3", "ind-1", "ind-2", "ind-3", "ind-4", "ind-5", "ind-6", "ind-7", "ind-8"]
     }
   },
-  "order": ["hero"]
+  "order": ["hero", "company-overview", "product-categories", "industries"]
 }
