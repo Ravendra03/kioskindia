@@ -1,83 +1,112 @@
 {%- comment -%}
-  MAXWELL TESTIMONIALS SECTION
-  ─────────────────────────────────────────────────────────────────────────────
-  Features:
-  - Customer review cards with 5-star ratings, author title, and company logo
-  - Grid layout with responsive slider/stacking
-  - Fully editable via Theme Customizer blocks
-  ─────────────────────────────────────────────────────────────────────────────
+  MAXWELL TESTIMONIALS SECTION — ENTERPRISE EDITION
 {%- endcomment -%}
 
-{%- assign testimonial_blocks = section.blocks | where: 'type', 'testimonial' -%}
+{%- liquid
+  assign testimonial_blocks = section.blocks | where: 'type', 'testimonial'
+  assign hide_mobile_class = ''
+  if section.settings.hide_on_mobile
+    assign hide_mobile_class = ' hide-mobile'
+  endif
+  assign hide_desktop_class = ''
+  if section.settings.hide_on_desktop
+    assign hide_desktop_class = ' hide-desktop'
+  endif
+-%}
 
 <section
-  class="section{% if section.settings.bg_style == 'alt' %} section--alt{% endif %} testimonials"
+  class="section testimonials-section{{ hide_mobile_class }}{{ hide_desktop_class }}"
   id="testimonials"
   aria-labelledby="testimonials-heading"
+  style="
+    --section-pt: {{ section.settings.padding_top | default: 80 }}px;
+    --section-pb: {{ section.settings.padding_bottom | default: 80 }}px;
+    --section-bg: {{ section.settings.bg_color | default: 'transparent' }};
+  "
 >
+  {%- if section.settings.bg_image != blank -%}
+    <div class="section__bg-wrap" aria-hidden="true">
+      {{
+        section.settings.bg_image
+        | image_url: width: 2000
+        | image_tag: class: 'section__bg-image', alt: '', loading: 'lazy'
+      }}
+      <div
+        class="section__overlay"
+        style="--section-overlay-opacity: {{ section.settings.overlay_opacity | default: 0 | divided_by: 100.0 }};"
+      ></div>
+    </div>
+  {%- endif -%}
+
   <div class="container">
 
     {%- render 'section-header',
       eyebrow: section.settings.eyebrow,
       heading: section.settings.heading,
       subtitle: section.settings.subtitle,
+      description: section.settings.description,
       heading_tag: 'h2',
-      align: 'center',
+      align: section.settings.alignment | default: 'center',
+      animate: section.settings.enable_animation,
       section_id: 'testimonials-heading'
     -%}
 
     {%- if testimonial_blocks.size > 0 -%}
-      <div class="testimonials__grid">
+      <div
+        class="testimonials__grid"
+        {% if section.settings.enable_animation %}
+          data-animate="{{ section.settings.animation_type | default: 'fade-up' }}"
+        {% endif %}
+      >
         {%- for block in testimonial_blocks -%}
-          <div
-            class="testimonial-card"
-            data-animate="fade-up"
-            data-delay="{{ forloop.index | times: 100 }}"
-            {{ block.shopify_attributes }}
-          >
-            <div class="testimonial-card__header">
-              <div class="testimonial-card__stars" aria-label="5 out of 5 stars">
-                {%- for i in (1..5) -%}
-                  {% render 'icon', name: 'star', size: 16 %}
-                {%- endfor -%}
-              </div>
-              <div class="testimonial-card__quote-icon" aria-hidden="true">
-                {% render 'icon', name: 'quote', size: 24 %}
-              </div>
+          <figure class="testimonial-card" {{ block.shopify_attributes }}>
+            <div class="testimonial-card__stars" aria-label="5 out of 5 stars">
+              {%- for i in (1..5) -%}
+                {% render 'icon', name: 'star', size: 16 %}
+              {%- endfor -%}
             </div>
 
             <blockquote class="testimonial-card__quote">
-              "{{ block.settings.quote }}"
+              <p>“{{ block.settings.quote }}”</p>
             </blockquote>
 
-            <div class="testimonial-card__author">
-              {%- if block.settings.avatar != blank -%}
-                {{
-                  block.settings.avatar
-                  | image_url: width: 100
-                  | image_tag:
-                    class: 'testimonial-card__avatar',
-                    alt: block.settings.author_name,
-                    loading: 'lazy',
-                    width: 48,
-                    height: 48
-                }}
-              {%- else -%}
-                <div class="testimonial-card__avatar-placeholder">
-                  {{ block.settings.author_name | slice: 0, 1 }}
-                </div>
-              {%- endif -%}
+            <figcaption class="testimonial-card__author">
+              <div class="testimonial-card__avatar">
+                {%- if block.settings.avatar != blank -%}
+                  {{
+                    block.settings.avatar
+                    | image_url: width: 100
+                    | image_tag: class: 'testimonial-card__avatar-img', alt: block.settings.author_name, loading: 'lazy'
+                  }}
+                {%- else -%}
+                  <span class="testimonial-card__avatar-initials">
+                    {{ block.settings.author_name | slice: 0, 1 }}
+                  </span>
+                {%- endif -%}
+              </div>
 
               <div class="testimonial-card__meta">
                 <strong class="testimonial-card__name">{{ block.settings.author_name }}</strong>
-                <span class="testimonial-card__title">{{ block.settings.author_title }}</span>
+                <span class="testimonial-card__role">{{ block.settings.author_title }}</span>
                 {%- if block.settings.company != blank -%}
                   <span class="testimonial-card__company">{{ block.settings.company }}</span>
                 {%- endif -%}
               </div>
-            </div>
-          </div>
+            </figcaption>
+          </figure>
         {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.cta_text != blank -%}
+      <div class="testimonials__footer-cta">
+        <a
+          href="{{ section.settings.cta_url | default: '/pages/contact' }}"
+          class="btn btn--secondary btn--lg"
+        >
+          {{ section.settings.cta_text }}
+          <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 18 %}</span>
+        </a>
       </div>
     {%- endif -%}
 
@@ -88,47 +117,34 @@
   .testimonials__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-6);
-    margin-top: var(--space-8);
+    gap: var(--space-8);
   }
 
   .testimonial-card {
     background-color: var(--color-white);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-2xl);
     padding: var(--space-8);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: var(--space-6);
+    gap: var(--space-4);
     box-shadow: var(--shadow-sm);
     transition: transform var(--transition), box-shadow var(--transition);
   }
 
   .testimonial-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
     box-shadow: var(--shadow-xl);
-  }
-
-  .testimonial-card__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
   }
 
   .testimonial-card__stars {
     display: flex;
-    gap: 2px;
-    color: #f59e0b;
-  }
-
-  .testimonial-card__quote-icon {
-    color: var(--color-primary);
-    opacity: 0.2;
+    gap: 4px;
+    color: var(--color-accent);
   }
 
   .testimonial-card__quote {
-    font-size: var(--text-base);
+    font-size: var(--text-sm);
     color: var(--color-text);
     line-height: var(--leading-relaxed);
     font-style: italic;
@@ -148,27 +164,29 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    object-fit: cover;
-  }
-
-  .testimonial-card__avatar-placeholder {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
+    overflow: hidden;
     background-color: var(--color-primary-light);
-    color: var(--color-primary);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--text-lg);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
   }
 
+  .testimonial-card__avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .testimonial-card__avatar-initials {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+  }
+
   .testimonial-card__meta {
     display: flex;
     flex-direction: column;
-    gap: 2px;
   }
 
   .testimonial-card__name {
@@ -177,7 +195,7 @@
     color: var(--color-text);
   }
 
-  .testimonial-card__title {
+  .testimonial-card__role {
     font-size: var(--text-xs);
     color: var(--color-text-muted);
   }
@@ -185,7 +203,12 @@
   .testimonial-card__company {
     font-size: var(--text-xs);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-primary);
+    color: var(--color-accent);
+  }
+
+  .testimonials__footer-cta {
+    margin-top: var(--space-12);
+    text-align: center;
   }
 
   @media (max-width: 1024px) {
@@ -203,115 +226,185 @@
 
 {% schema %}
 {
-  "name": "Testimonials",
+  "name": "Customer Testimonials",
   "class": "section-testimonials",
   "limit": 1,
   "settings": [
     {
-      "type": "select",
-      "id": "bg_style",
-      "label": "Background",
-      "options": [
-        {
-          "value": "white",
-          "label": "White"
-        },
-        {
-          "value": "alt",
-          "label": "Light Grey"
-        }
-      ],
-      "default": "alt"
+      "type": "header",
+      "content": "Text Content"
     },
     {
       "type": "text",
       "id": "eyebrow",
-      "label": "Eyebrow",
+      "label": "Eyebrow label",
       "default": "Client Reviews"
     },
     {
       "type": "textarea",
       "id": "heading",
-      "label": "Heading",
-      "default": "What Industry Leaders Say About Maxwell"
+      "label": "Section heading",
+      "default": "What Our Clients Say"
     },
     {
       "type": "textarea",
       "id": "subtitle",
-      "label": "Subtitle",
-      "default": "Read feedback from healthcare administrators, smart city project heads, and system integrators."
+      "label": "Section subtitle",
+      "default": "Read feedback from project heads, IT managers, and hospital administrators across India."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Detailed description"
+    },
+    {
+      "type": "header",
+      "content": "CTA Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "Read More Case Studies"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Background & Styling"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "transparent"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay darkness",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Visibility Controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_mobile",
+      "label": "Hide on mobile devices",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_desktop",
+      "label": "Hide on desktop devices",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Animations"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animation",
+      "label": "Enable scroll animations",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "animation_type",
+      "label": "Animation type",
+      "options": [
+        { "value": "fade-up", "label": "Fade Up" },
+        { "value": "fade-left", "label": "Fade Left" },
+        { "value": "fade-right", "label": "Fade Right" },
+        { "value": "zoom-in", "label": "Zoom In" }
+      ],
+      "default": "fade-up"
     }
   ],
   "blocks": [
     {
       "type": "testimonial",
       "name": "Testimonial Card",
+      "limit": 6,
       "settings": [
-        {
-          "type": "textarea",
-          "id": "quote",
-          "label": "Quote",
-          "default": "Maxwell Automatic delivered 50 custom touch kiosks for our OPD registration network. Build quality and thermal management exceeded expectations."
-        },
-        {
-          "type": "image_picker",
-          "id": "avatar",
-          "label": "Author Photo"
-        },
-        {
-          "type": "text",
-          "id": "author_name",
-          "label": "Author Name",
-          "default": "Dr. Rajesh Sharma"
-        },
-        {
-          "type": "text",
-          "id": "author_title",
-          "label": "Author Title",
-          "default": "Head of Operations & IT"
-        },
-        {
-          "type": "text",
-          "id": "company",
-          "label": "Company / Organization",
-          "default": "Apex Multispeciality Hospital"
-        }
+        { "type": "textarea", "id": "quote", "label": "Quote", "default": "Maxwell delivered 45 custom touch kiosks for our OPD registration. Build quality and post-sales support are exceptional." },
+        { "type": "text", "id": "author_name", "label": "Author name", "default": "Dr. Rajesh Patel" },
+        { "type": "text", "id": "author_title", "label": "Author title / Role", "default": "Chief IT Officer" },
+        { "type": "text", "id": "company", "label": "Company name", "default": "AIIMS Hospital" },
+        { "type": "image_picker", "id": "avatar", "label": "Author avatar photo" }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Testimonials",
+      "name": "Customer Testimonials",
+      "settings": {
+        "eyebrow": "Client Reviews",
+        "heading": "What Our Clients Say",
+        "subtitle": "Read feedback from project heads, IT managers, and hospital administrators across India.",
+        "cta_text": "Read More Case Studies",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "enable_animation": true,
+        "animation_type": "fade-up"
+      },
       "blocks": [
-        {
-          "type": "testimonial",
-          "settings": {
-            "quote": "Maxwell Automatic delivered 50 custom touch kiosks for our OPD registration network. Build quality and thermal management exceeded expectations.",
-            "author_name": "Dr. Rajesh Sharma",
-            "author_title": "Head of IT & Operations",
-            "company": "Apex Healthcare Group"
-          }
-        },
-        {
-          "type": "testimonial",
-          "settings": {
-            "quote": "The outdoor IP65 Totems manufactured by Maxwell have been running non-stop in high ambient humidity for 2 years without a single display failure.",
-            "author_name": "Vikram Patel",
-            "author_title": "Project Director",
-            "company": "Smart City Infra Solutions"
-          }
-        },
-        {
-          "type": "testimonial",
-          "settings": {
-            "quote": "Outstanding sheet metal precision and powder coating quality for electrical enclosures. Their engineering team is extremely collaborative.",
-            "author_name": "Sanjay Mehta",
-            "author_title": "General Manager - Procurement",
-            "company": "Precision OEM Automation"
-          }
-        }
+        { "type": "testimonial", "settings": { "quote": "Maxwell delivered 45 custom touch kiosks for our OPD registration. Build quality and post-sales support are exceptional.", "author_name": "Dr. Rajesh Patel", "author_title": "Chief IT Officer", "company": "AIIMS Hospital" } },
+        { "type": "testimonial", "settings": { "quote": "The outdoor signage totems survived monsoon conditions in Gujarat without any downtime. Highly recommended for smart city projects.", "author_name": "Suresh Mehta", "author_title": "Project Director", "company": "Smart City Project" } },
+        { "type": "testimonial", "settings": { "quote": "In-house manufacturing meant we got our custom electrical enclosures delivered 10 days ahead of schedule.", "author_name": "Amit Sharma", "author_title": "Procurement Manager", "company": "L&T Construction" } }
       ]
     }
-  ]
+  ],
+  "enabled_on": { "templates": ["*"] }
 }
 {% endschema %}

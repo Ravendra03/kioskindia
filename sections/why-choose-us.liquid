@@ -1,46 +1,80 @@
 {%- comment -%}
-  MAXWELL WHY CHOOSE US SECTION
-  ─────────────────────────────────────────────────────────────────────────────
-  Features:
-  - Grid of Unique Selling Points (USPs) with custom icons
-  - Animated counters for key statistics
-  - High impact visual structure
-  - Editable via Theme Editor blocks
-  ─────────────────────────────────────────────────────────────────────────────
+  MAXWELL WHY CHOOSE US SECTION — ENTERPRISE EDITION
 {%- endcomment -%}
 
-{%- assign usp_blocks = section.blocks | where: 'type', 'usp' -%}
+{%- liquid
+  assign usp_blocks = section.blocks | where: 'type', 'usp'
+  assign hide_mobile_class = ''
+  if section.settings.hide_on_mobile
+    assign hide_mobile_class = ' hide-mobile'
+  endif
+  assign hide_desktop_class = ''
+  if section.settings.hide_on_desktop
+    assign hide_desktop_class = ' hide-desktop'
+  endif
+-%}
 
 <section
-  class="section{% if section.settings.bg_style == 'alt' %} section--alt{% endif %} why-choose-us"
+  class="section why-choose-us{{ hide_mobile_class }}{{ hide_desktop_class }}"
   id="why-choose-us"
   aria-labelledby="why-us-heading"
+  style="
+    --section-pt: {{ section.settings.padding_top | default: 80 }}px;
+    --section-pb: {{ section.settings.padding_bottom | default: 80 }}px;
+    --section-bg: {{ section.settings.bg_color | default: 'transparent' }};
+  "
 >
+  {%- if section.settings.bg_image != blank -%}
+    <div class="section__bg-wrap" aria-hidden="true">
+      {{
+        section.settings.bg_image
+        | image_url: width: 2000
+        | image_tag: class: 'section__bg-image', alt: '', loading: 'lazy'
+      }}
+      <div
+        class="section__overlay"
+        style="--section-overlay-opacity: {{ section.settings.overlay_opacity | default: 0 | divided_by: 100.0 }};"
+      ></div>
+    </div>
+  {%- endif -%}
+
   <div class="container">
 
     {%- render 'section-header',
       eyebrow: section.settings.eyebrow,
       heading: section.settings.heading,
       subtitle: section.settings.subtitle,
+      description: section.settings.description,
       heading_tag: 'h2',
-      align: 'center',
+      align: section.settings.alignment | default: 'center',
+      animate: section.settings.enable_animation,
       section_id: 'why-us-heading'
     -%}
 
     {%- if usp_blocks.size > 0 -%}
-      <div class="why-us__grid">
+      <div
+        class="why-us__grid"
+        {% if section.settings.enable_animation %}
+          data-animate="{{ section.settings.animation_type | default: 'fade-up' }}"
+        {% endif %}
+      >
         {%- for block in usp_blocks -%}
-          <div
-            class="why-us__card"
-            data-animate="fade-up"
-            data-delay="{{ forloop.index | times: 100 }}"
-            {{ block.shopify_attributes }}
-          >
-            <div class="why-us__card-icon" aria-hidden="true">
-              {% render 'icon', name: block.settings.icon, size: 32 %}
+          <div class="why-us__card" {{ block.shopify_attributes }}>
+            <div class="why-us__icon-wrap" aria-hidden="true">
+              {% render 'icon', name: block.settings.icon, size: 28 %}
             </div>
-            <h3 class="why-us__card-title">{{ block.settings.title }}</h3>
-            <p class="why-us__card-desc">{{ block.settings.description }}</p>
+
+            <div class="why-us__card-content">
+              <h3 class="why-us__card-title">{{ block.settings.title }}</h3>
+              <p class="why-us__card-desc">{{ block.settings.description }}</p>
+
+              {%- if block.settings.metric != blank -%}
+                <div class="why-us__card-metric">
+                  <span class="why-us__metric-num">{{ block.settings.metric }}</span>
+                  <span class="why-us__metric-label">{{ block.settings.metric_label }}</span>
+                </div>
+              {%- endif -%}
+            </div>
           </div>
         {%- endfor -%}
       </div>
@@ -49,13 +83,16 @@
     {%- if section.settings.show_banner -%}
       <div class="why-us__banner" data-animate="fade-up">
         <div class="why-us__banner-content">
-          <h3 class="why-us__banner-title">{{ section.settings.banner_title | default: "Ready to discuss your custom manufacturing requirements?" }}</h3>
-          <p class="why-us__banner-desc">{{ section.settings.banner_desc | default: "Talk directly with our technical engineering team for customized OEM/ODM solutions." }}</p>
+          <h3 class="why-us__banner-title">{{ section.settings.banner_heading | default: "Need a Custom Engineered Solution?" }}</h3>
+          <p class="why-us__banner-desc">{{ section.settings.banner_subtext | default: "Talk directly to our chief hardware engineers for OEM design and high-volume production." }}</p>
         </div>
-        {%- if section.settings.banner_cta_text != blank -%}
-          <a href="{{ section.settings.banner_cta_url | default: '/pages/contact' }}" class="btn btn--accent btn--lg why-us__banner-cta">
-            {{ section.settings.banner_cta_text }}
-            {% render 'icon', name: 'arrow-right', size: 18 %}
+        {%- if section.settings.cta_text != blank -%}
+          <a
+            href="{{ section.settings.cta_url | default: '/pages/contact' }}"
+            class="btn btn--accent btn--lg why-us__banner-cta"
+          >
+            {{ section.settings.cta_text }}
+            <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 18 %}</span>
           </a>
         {%- endif -%}
       </div>
@@ -65,50 +102,54 @@
 </section>
 
 <style>
-  /* ── Why Choose Us ─────────────────────────────────────────────────────── */
-  .why-choose-us {
-    position: relative;
-  }
-
   .why-us__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-6);
-    margin-top: var(--space-8);
+    gap: var(--space-8);
   }
 
   .why-us__card {
     background-color: var(--color-white);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-2xl);
     padding: var(--space-8);
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-5);
+    box-shadow: var(--shadow-sm);
     transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   }
 
   .why-us__card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
     box-shadow: var(--shadow-xl);
     border-color: var(--color-primary-light);
   }
 
-  .why-us__card-icon {
+  .why-us__icon-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, var(--color-primary-light), rgba(245, 130, 32, 0.08));
+    color: var(--color-primary);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 60px;
-    height: 60px;
-    background-color: var(--color-primary-light);
-    border-radius: var(--radius-lg);
-    color: var(--color-primary);
-    transition: background-color var(--transition), color var(--transition);
+    flex-shrink: 0;
+    transition: background var(--transition), color var(--transition), transform var(--transition);
   }
 
-  .why-us__card:hover .why-us__card-icon {
-    background-color: var(--color-primary);
+  .why-us__card:hover .why-us__icon-wrap {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
     color: var(--color-white);
+    transform: scale(1.05);
+  }
+
+  .why-us__card-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
   }
 
   .why-us__card-title {
@@ -123,14 +164,39 @@
     color: var(--color-text-muted);
     line-height: var(--leading-relaxed);
     margin: 0;
+    flex: 1;
   }
 
+  .why-us__card-metric {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .why-us__metric-num {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-accent);
+    line-height: 1;
+  }
+
+  .why-us__metric-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+  }
+
+  /* Callout Banner */
   .why-us__banner {
     margin-top: var(--space-16);
     background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    border-radius: var(--radius-2xl);
-    padding: var(--space-10) var(--space-12);
     color: var(--color-white);
+    border-radius: var(--radius-2xl);
+    padding: clamp(2rem, 4vw, 3.5rem);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -140,9 +206,9 @@
 
   .why-us__banner-title {
     font-size: var(--text-2xl);
-    font-weight: var(--font-weight-bold);
+    font-weight: 800;
     color: var(--color-white);
-    margin-bottom: var(--space-2);
+    margin: 0 0 var(--space-2) 0;
   }
 
   .why-us__banner-desc {
@@ -151,24 +217,19 @@
     margin: 0;
   }
 
-  .why-us__banner-cta {
-    flex-shrink: 0;
-  }
-
   @media (max-width: 1024px) {
     .why-us__grid {
       grid-template-columns: repeat(2, 1fr);
-    }
-    .why-us__banner {
-      flex-direction: column;
-      text-align: center;
-      padding: var(--space-8);
     }
   }
 
   @media (max-width: 640px) {
     .why-us__grid {
       grid-template-columns: 1fr;
+    }
+    .why-us__banner {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 </style>
@@ -180,38 +241,46 @@
   "limit": 1,
   "settings": [
     {
-      "type": "select",
-      "id": "bg_style",
-      "label": "Background Style",
-      "options": [
-        {
-          "value": "white",
-          "label": "White"
-        },
-        {
-          "value": "alt",
-          "label": "Light Grey"
-        }
-      ],
-      "default": "white"
+      "type": "header",
+      "content": "Text Content"
     },
     {
       "type": "text",
       "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Why Partner With Maxwell"
+      "label": "Eyebrow label",
+      "default": "Why Maxwell"
     },
     {
       "type": "textarea",
       "id": "heading",
-      "label": "Heading",
-      "default": "Enterprise Grade Excellence in Manufacturing"
+      "label": "Section heading",
+      "default": "Why India's Top Enterprises Trust Maxwell"
     },
     {
       "type": "textarea",
       "id": "subtitle",
-      "label": "Subtitle",
-      "default": "We deliver custom interactive hardware built to international standards with complete in-house control."
+      "label": "Section subtitle",
+      "default": "We combine precision engineering, robust materials, and end-to-end manufacturing to build hardware that performs reliably 24/7."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Detailed description"
+    },
+    {
+      "type": "header",
+      "content": "CTA Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "Talk to an Engineer"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
     },
     {
       "type": "header",
@@ -220,139 +289,171 @@
     {
       "type": "checkbox",
       "id": "show_banner",
-      "label": "Show bottom banner",
+      "label": "Show callout banner",
       "default": true
     },
     {
       "type": "text",
-      "id": "banner_title",
-      "label": "Banner Title",
-      "default": "Ready to discuss your custom manufacturing requirements?"
+      "id": "banner_heading",
+      "label": "Banner heading",
+      "default": "Need a Custom Engineered Solution?"
     },
     {
       "type": "textarea",
-      "id": "banner_desc",
-      "label": "Banner Description",
-      "default": "Talk directly with our technical engineering team for customized OEM/ODM solutions."
+      "id": "banner_subtext",
+      "label": "Banner subtitle",
+      "default": "Talk directly to our chief hardware engineers for OEM design and high-volume production."
     },
     {
-      "type": "text",
-      "id": "banner_cta_text",
-      "label": "Banner CTA Text",
-      "default": "Talk to Engineering"
+      "type": "header",
+      "content": "Background & Styling"
     },
     {
-      "type": "url",
-      "id": "banner_cta_url",
-      "label": "Banner CTA Link"
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "transparent"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay darkness",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Visibility Controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_mobile",
+      "label": "Hide on mobile devices",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_desktop",
+      "label": "Hide on desktop devices",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Animations"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animation",
+      "label": "Enable scroll animations",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "animation_type",
+      "label": "Animation type",
+      "options": [
+        { "value": "fade-up", "label": "Fade Up" },
+        { "value": "fade-left", "label": "Fade Left" },
+        { "value": "fade-right", "label": "Fade Right" },
+        { "value": "zoom-in", "label": "Zoom In" }
+      ],
+      "default": "fade-up"
     }
   ],
   "blocks": [
     {
       "type": "usp",
       "name": "USP Card",
+      "limit": 6,
       "settings": [
         {
           "type": "select",
           "id": "icon",
           "label": "Icon",
           "options": [
-            {
-              "value": "factory",
-              "label": "Factory"
-            },
-            {
-              "value": "shield",
-              "label": "Shield"
-            },
-            {
-              "value": "cog",
-              "label": "Cog"
-            },
-            {
-              "value": "award",
-              "label": "Award"
-            },
-            {
-              "value": "truck",
-              "label": "Truck"
-            },
-            {
-              "value": "headphones",
-              "label": "Support"
-            }
+            { "value": "factory", "label": "Factory / Manufacturing" },
+            { "value": "shield", "label": "Shield / Security" },
+            { "value": "cog", "label": "Cog / Customization" },
+            { "value": "truck", "label": "Truck / Logistics" },
+            { "value": "headphones", "label": "Headphones / Support" },
+            { "value": "award", "label": "Award / Quality" }
           ],
           "default": "factory"
         },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "100% In-House Production"
-        },
-        {
-          "type": "textarea",
-          "id": "description",
-          "label": "Description",
-          "default": "Laser cutting, CNC bending, powder coating, and final assembly all under one roof in Vatwa GIDC."
-        }
+        { "type": "text", "id": "title", "label": "Title", "default": "In-House Manufacturing" },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "100% in-house sheet metal fabrication, laser cutting, powder coating, and assembly." },
+        { "type": "text", "id": "metric", "label": "Metric highlight (optional)", "default": "100%" },
+        { "type": "text", "id": "metric_label", "label": "Metric label (optional)", "default": "In-House" }
       ]
     }
   ],
   "presets": [
     {
       "name": "Why Choose Us",
+      "settings": {
+        "eyebrow": "Why Maxwell",
+        "heading": "Why India's Top Enterprises Trust Maxwell",
+        "subtitle": "We combine precision engineering, robust materials, and end-to-end manufacturing to build hardware that performs reliably 24/7.",
+        "cta_text": "Talk to an Engineer",
+        "show_banner": true,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "enable_animation": true,
+        "animation_type": "fade-up"
+      },
       "blocks": [
-        {
-          "type": "usp",
-          "settings": {
-            "icon": "factory",
-            "title": "100% In-House Production",
-            "description": "Complete manufacturing control from raw metal sheets to finished kiosk assembly at our Vatwa unit."
-          }
-        },
-        {
-          "type": "usp",
-          "settings": {
-            "icon": "shield",
-            "title": "ISO 9001:2015 Certified",
-            "description": "Strict quality protocols ensuring rugged hardware reliability, thermal compliance, and IP rating security."
-          }
-        },
-        {
-          "type": "usp",
-          "settings": {
-            "icon": "cog",
-            "title": "Bespoke Customization",
-            "description": "Tailor-made designs for specialized peripheral integration including biometric, thermal printers, and POS."
-          }
-        },
-        {
-          "type": "usp",
-          "settings": {
-            "icon": "award",
-            "title": "Industrial Grade Materials",
-            "description": "Heavy gauge CRCA/SS sheet fabrication with anti-vandal toughened glass and premium powder coating finish."
-          }
-        },
-        {
-          "type": "usp",
-          "settings": {
-            "icon": "truck",
-            "title": "Pan-India Logistics",
-            "description": "Safe wooden crate packaging and reliable freight distribution network delivering across all Indian states."
-          }
-        },
-        {
-          "type": "usp",
-          "settings": {
-            "icon": "headphones",
-            "title": "Dedicated SLA Support",
-            "description": "Robust post-deployment technical assistance, spare supply, and remote maintenance support."
-          }
-        }
+        { "type": "usp", "settings": { "icon": "factory", "title": "In-House Manufacturing", "description": "100% in-house sheet metal fabrication, laser cutting, powder coating, and assembly.", "metric": "100%", "metric_label": "In-House" } },
+        { "type": "usp", "settings": { "icon": "cog", "title": "Custom OEM Engineering", "description": "Tailored hardware designs engineered specifically to match your project blueprint.", "metric": "Custom", "metric_label": "Designs" } },
+        { "type": "usp", "settings": { "icon": "shield", "title": "ISO Certified Quality", "description": "Rigorous QA testing ensures IP65 weather resistance and 24/7 operational reliability.", "metric": "ISO", "metric_label": "9001:2015" } },
+        { "type": "usp", "settings": { "icon": "truck", "title": "Pan-India Logistics", "description": "Safe, insured packaging and doorstep delivery across 20+ states in India.", "metric": "20+", "metric_label": "States" } },
+        { "type": "usp", "settings": { "icon": "headphones", "title": "Dedicated AMC & Support", "description": "Post-installation support, spare parts availability, and annual maintenance contracts.", "metric": "24/7", "metric_label": "Support" } },
+        { "type": "usp", "settings": { "icon": "award", "title": "Competitive Factory Direct Pricing", "description": "Zero middleman markup — deal directly with the manufacturer for bulk pricing.", "metric": "Direct", "metric_label": "Factory Price" } }
       ]
     }
-  ]
+  ],
+  "enabled_on": { "templates": ["*"] }
 }
 {% endschema %}

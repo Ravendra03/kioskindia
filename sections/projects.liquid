@@ -1,81 +1,92 @@
 {%- comment -%}
-  MAXWELL PROJECTS / CASE STUDIES SECTION
-  ─────────────────────────────────────────────────────────────────────────────
-  Features:
-  - Featured projects showcase with client badges and details
-  - Filter or gallery layout
-  - Fully editable via Theme Customizer blocks
-  ─────────────────────────────────────────────────────────────────────────────
+  MAXWELL PROJECTS SHOWCASE SECTION — ENTERPRISE EDITION
 {%- endcomment -%}
 
-{%- assign project_blocks = section.blocks | where: 'type', 'project' -%}
+{%- liquid
+  assign project_blocks = section.blocks | where: 'type', 'project'
+  assign hide_mobile_class = ''
+  if section.settings.hide_on_mobile
+    assign hide_mobile_class = ' hide-mobile'
+  endif
+  assign hide_desktop_class = ''
+  if section.settings.hide_on_desktop
+    assign hide_desktop_class = ' hide-desktop'
+  endif
+-%}
 
 <section
-  class="section section--alt projects-showcase"
-  id="featured-projects"
+  class="section projects-section{{ hide_mobile_class }}{{ hide_desktop_class }}"
+  id="projects"
   aria-labelledby="projects-heading"
+  style="
+    --section-pt: {{ section.settings.padding_top | default: 80 }}px;
+    --section-pb: {{ section.settings.padding_bottom | default: 80 }}px;
+    --section-bg: {{ section.settings.bg_color | default: 'transparent' }};
+  "
 >
+  {%- if section.settings.bg_image != blank -%}
+    <div class="section__bg-wrap" aria-hidden="true">
+      {{
+        section.settings.bg_image
+        | image_url: width: 2000
+        | image_tag: class: 'section__bg-image', alt: '', loading: 'lazy'
+      }}
+      <div
+        class="section__overlay"
+        style="--section-overlay-opacity: {{ section.settings.overlay_opacity | default: 0 | divided_by: 100.0 }};"
+      ></div>
+    </div>
+  {%- endif -%}
+
   <div class="container">
 
-    <div class="projects-showcase__header">
-      {%- render 'section-header',
-        eyebrow: section.settings.eyebrow,
-        heading: section.settings.heading,
-        subtitle: section.settings.subtitle,
-        heading_tag: 'h2',
-        align: 'left',
-        section_id: 'projects-heading'
-      -%}
-
-      {%- if section.settings.cta_text != blank -%}
-        <a href="{{ section.settings.cta_url | default: '/pages/projects' }}" class="btn btn--ghost projects-showcase__header-cta">
-          {{ section.settings.cta_text }}
-          {% render 'icon', name: 'arrow-right', size: 18 %}
-        </a>
-      {%- endif -%}
-    </div>
+    {%- render 'section-header',
+      eyebrow: section.settings.eyebrow,
+      heading: section.settings.heading,
+      subtitle: section.settings.subtitle,
+      description: section.settings.description,
+      heading_tag: 'h2',
+      align: section.settings.alignment | default: 'center',
+      animate: section.settings.enable_animation,
+      section_id: 'projects-heading'
+    -%}
 
     {%- if project_blocks.size > 0 -%}
-      <div class="projects-showcase__grid">
+      <div
+        class="projects__grid"
+        {% if section.settings.enable_animation %}
+          data-animate="{{ section.settings.animation_type | default: 'fade-up' }}"
+        {% endif %}
+      >
         {%- for block in project_blocks -%}
-          <article
-            class="project-card"
-            data-animate="fade-up"
-            data-delay="{{ forloop.index | times: 100 }}"
-            {{ block.shopify_attributes }}
-          >
+          <article class="project-card" {{ block.shopify_attributes }}>
             <div class="project-card__image-wrap">
               {%- if block.settings.image != blank -%}
                 {{
                   block.settings.image
                   | image_url: width: 700
-                  | image_tag:
-                    class: 'project-card__image',
-                    alt: block.settings.title,
-                    loading: 'lazy',
-                    width: 700
+                  | image_tag: class: 'project-card__image', alt: block.settings.title, loading: 'lazy'
                 }}
               {%- else -%}
-                <div class="project-card__placeholder">
+                <div class="project-card__placeholder" aria-hidden="true">
                   {% render 'icon', name: 'building', size: 48 %}
                 </div>
               {%- endif -%}
-              {%- if block.settings.tag != blank -%}
-                <span class="badge badge--accent project-card__tag">{{ block.settings.tag }}</span>
+
+              {%- if block.settings.client_badge != blank -%}
+                <span class="project-card__badge">{{ block.settings.client_badge }}</span>
               {%- endif -%}
             </div>
 
             <div class="project-card__body">
-              {%- if block.settings.client != blank -%}
-                <span class="project-card__client">{{ block.settings.client }}</span>
-              {%- endif -%}
+              <span class="project-card__category">{{ block.settings.category }}</span>
               <h3 class="project-card__title">{{ block.settings.title }}</h3>
               <p class="project-card__desc">{{ block.settings.description }}</p>
 
-              {%- if block.settings.metric_val != blank -%}
-                <div class="project-card__metric">
-                  <span class="project-card__metric-val">{{ block.settings.metric_val }}</span>
-                  <span class="project-card__metric-lbl">{{ block.settings.metric_label }}</span>
+              {%- if block.settings.metric != blank -%}
+                <div class="project-card__metric-pill">
+                  {% render 'icon', name: 'check-circle', size: 14 %}
+                  <span>{{ block.settings.metric }}</span>
                 </div>
               {%- endif -%}
             </div>
@@ -84,50 +95,50 @@
       </div>
     {%- endif -%}
 
+    {%- if section.settings.cta_text != blank -%}
+      <div class="projects__footer-cta" data-animate="fade-up">
+        <a
+          href="{{ section.settings.cta_url | default: '/pages/contact' }}"
+          class="btn btn--secondary btn--lg"
+        >
+          {{ section.settings.cta_text }}
+          <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 18 %}</span>
+        </a>
+      </div>
+    {%- endif -%}
+
   </div>
 </section>
 
 <style>
-  .projects-showcase__header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-6);
-    margin-bottom: var(--space-10);
-  }
-
-  .projects-showcase__header-cta {
-    flex-shrink: 0;
-    align-self: center;
-  }
-
-  .projects-showcase__grid {
+  .projects__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-6);
+    gap: var(--space-8);
   }
 
   .project-card {
     background-color: var(--color-white);
-    border-radius: var(--radius-xl);
     border: 1px solid var(--color-border);
+    border-radius: var(--radius-2xl);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     box-shadow: var(--shadow-sm);
-    transition: transform var(--transition), box-shadow var(--transition);
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   }
 
   .project-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
     box-shadow: var(--shadow-xl);
+    border-color: var(--color-primary-light);
   }
 
   .project-card__image-wrap {
     position: relative;
     aspect-ratio: 16 / 10;
-    overflow: hidden;
     background-color: var(--color-bg-section);
+    overflow: hidden;
   }
 
   .project-card__image {
@@ -138,7 +149,7 @@
   }
 
   .project-card:hover .project-card__image {
-    transform: scale(1.05);
+    transform: scale(1.06);
   }
 
   .project-card__placeholder {
@@ -148,13 +159,20 @@
     align-items: center;
     justify-content: center;
     color: var(--color-primary);
-    opacity: 0.3;
+    opacity: 0.25;
   }
 
-  .project-card__tag {
+  .project-card__badge {
     position: absolute;
-    top: var(--space-4);
-    left: var(--space-4);
+    top: var(--space-3);
+    left: var(--space-3);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    color: var(--color-white);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-semibold);
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-full);
   }
 
   .project-card__body {
@@ -165,12 +183,12 @@
     flex: 1;
   }
 
-  .project-card__client {
+  .project-card__category {
     font-size: var(--text-xs);
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-bold);
     color: var(--color-accent);
-    letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
   }
 
   .project-card__title {
@@ -188,39 +206,34 @@
     flex: 1;
   }
 
-  .project-card__metric {
-    margin-top: var(--space-4);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--color-border);
-    display: flex;
-    align-items: baseline;
+  .project-card__metric-pill {
+    display: inline-flex;
+    align-items: center;
     gap: var(--space-2);
-  }
-
-  .project-card__metric-val {
-    font-size: var(--text-xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
-  }
-
-  .project-card__metric-lbl {
     font-size: var(--text-xs);
-    color: var(--color-text-muted);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    background-color: var(--color-primary-light);
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-full);
+    width: fit-content;
+    margin-top: var(--space-3);
+  }
+
+  .projects__footer-cta {
+    margin-top: var(--space-12);
+    text-align: center;
   }
 
   @media (max-width: 1024px) {
-    .projects-showcase__grid {
+    .projects__grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
 
   @media (max-width: 640px) {
-    .projects-showcase__grid {
+    .projects__grid {
       grid-template-columns: 1fr;
-    }
-    .projects-showcase__header {
-      flex-direction: column;
-      align-items: flex-start;
     }
   }
 </style>
@@ -228,127 +241,185 @@
 {% schema %}
 {
   "name": "Projects Showcase",
-  "class": "section-projects-showcase",
+  "class": "section-projects",
   "limit": 1,
   "settings": [
     {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
       "type": "text",
       "id": "eyebrow",
-      "label": "Eyebrow",
+      "label": "Eyebrow label",
       "default": "Case Studies"
     },
     {
       "type": "textarea",
       "id": "heading",
-      "label": "Heading",
-      "default": "Featured Installations Across India"
+      "label": "Section heading",
+      "default": "Featured Deployments Across India"
     },
     {
       "type": "textarea",
       "id": "subtitle",
-      "label": "Subtitle",
-      "default": "Explore key deployments delivered for government, healthcare, smart cities, and enterprise clients."
+      "label": "Section subtitle",
+      "default": "Explore how our custom kiosks and digital signages deliver seamless performance for major enterprise clients."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Detailed description"
+    },
+    {
+      "type": "header",
+      "content": "CTA Button"
     },
     {
       "type": "text",
       "id": "cta_text",
-      "label": "CTA Text",
-      "default": "Explore All Projects"
+      "label": "Button text",
+      "default": "Request Case Study Deck"
     },
     {
       "type": "url",
       "id": "cta_url",
-      "label": "CTA Link"
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Background & Styling"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "transparent"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay darkness",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Visibility Controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_mobile",
+      "label": "Hide on mobile devices",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_desktop",
+      "label": "Hide on desktop devices",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Animations"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animation",
+      "label": "Enable scroll animations",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "animation_type",
+      "label": "Animation type",
+      "options": [
+        { "value": "fade-up", "label": "Fade Up" },
+        { "value": "fade-left", "label": "Fade Left" },
+        { "value": "fade-right", "label": "Fade Right" },
+        { "value": "zoom-in", "label": "Zoom In" }
+      ],
+      "default": "fade-up"
     }
   ],
   "blocks": [
     {
       "type": "project",
-      "name": "Project Card",
+      "name": "Case Study Card",
+      "limit": 6,
       "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Project Image"
-        },
-        {
-          "type": "text",
-          "id": "tag",
-          "label": "Tag",
-          "default": "Healthcare"
-        },
-        {
-          "type": "text",
-          "id": "client",
-          "label": "Client Name",
-          "default": "AIIMS OPD Network"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Project Title",
-          "default": "Self-Registration & Patient Check-in Kiosks"
-        },
-        {
-          "type": "textarea",
-          "id": "description",
-          "label": "Description",
-          "default": "Custom manufactured dual-screen touchscreen terminals integrated with hospital management software."
-        },
-        {
-          "type": "text",
-          "id": "metric_val",
-          "label": "Metric Value",
-          "default": "120+"
-        },
-        {
-          "type": "text",
-          "id": "metric_label",
-          "label": "Metric Label",
-          "default": "Kiosks Deployed"
-        }
+        { "type": "image_picker", "id": "image", "label": "Project image" },
+        { "type": "text", "id": "title", "label": "Project title", "default": "AIIMS OPD Patient Check-In System" },
+        { "type": "text", "id": "category", "label": "Category", "default": "Healthcare" },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "Deployed 45 custom touch terminals reducing queue wait times by 65% across 8 hospital wings." },
+        { "type": "text", "id": "client_badge", "label": "Client badge", "default": "AIIMS Hospital" },
+        { "type": "text", "id": "metric", "label": "Metric highlight", "default": "45 Kiosks Deployed" }
       ]
     }
   ],
   "presets": [
     {
       "name": "Projects Showcase",
+      "settings": {
+        "eyebrow": "Case Studies",
+        "heading": "Featured Deployments Across India",
+        "subtitle": "Explore how our custom kiosks and digital signages deliver seamless performance for major enterprise clients.",
+        "cta_text": "Request Case Study Deck",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "enable_animation": true,
+        "animation_type": "fade-up"
+      },
       "blocks": [
-        {
-          "type": "project",
-          "settings": {
-            "tag": "Healthcare",
-            "client": "Apex Multispeciality Hospital",
-            "title": "Smart OPD Check-in Kiosks",
-            "description": "High-speed thermal printer equipped check-in terminals reducing patient wait times by 40%.",
-            "metric_val": "50+",
-            "metric_label": "Units Installed"
-          }
-        },
-        {
-          "type": "project",
-          "settings": {
-            "tag": "Smart City",
-            "client": "Municipal Corporation",
-            "title": "Outdoor IP65 Information Totems",
-            "description": "2500-nit high brightness outdoor digital signage displays engineered for extreme weather.",
-            "metric_val": "85+",
-            "metric_label": "Locations Active"
-          }
-        },
-        {
-          "type": "project",
-          "settings": {
-            "tag": "Government",
-            "client": "State E-Governance Dept",
-            "title": "Citizen Services Payment Terminals",
-            "description": "Ruggedized cash and UPI acceptance kiosks providing 24/7 public utility payments.",
-            "metric_val": "200+",
-            "metric_label": "Terminals Deployed"
-          }
-        }
+        { "type": "project", "settings": { "title": "AIIMS OPD Patient Check-In System", "category": "Healthcare", "description": "Deployed 45 custom touch terminals reducing queue wait times by 65% across 8 hospital wings.", "client_badge": "AIIMS Hospital", "metric": "45 Kiosks Deployed" } },
+        { "type": "project", "settings": { "title": "Gujarat Metro Passenger ATVM", "category": "Transportation", "description": "Ruggedized cash and card ticketing kiosks designed for high-throughput transit stations.", "client_badge": "Metro Rail Corp", "metric": "80+ Terminals" } },
+        { "type": "project", "settings": { "title": "Smart City Citizen Service Kiosks", "category": "Government", "description": "Outdoor IP65 touch kiosks for bill payments, civic applications, and public Wi-Fi access.", "client_badge": "Smart City Project", "metric": "120 Units Nationwide" } }
       ]
     }
-  ]
+  ],
+  "enabled_on": { "templates": ["*"] }
 }
 {% endschema %}

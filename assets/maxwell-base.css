@@ -87,10 +87,47 @@ a {
   max-width: 960px;
 }
 
-/* ── Section Wrapper ─────────────────────────────────────────────────────── */
+/* ── Section Wrapper & Dynamic Controls ─────────────────────────────────── */
 .section {
-  padding-block: clamp(3.5rem, 6vw, 6.5rem);
+  padding-top: var(--section-pt, clamp(3.5rem, 6vw, 6.5rem));
+  padding-bottom: var(--section-pb, clamp(3.5rem, 6vw, 6.5rem));
+  background-color: var(--section-bg, transparent);
   position: relative;
+}
+
+.section__bg-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.section__bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.section__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: #000;
+  opacity: var(--section-overlay-opacity, 0);
+  z-index: 1;
+}
+
+.section > .container {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 767px) {
+  .hide-mobile { display: none !important; }
+}
+
+@media (min-width: 768px) {
+  .hide-desktop { display: none !important; }
 }
 
 .section--alt {

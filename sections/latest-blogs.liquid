@@ -1,148 +1,163 @@
 {%- comment -%}
-  MAXWELL LATEST BLOGS / INDUSTRY INSIGHTS SECTION
-  ─────────────────────────────────────────────────────────────────────────────
-  Features:
-  - Article card grid from Shopify Blog
-  - Shows date, author, excerpt, and featured image
-  - Fallback cards if blog is empty
-  ─────────────────────────────────────────────────────────────────────────────
+  MAXWELL LATEST BLOG ARTICLES SECTION — ENTERPRISE EDITION
 {%- endcomment -%}
 
 {%- liquid
   assign blog = blogs[section.settings.blog]
-  assign posts_to_show = section.settings.posts_to_show | default: 3
+  assign articles_to_show = section.settings.articles_to_show | default: 3
   assign has_blog = false
   if blog != blank and blog.articles_count > 0
     assign has_blog = true
   endif
+  assign hide_mobile_class = ''
+  if section.settings.hide_on_mobile
+    assign hide_mobile_class = ' hide-mobile'
+  endif
+  assign hide_desktop_class = ''
+  if section.settings.hide_on_desktop
+    assign hide_desktop_class = ' hide-desktop'
+  endif
 -%}
 
 <section
-  class="section section--alt latest-blogs"
+  class="section blog-section{{ hide_mobile_class }}{{ hide_desktop_class }}"
   id="latest-blogs"
   aria-labelledby="blogs-heading"
+  style="
+    --section-pt: {{ section.settings.padding_top | default: 80 }}px;
+    --section-pb: {{ section.settings.padding_bottom | default: 80 }}px;
+    --section-bg: {{ section.settings.bg_color | default: 'transparent' }};
+  "
 >
+  {%- if section.settings.bg_image != blank -%}
+    <div class="section__bg-wrap" aria-hidden="true">
+      {{
+        section.settings.bg_image
+        | image_url: width: 2000
+        | image_tag: class: 'section__bg-image', alt: '', loading: 'lazy'
+      }}
+      <div
+        class="section__overlay"
+        style="--section-overlay-opacity: {{ section.settings.overlay_opacity | default: 0 | divided_by: 100.0 }};"
+      ></div>
+    </div>
+  {%- endif -%}
+
   <div class="container">
 
-    <div class="latest-blogs__header">
-      {%- render 'section-header',
-        eyebrow: section.settings.eyebrow,
-        heading: section.settings.heading,
-        subtitle: section.settings.subtitle,
-        heading_tag: 'h2',
-        align: 'left',
-        section_id: 'blogs-heading'
-      -%}
+    <div class="blog-section__header">
+      <div class="blog-section__header-text">
+        {%- render 'section-header',
+          eyebrow: section.settings.eyebrow,
+          heading: section.settings.heading,
+          subtitle: section.settings.subtitle,
+          description: section.settings.description,
+          heading_tag: 'h2',
+          align: section.settings.alignment | default: 'left',
+          animate: section.settings.enable_animation,
+          section_id: 'blogs-heading'
+        -%}
+      </div>
 
-      {%- if has_blog and section.settings.cta_text != blank -%}
-        <a href="{{ blog.url }}" class="btn btn--ghost latest-blogs__header-cta">
+      {%- if section.settings.cta_text != blank and has_blog -%}
+        <a
+          href="{{ blog.url }}"
+          class="btn btn--secondary blog-section__header-cta"
+        >
           {{ section.settings.cta_text }}
-          {% render 'icon', name: 'arrow-right', size: 18 %}
+          <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 18 %}</span>
         </a>
       {%- endif -%}
     </div>
 
-    <div class="latest-blogs__grid">
-
+    <div
+      class="blog-section__grid"
+      {% if section.settings.enable_animation %}
+        data-animate="{{ section.settings.animation_type | default: 'fade-up' }}"
+      {% endif %}
+    >
       {%- if has_blog -%}
-        {%- for article in blog.articles limit: posts_to_show -%}
-          <article class="blog-card" data-animate="fade-up" data-delay="{{ forloop.index | times: 100 }}">
-            <a href="{{ article.url }}" class="blog-card__image-link" tabindex="-1">
-              <div class="blog-card__image-wrap">
+        {%- for article in blog.articles limit: articles_to_show -%}
+          <article class="article-card">
+            <a href="{{ article.url }}" class="article-card__image-link" tabindex="-1" aria-hidden="true">
+              <div class="article-card__image-wrap">
                 {%- if article.image != blank -%}
                   {{
                     article.image
                     | image_url: width: 600
-                    | image_tag:
-                      class: 'blog-card__image',
-                      alt: article.title,
-                      loading: 'lazy',
-                      width: 600
+                    | image_tag: class: 'article-card__image', alt: article.title, loading: 'lazy'
                   }}
                 {%- else -%}
-                  <div class="blog-card__placeholder">
-                    {% render 'icon', name: 'monitor', size: 48 %}
+                  <div class="article-card__placeholder" aria-hidden="true">
+                    {% render 'icon', name: 'layers', size: 48 %}
                   </div>
                 {%- endif -%}
+
+                <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}" class="article-card__date">
+                  {{ article.published_at | date: '%b %d, %Y' }}
+                </time>
               </div>
             </a>
 
-            <div class="blog-card__body">
-              <div class="blog-card__meta">
-                <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%b %d, %Y' }}</time>
-              </div>
-
-              <h3 class="blog-card__title">
-                <a href="{{ article.url }}">{{ article.title }}</a>
+            <div class="article-card__body">
+              <span class="article-card__author">By {{ article.author | default: 'Maxwell Team' }}</span>
+              <h3 class="article-card__title">
+                <a href="{{ article.url }}" class="article-card__title-link">{{ article.title }}</a>
               </h3>
-
-              <p class="blog-card__excerpt">
-                {{ article.excerpt_or_content | strip_html | truncate: 110 }}
+              <p class="article-card__excerpt">
+                {{ article.excerpt_or_content | strip_html | truncate: 100 }}
               </p>
-
-              <a href="{{ article.url }}" class="blog-card__link">
-                Read Article
-                {% render 'icon', name: 'arrow-right', size: 16 %}
-              </a>
-            </div>
-          </article>
-        {%- endfor -%}
-
-      {%- else -%}
-
-        {%- comment -%} Manual sample blog posts if no blog assigned {%- endcomment -%}
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'sample_article' -%}
-            <article class="blog-card" data-animate="fade-up" data-delay="{{ forloop.index | times: 100 }}" {{ block.shopify_attributes }}>
-              <div class="blog-card__image-wrap">
-                {%- if block.settings.image != blank -%}
-                  {{
-                    block.settings.image
-                    | image_url: width: 600
-                    | image_tag:
-                      class: 'blog-card__image',
-                      alt: block.settings.title,
-                      loading: 'lazy',
-                      width: 600
-                  }}
-                {%- else -%}
-                  <div class="blog-card__placeholder">
-                    {% render 'icon', name: 'monitor', size: 48 %}
-                  </div>
-                {%- endif -%}
-              </div>
-
-              <div class="blog-card__body">
-                <div class="blog-card__meta">
-                  <span>{{ block.settings.date }}</span>
-                </div>
-
-                <h3 class="blog-card__title">
-                  <a href="{{ block.settings.url | default: '#' }}">{{ block.settings.title }}</a>
-                </h3>
-
-                <p class="blog-card__excerpt">
-                  {{ block.settings.excerpt }}
-                </p>
-
-                <a href="{{ block.settings.url | default: '#' }}" class="blog-card__link">
-                  Read Article
+              <div class="article-card__footer">
+                <a href="{{ article.url }}" class="article-card__read-more">
+                  <span>Read Article</span>
                   {% render 'icon', name: 'arrow-right', size: 16 %}
                 </a>
               </div>
-            </article>
-          {%- endif -%}
+            </div>
+          </article>
         {%- endfor -%}
+      {%- elsif section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          <article class="article-card" {{ block.shopify_attributes }}>
+            <div class="article-card__image-wrap">
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 600
+                  | image_tag: class: 'article-card__image', alt: block.settings.title, loading: 'lazy'
+                }}
+              {%- else -%}
+                <div class="article-card__placeholder" aria-hidden="true">
+                  {% render 'icon', name: 'layers', size: 48 %}
+                </div>
+              {%- endif -%}
 
+              <span class="article-card__date">{{ block.settings.date | default: 'Aug 2026' }}</span>
+            </div>
+
+            <div class="article-card__body">
+              <span class="article-card__author">By {{ block.settings.author | default: 'Maxwell Engineering' }}</span>
+              <h3 class="article-card__title">
+                <a href="{{ block.settings.link | default: '#' }}" class="article-card__title-link">{{ block.settings.title }}</a>
+              </h3>
+              <p class="article-card__excerpt">{{ block.settings.excerpt }}</p>
+              <div class="article-card__footer">
+                <a href="{{ block.settings.link | default: '/pages/contact' }}" class="article-card__read-more">
+                  <span>Read Article</span>
+                  {% render 'icon', name: 'arrow-right', size: 16 %}
+                </a>
+              </div>
+            </div>
+          </article>
+        {%- endfor -%}
       {%- endif -%}
-
     </div>
 
   </div>
 </section>
 
 <style>
-  .latest-blogs__header {
+  .blog-section__header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -150,21 +165,16 @@
     margin-bottom: var(--space-10);
   }
 
-  .latest-blogs__header-cta {
-    flex-shrink: 0;
-    align-self: center;
-  }
-
-  .latest-blogs__grid {
+  .blog-section__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-6);
+    gap: var(--space-8);
   }
 
-  .blog-card {
+  .article-card {
     background-color: var(--color-white);
-    border-radius: var(--radius-xl);
     border: 1px solid var(--color-border);
+    border-radius: var(--radius-2xl);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -172,40 +182,53 @@
     transition: transform var(--transition), box-shadow var(--transition);
   }
 
-  .blog-card:hover {
-    transform: translateY(-4px);
+  .article-card:hover {
+    transform: translateY(-6px);
     box-shadow: var(--shadow-xl);
   }
 
-  .blog-card__image-wrap {
+  .article-card__image-wrap {
     position: relative;
     aspect-ratio: 16 / 10;
-    overflow: hidden;
     background-color: var(--color-bg-section);
+    overflow: hidden;
   }
 
-  .blog-card__image {
+  .article-card__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform var(--duration-slow) var(--ease-out);
   }
 
-  .blog-card:hover .blog-card__image {
-    transform: scale(1.05);
+  .article-card:hover .article-card__image {
+    transform: scale(1.06);
   }
 
-  .blog-card__placeholder {
+  .article-card__placeholder {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--color-primary);
-    opacity: 0.3;
+    opacity: 0.25;
   }
 
-  .blog-card__body {
+  .article-card__date {
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-3);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    color: var(--color-white);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-semibold);
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-full);
+  }
+
+  .article-card__body {
     padding: var(--space-6);
     display: flex;
     flex-direction: column;
@@ -213,29 +236,32 @@
     flex: 1;
   }
 
-  .blog-card__meta {
+  .article-card__author {
     font-size: var(--text-xs);
-    color: var(--color-text-muted);
-  }
-
-  .blog-card__title {
-    font-size: var(--text-base);
     font-weight: var(--font-weight-bold);
-    line-height: var(--leading-snug);
-    margin: 0;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
   }
 
-  .blog-card__title a {
+  .article-card__title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-bold);
+    margin: 0;
+    line-height: var(--leading-snug);
+  }
+
+  .article-card__title-link {
     color: var(--color-text);
     text-decoration: none;
     transition: color var(--transition);
   }
 
-  .blog-card__title a:hover {
+  .article-card__title-link:hover {
     color: var(--color-primary);
   }
 
-  .blog-card__excerpt {
+  .article-card__excerpt {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
     line-height: var(--leading-relaxed);
@@ -243,32 +269,40 @@
     flex: 1;
   }
 
-  .blog-card__link {
+  .article-card__footer {
     margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .article-card__read-more {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    font-size: var(--text-sm);
-    font-weight: var(--font-weight-semibold);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
     color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
     text-decoration: none;
+    transition: color var(--transition);
   }
 
-  .blog-card__link:hover {
+  .article-card__read-more:hover {
     color: var(--color-accent);
   }
 
   @media (max-width: 1024px) {
-    .latest-blogs__grid {
+    .blog-section__grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
 
   @media (max-width: 640px) {
-    .latest-blogs__grid {
+    .blog-section__grid {
       grid-template-columns: 1fr;
     }
-    .latest-blogs__header {
+    .blog-section__header {
       flex-direction: column;
       align-items: flex-start;
     }
@@ -277,116 +311,201 @@
 
 {% schema %}
 {
-  "name": "Latest News & Blogs",
-  "class": "section-latest-blogs",
+  "name": "Latest Articles",
+  "class": "section-blog",
   "limit": 1,
   "settings": [
     {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
       "type": "text",
       "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Industry Insights"
+      "label": "Eyebrow label",
+      "default": "Insights & News"
     },
     {
       "type": "textarea",
       "id": "heading",
-      "label": "Heading",
-      "default": "Latest Articles & Manufacturing Trends"
+      "label": "Section heading",
+      "default": "Latest Technical Articles & Guides"
     },
     {
       "type": "textarea",
       "id": "subtitle",
-      "label": "Subtitle",
-      "default": "Technical guides, kiosk design trends, and smart signage industry updates."
+      "label": "Section subtitle",
+      "default": "Read expert insights on kiosk manufacturing, digital signage trends, and electrical enclosure standards."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Detailed description"
     },
     {
       "type": "blog",
       "id": "blog",
-      "label": "Blog",
-      "info": "Select Shopify blog to fetch articles automatically."
+      "label": "Shopify Blog source"
     },
     {
       "type": "range",
-      "id": "posts_to_show",
-      "min": 3,
+      "id": "articles_to_show",
+      "min": 2,
       "max": 6,
       "step": 1,
       "label": "Articles to show",
       "default": 3
     },
     {
+      "type": "header",
+      "content": "CTA Button"
+    },
+    {
       "type": "text",
       "id": "cta_text",
-      "label": "View All CTA Text",
+      "label": "Button text",
       "default": "View All Articles"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Background & Styling"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "transparent"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay darkness",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Visibility Controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_mobile",
+      "label": "Hide on mobile devices",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_desktop",
+      "label": "Hide on desktop devices",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Animations"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animation",
+      "label": "Enable scroll animations",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "animation_type",
+      "label": "Animation type",
+      "options": [
+        { "value": "fade-up", "label": "Fade Up" },
+        { "value": "fade-left", "label": "Fade Left" },
+        { "value": "fade-right", "label": "Fade Right" },
+        { "value": "zoom-in", "label": "Zoom In" }
+      ],
+      "default": "fade-up"
     }
   ],
   "blocks": [
     {
-      "type": "sample_article",
+      "type": "article_card",
       "name": "Sample Article Card",
+      "limit": 6,
       "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image"
-        },
-        {
-          "type": "text",
-          "id": "date",
-          "label": "Date",
-          "default": "August 2026"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Article Title",
-          "default": "How to Choose the Right IP Rating for Outdoor Touch Kiosks"
-        },
-        {
-          "type": "textarea",
-          "id": "excerpt",
-          "label": "Excerpt",
-          "default": "A comprehensive guide on IP65 vs IP54 enclosures for high heat and dust environments in India."
-        },
-        {
-          "type": "url",
-          "id": "url",
-          "label": "Article URL"
-        }
+        { "type": "image_picker", "id": "image", "label": "Article image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Choosing the Right Outdoor Digital Signage for Extreme Indian Weather" },
+        { "type": "textarea", "id": "excerpt", "label": "Excerpt", "default": "A guide to thermal management, IP65 sealing, and high-nit displays for outdoor deployment." },
+        { "type": "text", "id": "date", "label": "Date badge", "default": "Aug 2026" },
+        { "type": "text", "id": "author", "label": "Author", "default": "Maxwell Engineering" },
+        { "type": "url", "id": "link", "label": "Article link" }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Latest News & Blogs",
+      "name": "Latest Articles",
+      "settings": {
+        "eyebrow": "Insights & News",
+        "heading": "Latest Technical Articles & Guides",
+        "subtitle": "Read expert insights on kiosk manufacturing, digital signage trends, and electrical enclosure standards.",
+        "articles_to_show": 3,
+        "cta_text": "View All Articles",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "enable_animation": true,
+        "animation_type": "fade-up"
+      },
       "blocks": [
-        {
-          "type": "sample_article",
-          "settings": {
-            "date": "Aug 02, 2026",
-            "title": "Choosing IP65 Weatherproof Enclosures for Smart Cities",
-            "excerpt": "Key technical considerations when deploying outdoor digital signages in extreme Indian climate conditions."
-          }
-        },
-        {
-          "type": "sample_article",
-          "settings": {
-            "date": "Jul 28, 2026",
-            "title": "5 Ways Interactive Kiosks Streamline OPD Hospital Workflows",
-            "excerpt": "How smart registration terminals reduce patient queuing times and improve hospital operational efficiency."
-          }
-        },
-        {
-          "type": "sample_article",
-          "settings": {
-            "date": "Jul 15, 2026",
-            "title": "Sheet Metal Fabrication Standards in Industrial Enclosures",
-            "excerpt": "Understanding CNC bending, powder coating thickness, and anti-vandal structural designs."
-          }
-        }
+        { "type": "article_card", "settings": { "title": "Choosing the Right Outdoor Digital Signage for Extreme Indian Weather", "excerpt": "A guide to thermal management, IP65 sealing, and high-nit displays for outdoor deployment.", "date": "Aug 2026" } },
+        { "type": "article_card", "settings": { "title": "How Interactive Kiosks Streamline OPD Queues in Government Hospitals", "excerpt": "Case study analysis of patient self-check-in terminals across Indian hospital networks.", "date": "Jul 2026" } },
+        { "type": "article_card", "settings": { "title": "MS vs Stainless Steel Enclosures: Selecting the Best Material for Industrial Panels", "excerpt": "Understanding corrosion resistance, powder coating specs, and NEMA ratings.", "date": "Jun 2026" } }
       ]
     }
-  ]
+  ],
+  "enabled_on": { "templates": ["*"] }
 }
 {% endschema %}

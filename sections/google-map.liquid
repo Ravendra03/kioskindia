@@ -1,83 +1,117 @@
 {%- comment -%}
-  MAXWELL GOOGLE MAP & FACTORY LOCATION SECTION
-  ─────────────────────────────────────────────────────────────────────────────
-  Features:
-  - Interactive Google Maps embed for Vatwa GIDC manufacturing unit
-  - Factory address, contact numbers, and working hours info card
-  ─────────────────────────────────────────────────────────────────────────────
+  MAXWELL GOOGLE MAP & FACTORY LOCATION SECTION — ENTERPRISE EDITION
 {%- endcomment -%}
 
+{%- liquid
+  assign hide_mobile_class = ''
+  if section.settings.hide_on_mobile
+    assign hide_mobile_class = ' hide-mobile'
+  endif
+  assign hide_desktop_class = ''
+  if section.settings.hide_on_desktop
+    assign hide_desktop_class = ' hide-desktop'
+  endif
+-%}
+
 <section
-  class="section google-map-section"
-  id="factory-location"
+  class="section google-map-section{{ hide_mobile_class }}{{ hide_desktop_class }}"
+  id="google-map"
   aria-labelledby="map-heading"
+  style="
+    --section-pt: {{ section.settings.padding_top | default: 80 }}px;
+    --section-pb: {{ section.settings.padding_bottom | default: 80 }}px;
+    --section-bg: {{ section.settings.bg_color | default: 'transparent' }};
+  "
 >
+  {%- if section.settings.bg_image != blank -%}
+    <div class="section__bg-wrap" aria-hidden="true">
+      {{
+        section.settings.bg_image
+        | image_url: width: 2000
+        | image_tag: class: 'section__bg-image', alt: '', loading: 'lazy'
+      }}
+      <div
+        class="section__overlay"
+        style="--section-overlay-opacity: {{ section.settings.overlay_opacity | default: 0 | divided_by: 100.0 }};"
+      ></div>
+    </div>
+  {%- endif -%}
+
   <div class="container">
 
     {%- render 'section-header',
       eyebrow: section.settings.eyebrow,
       heading: section.settings.heading,
       subtitle: section.settings.subtitle,
+      description: section.settings.description,
       heading_tag: 'h2',
-      align: 'center',
+      align: section.settings.alignment | default: 'center',
+      animate: section.settings.enable_animation,
       section_id: 'map-heading'
     -%}
 
-    <div class="google-map__wrap" data-animate="fade-up">
-
-      {%- comment -%} Map Embed {%- endcomment -%}
-      <div class="google-map__embed">
-        <iframe
-          src="{{ section.settings.map_iframe_url | default: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3673.559287317765!2d72.64189!3d22.96701!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e890255555555%3A0x5555555555555555!2sGIDC%20Vatwa%2C%20Ahmedabad!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin' }}"
-          width="100%"
-          height="450"
-          style="border:0;"
-          allowfullscreen=""
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          title="Maxwell Automatic Factory Location Map"
-        ></iframe>
+    <div
+      class="map__card"
+      {% if section.settings.enable_animation %}
+        data-animate="{{ section.settings.animation_type | default: 'fade-up' }}"
+      {% endif %}
+    >
+      {%- comment -%} Map Iframe Wrap {%- endcomment -%}
+      <div class="map__iframe-wrap">
+        {%- if section.settings.map_embed_url != blank -%}
+          <iframe
+            src="{{ section.settings.map_embed_url }}"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Maxwell Automatic Factory Location Map"
+          ></iframe>
+        {%- else -%}
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.687799132274!2d72.6174!3d22.9904!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m3!2sVatwa+GIDC+Phase+1+Ahmedabad+Gujarat!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Maxwell Automatic Factory Location Map"
+          ></iframe>
+        {%- endif -%}
       </div>
 
-      {%- comment -%} Location Detail Card {%- endcomment -%}
-      <div class="google-map__info-card">
-        <h3 class="google-map__info-title">{{ section.settings.card_title | default: "Maxwell Manufacturing Unit" }}</h3>
+      {%- comment -%} Floating Location Info Card {%- endcomment -%}
+      <div class="map__info-box">
+        <div class="map__info-header">
+          <span class="map__info-badge">Manufacturing Unit</span>
+          <h3 class="map__info-title">{{ section.settings.factory_name | default: 'Maxwell Automatic Factory' }}</h3>
+        </div>
 
-        <div class="google-map__info-list">
-          <div class="google-map__info-item">
-            <span class="google-map__info-icon">{% render 'icon', name: 'map-pin', size: 20 %}</span>
-            <div>
-              <strong>Address</strong>
-              <p>{{ settings.contact_address_full | default: "Phase 4, Plot No. 2012, GIDC, Vatwa, Ahmedabad, Gujarat 382445" }}</p>
-            </div>
+        <div class="map__info-details">
+          <div class="map__info-row">
+            {% render 'icon', name: 'map-pin', size: 18 %}
+            <span>{{ section.settings.factory_address | default: 'Phase 1, Vatwa GIDC, Ahmedabad, Gujarat 382445, India' }}</span>
           </div>
-
-          <div class="google-map__info-item">
-            <span class="google-map__info-icon">{% render 'icon', name: 'clock', size: 20 %}</span>
-            <div>
-              <strong>Working Hours</strong>
-              <p>{{ section.settings.working_hours | default: "Mon - Sat: 9:00 AM - 7:00 PM (Sunday Closed)" }}</p>
-            </div>
-          </div>
-
-          <div class="google-map__info-item">
-            <span class="google-map__info-icon">{% render 'icon', name: 'phone', size: 20 %}</span>
-            <div>
-              <strong>Direct Support</strong>
-              <p>{{ settings.contact_phone | default: "+91 79 4254 0370" }}</p>
-            </div>
+          <div class="map__info-row">
+            {% render 'icon', name: 'clock', size: 18 %}
+            <span>{{ section.settings.factory_hours | default: 'Mon – Sat: 9:00 AM – 7:00 PM' }}</span>
           </div>
         </div>
 
-        <a
-          href="{{ section.settings.directions_url | default: 'https://maps.google.com' }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn btn--primary google-map__directions-btn"
-        >
-          Get Directions
-          {% render 'icon', name: 'external-link', size: 16 %}
-        </a>
+        {%- if section.settings.cta_text != blank -%}
+          <a
+            href="{{ section.settings.cta_url | default: 'https://maps.google.com' }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn--accent btn--sm map__info-btn"
+          >
+            {{ section.settings.cta_text }}
+            <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 16 %}</span>
+          </a>
+        {%- endif -%}
       </div>
 
     </div>
@@ -86,144 +120,281 @@
 </section>
 
 <style>
-  .google-map__wrap {
+  .map__card {
     position: relative;
     border-radius: var(--radius-2xl);
     overflow: hidden;
     box-shadow: var(--shadow-xl);
     border: 1px solid var(--color-border);
-    margin-top: var(--space-8);
-  }
-
-  .google-map__embed iframe {
-    display: block;
-    width: 100%;
     height: 480px;
+    background-color: var(--color-bg-section);
   }
 
-  .google-map__info-card {
+  .map__iframe-wrap {
+    width: 100%;
+    height: 100%;
+  }
+
+  .map__info-box {
     position: absolute;
-    top: var(--space-6);
-    right: var(--space-6);
-    width: 360px;
-    background-color: var(--color-white);
+    bottom: var(--space-6);
+    left: var(--space-6);
+    background: rgba(0, 26, 51, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--color-white);
     border-radius: var(--radius-xl);
     padding: var(--space-6);
+    max-width: 380px;
     box-shadow: var(--shadow-2xl);
-    border: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
-    z-index: 2;
   }
 
-  .google-map__info-title {
+  .map__info-badge {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+  }
+
+  .map__info-title {
     font-size: var(--text-lg);
     font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
+    color: var(--color-white);
     margin: 0;
   }
 
-  .google-map__info-list {
+  .map__info-details {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-2);
   }
 
-  .google-map__info-item {
+  .map__info-row {
     display: flex;
     align-items: flex-start;
-    gap: var(--space-3);
-    font-size: var(--text-sm);
-  }
-
-  .google-map__info-item strong {
-    display: block;
-    color: var(--color-text);
-  }
-
-  .google-map__info-item p {
-    margin: 0;
-    color: var(--color-text-muted);
+    gap: var(--space-2);
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.8);
     line-height: var(--leading-relaxed);
   }
 
-  .google-map__info-icon {
+  .map__info-row .icon {
     color: var(--color-accent);
     flex-shrink: 0;
     margin-top: 2px;
   }
 
-  .google-map__directions-btn {
+  .map__info-btn {
     width: 100%;
   }
 
-  @media (max-width: 900px) {
-    .google-map__info-card {
+  @media (max-width: 767px) {
+    .map__card {
+      height: 560px;
+    }
+    .map__info-box {
       position: relative;
-      top: 0;
-      right: 0;
-      width: 100%;
+      bottom: auto;
+      left: auto;
+      max-width: 100%;
       border-radius: 0;
-      box-shadow: none;
-      border: none;
-      border-top: 1px solid var(--color-border);
     }
   }
 </style>
 
 {% schema %}
 {
-  "name": "Google Map & Location",
+  "name": "Google Map & Factory",
   "class": "section-google-map",
   "limit": 1,
   "settings": [
     {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
       "type": "text",
       "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Factory Unit"
+      "label": "Eyebrow label",
+      "default": "Factory Location"
     },
     {
       "type": "textarea",
       "id": "heading",
-      "label": "Heading",
-      "default": "Visit Our Manufacturing Plant"
+      "label": "Section heading",
+      "default": "Visit Our Manufacturing Unit in Ahmedabad"
     },
     {
       "type": "textarea",
       "id": "subtitle",
-      "label": "Subtitle",
-      "default": "Located in Vatwa GIDC industrial estate, Ahmedabad, Gujarat."
+      "label": "Section subtitle",
+      "default": "Schedule a factory tour to inspect our fabrication setup, powder coating line, and live product demos."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Detailed description"
+    },
+    {
+      "type": "text",
+      "id": "map_embed_url",
+      "label": "Google Maps Embed iFrame src URL"
+    },
+    {
+      "type": "text",
+      "id": "factory_name",
+      "label": "Factory name label",
+      "default": "Maxwell Automatic Factory"
     },
     {
       "type": "textarea",
-      "id": "map_iframe_url",
-      "label": "Google Maps Embed URL",
-      "info": "Paste the src attribute from Google Maps Embed iframe."
+      "id": "factory_address",
+      "label": "Factory address text",
+      "default": "Phase 1, Vatwa GIDC, Ahmedabad, Gujarat 382445, India"
     },
     {
       "type": "text",
-      "id": "card_title",
-      "label": "Card Title",
-      "default": "Maxwell Manufacturing Unit"
+      "id": "factory_hours",
+      "label": "Operating hours text",
+      "default": "Mon – Sat: 9:00 AM – 7:00 PM"
+    },
+    {
+      "type": "header",
+      "content": "CTA Button"
     },
     {
       "type": "text",
-      "id": "working_hours",
-      "label": "Working Hours",
-      "default": "Mon - Sat: 9:00 AM - 7:00 PM (Sunday Closed)"
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "Get Directions on Google Maps"
     },
     {
       "type": "url",
-      "id": "directions_url",
-      "label": "Get Directions Google Maps URL"
+      "id": "cta_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Background & Styling"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "transparent"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay darkness",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Visibility Controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_mobile",
+      "label": "Hide on mobile devices",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_desktop",
+      "label": "Hide on desktop devices",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Animations"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animation",
+      "label": "Enable scroll animations",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "animation_type",
+      "label": "Animation type",
+      "options": [
+        { "value": "fade-up", "label": "Fade Up" },
+        { "value": "fade-left", "label": "Fade Left" },
+        { "value": "fade-right", "label": "Fade Right" },
+        { "value": "zoom-in", "label": "Zoom In" }
+      ],
+      "default": "fade-up"
     }
   ],
   "presets": [
     {
-      "name": "Google Map & Location"
+      "name": "Google Map & Factory",
+      "settings": {
+        "eyebrow": "Factory Location",
+        "heading": "Visit Our Manufacturing Unit in Ahmedabad",
+        "subtitle": "Schedule a factory tour to inspect our fabrication setup, powder coating line, and live product demos.",
+        "factory_name": "Maxwell Automatic Factory",
+        "factory_address": "Phase 1, Vatwa GIDC, Ahmedabad, Gujarat 382445, India",
+        "factory_hours": "Mon – Sat: 9:00 AM – 7:00 PM",
+        "cta_text": "Get Directions on Google Maps",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "enable_animation": true,
+        "animation_type": "fade-up"
+      }
     }
-  ]
+  ],
+  "enabled_on": { "templates": ["*"] }
 }
 {% endschema %}

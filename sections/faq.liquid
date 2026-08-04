@@ -1,39 +1,69 @@
 {%- comment -%}
-  MAXWELL ACCORDION FAQ SECTION
-  ─────────────────────────────────────────────────────────────────────────────
-  Features:
-  - Accessible native accordion toggles (`<details>` / `<summary>`)
-  - FAQPage JSON-LD schema generated automatically for Google Rich Snippets
-  - Fully editable via Theme Customizer blocks
-  ─────────────────────────────────────────────────────────────────────────────
+  MAXWELL FAQ SECTION WITH ACCORDION & JSON-LD SCHEMA — ENTERPRISE EDITION
 {%- endcomment -%}
 
-{%- assign faq_blocks = section.blocks | where: 'type', 'faq' -%}
+{%- liquid
+  assign faq_blocks = section.blocks | where: 'type', 'faq'
+  assign hide_mobile_class = ''
+  if section.settings.hide_on_mobile
+    assign hide_mobile_class = ' hide-mobile'
+  endif
+  assign hide_desktop_class = ''
+  if section.settings.hide_on_desktop
+    assign hide_desktop_class = ' hide-desktop'
+  endif
+-%}
 
 <section
-  class="section section--alt faq-section"
+  class="section faq-section{{ hide_mobile_class }}{{ hide_desktop_class }}"
   id="faq"
   aria-labelledby="faq-heading"
+  style="
+    --section-pt: {{ section.settings.padding_top | default: 80 }}px;
+    --section-pb: {{ section.settings.padding_bottom | default: 80 }}px;
+    --section-bg: {{ section.settings.bg_color | default: 'transparent' }};
+  "
 >
-  <div class="container">
+  {%- if section.settings.bg_image != blank -%}
+    <div class="section__bg-wrap" aria-hidden="true">
+      {{
+        section.settings.bg_image
+        | image_url: width: 2000
+        | image_tag: class: 'section__bg-image', alt: '', loading: 'lazy'
+      }}
+      <div
+        class="section__overlay"
+        style="--section-overlay-opacity: {{ section.settings.overlay_opacity | default: 0 | divided_by: 100.0 }};"
+      ></div>
+    </div>
+  {%- endif -%}
+
+  <div class="container container--narrow">
 
     {%- render 'section-header',
       eyebrow: section.settings.eyebrow,
       heading: section.settings.heading,
       subtitle: section.settings.subtitle,
+      description: section.settings.description,
       heading_tag: 'h2',
-      align: 'center',
+      align: section.settings.alignment | default: 'center',
+      animate: section.settings.enable_animation,
       section_id: 'faq-heading'
     -%}
 
     {%- if faq_blocks.size > 0 -%}
-      <div class="faq__container" data-animate="fade-up">
+      <div
+        class="faq__list"
+        {% if section.settings.enable_animation %}
+          data-animate="{{ section.settings.animation_type | default: 'fade-up' }}"
+        {% endif %}
+      >
         {%- for block in faq_blocks -%}
           <details class="faq__item" {{ block.shopify_attributes }}>
-            <summary class="faq__question">
-              <span>{{ block.settings.question }}</span>
-              <span class="faq__chevron" aria-hidden="true">
-                {% render 'icon', name: 'chevron-down', size: 20 %}
+            <summary class="faq__summary">
+              <span class="faq__question">{{ block.settings.question }}</span>
+              <span class="faq__icon" aria-hidden="true">
+                {% render 'icon', name: 'chevron-down', size: 18 %}
               </span>
             </summary>
             <div class="faq__answer">
@@ -42,35 +72,47 @@
           </details>
         {%- endfor -%}
       </div>
+    {%- endif -%}
 
-      {%- comment -%} Structured Data for FAQPage Schema {%- endcomment -%}
-      <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {%- for block in faq_blocks -%}
-            {
-              "@type": "Question",
-              "name": {{ block.settings.question | json }},
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": {{ block.settings.answer | json }}
-              }
-            }{%- unless forloop.last -%},{%- endunless -%}
-          {%- endfor -%}
-        ]
-      }
-      </script>
+    {%- if section.settings.cta_text != blank -%}
+      <div class="faq__footer-cta">
+        <a
+          href="{{ section.settings.cta_url | default: '/pages/contact' }}"
+          class="btn btn--secondary"
+        >
+          {{ section.settings.cta_text }}
+          <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 16 %}</span>
+        </a>
+      </div>
     {%- endif -%}
 
   </div>
 </section>
 
+{%- comment -%} Automatic FAQPage JSON-LD Structured Data for Google SEO {%- endcomment -%}
+{%- if faq_blocks.size > 0 -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {%- for block in faq_blocks -%}
+          {
+            "@type": "Question",
+            "name": {{ block.settings.question | json }},
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": {{ block.settings.answer | json }}
+            }
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}
+
 <style>
-  .faq__container {
-    max-width: 840px;
-    margin: var(--space-8) auto 0 auto;
+  .faq__list {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
@@ -79,7 +121,7 @@
   .faq__item {
     background-color: var(--color-white);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     overflow: hidden;
     transition: border-color var(--transition), box-shadow var(--transition);
   }
@@ -89,33 +131,34 @@
     box-shadow: var(--shadow-md);
   }
 
-  .faq__question {
-    padding: var(--space-5) var(--space-6);
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text);
-    cursor: pointer;
+  .faq__summary {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-4);
+    padding: var(--space-5) var(--space-6);
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    cursor: pointer;
     list-style: none;
+    user-select: none;
   }
 
-  .faq__question::-webkit-details-marker {
+  .faq__summary::-webkit-details-marker {
     display: none;
   }
 
-  .faq__chevron {
-    color: var(--color-text-muted);
-    transition: transform var(--duration-base) var(--ease-out);
+  .faq__icon {
     display: flex;
+    align-items: center;
+    color: var(--color-primary);
+    transition: transform var(--transition);
     flex-shrink: 0;
   }
 
-  .faq__item[open] .faq__chevron {
+  .faq__item[open] .faq__icon {
     transform: rotate(180deg);
-    color: var(--color-primary);
   }
 
   .faq__answer {
@@ -123,10 +166,12 @@
     font-size: var(--text-sm);
     color: var(--color-text-muted);
     line-height: var(--leading-relaxed);
+    border-top: 1px solid transparent;
   }
 
-  .faq__answer p {
-    margin: 0;
+  .faq__footer-cta {
+    margin-top: var(--space-10);
+    text-align: center;
   }
 </style>
 
@@ -137,78 +182,178 @@
   "limit": 1,
   "settings": [
     {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
       "type": "text",
       "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Frequently Asked Questions"
+      "label": "Eyebrow label",
+      "default": "Got Questions?"
     },
     {
       "type": "textarea",
       "id": "heading",
-      "label": "Heading",
-      "default": "Everything You Need to Know"
+      "label": "Section heading",
+      "default": "Frequently Asked Questions"
     },
     {
       "type": "textarea",
       "id": "subtitle",
-      "label": "Subtitle",
-      "default": "Answers to common questions regarding customization, MOQ, delivery times, and warranty."
+      "label": "Section subtitle",
+      "default": "Everything you need to know about our custom manufacturing process, lead times, and warranty."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Detailed description"
+    },
+    {
+      "type": "header",
+      "content": "CTA Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "Still Have Questions? Contact Sales"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Background & Styling"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "transparent"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay darkness",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Visibility Controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_mobile",
+      "label": "Hide on mobile devices",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_desktop",
+      "label": "Hide on desktop devices",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Animations"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animation",
+      "label": "Enable scroll animations",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "animation_type",
+      "label": "Animation type",
+      "options": [
+        { "value": "fade-up", "label": "Fade Up" },
+        { "value": "fade-left", "label": "Fade Left" },
+        { "value": "fade-right", "label": "Fade Right" },
+        { "value": "zoom-in", "label": "Zoom In" }
+      ],
+      "default": "fade-up"
     }
   ],
   "blocks": [
     {
       "type": "faq",
       "name": "FAQ Item",
+      "limit": 12,
       "settings": [
-        {
-          "type": "text",
-          "id": "question",
-          "label": "Question",
-          "default": "What is the typical manufacturing lead time for custom kiosks?"
-        },
-        {
-          "type": "textarea",
-          "id": "answer",
-          "label": "Answer",
-          "default": "Standard kiosk models take 2–3 weeks. Custom engineered OEM projects take approximately 3–4 weeks from technical design sign-off."
-        }
+        { "type": "text", "id": "question", "label": "Question", "default": "What is the typical lead time for custom kiosks?" },
+        { "type": "textarea", "id": "answer", "label": "Answer", "default": "Standard lead time for custom interactive kiosks is 3–4 weeks from design sign-off. Bulk orders above 50 units may require 5–6 weeks." }
       ]
     }
   ],
   "presets": [
     {
       "name": "FAQ Accordion",
+      "settings": {
+        "eyebrow": "Got Questions?",
+        "heading": "Frequently Asked Questions",
+        "subtitle": "Everything you need to know about our custom manufacturing process, lead times, and warranty.",
+        "cta_text": "Still Have Questions? Contact Sales",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "enable_animation": true,
+        "animation_type": "fade-up"
+      },
       "blocks": [
-        {
-          "type": "faq",
-          "settings": {
-            "question": "What is the typical manufacturing lead time for custom kiosks?",
-            "answer": "Standard kiosk models take 2–3 weeks. Custom engineered OEM projects take approximately 3–4 weeks from technical design sign-off."
-          }
-        },
-        {
-          "type": "faq",
-          "settings": {
-            "question": "Do you provide on-site installation and support across India?",
-            "answer": "Yes, we offer complete pan-India freight delivery with optional on-site installation, software integration support, and commissioning."
-          }
-        },
-        {
-          "type": "faq",
-          "settings": {
-            "question": "Can kiosks be customized with our company logo and brand color powder coating?",
-            "answer": "Absolutely. All kiosk enclosures can be custom powder coated in any RAL color shade and customized with laser-etched or vinyl brand logos."
-          }
-        },
-        {
-          "type": "faq",
-          "settings": {
-            "question": "What warranty and post-sales support do you offer?",
-            "answer": "All Maxwell products come with a 1-year comprehensive hardware warranty, extendable up to 3 years under an Annual Maintenance Contract (AMC)."
-          }
-        }
+        { "type": "faq", "settings": { "question": "What is the typical lead time for custom kiosks?", "answer": "Standard lead time for custom interactive kiosks is 3–4 weeks from design sign-off. Bulk orders above 50 units may require 5–6 weeks." } },
+        { "type": "faq", "settings": { "question": "Do you provide on-site installation and commissioning?", "answer": "Yes! We offer pan-India installation, hardware commissioning, and technical setup services through our field engineering team." } },
+        { "type": "faq", "settings": { "question": "What warranty is provided on Maxwell products?", "answer": "Every product includes a standard 1-year comprehensive warranty covering sheet metal structure, powder coating, display panels, and internal controllers." } },
+        { "type": "faq", "settings": { "question": "Can I customize the color and branding on kiosks?", "answer": "Absolutely. We offer custom RAL powder coating colors, laser-etched corporate logos, and custom vinyl graphic wraps tailored to your brand identity." } }
       ]
     }
-  ]
+  ],
+  "enabled_on": { "templates": ["*"] }
 }
 {% endschema %}

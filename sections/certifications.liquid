@@ -1,51 +1,90 @@
 {%- comment -%}
-  MAXWELL CERTIFICATIONS & COMPLIANCE SECTION
-  ─────────────────────────────────────────────────────────────────────────────
-  Features:
-  - ISO, MSME, Make in India, CE, IP65 certification badge grid
-  - Hover effects & trust metrics
-  - Fully editable via Theme Customizer blocks
-  ─────────────────────────────────────────────────────────────────────────────
+  MAXWELL CERTIFICATIONS & COMPLIANCE SECTION — ENTERPRISE EDITION
 {%- endcomment -%}
 
-{%- assign cert_blocks = section.blocks | where: 'type', 'certification' -%}
+{%- liquid
+  assign cert_blocks = section.blocks | where: 'type', 'cert'
+  assign hide_mobile_class = ''
+  if section.settings.hide_on_mobile
+    assign hide_mobile_class = ' hide-mobile'
+  endif
+  assign hide_desktop_class = ''
+  if section.settings.hide_on_desktop
+    assign hide_desktop_class = ' hide-desktop'
+  endif
+-%}
 
 <section
-  class="section certifications"
+  class="section certifications-section{{ hide_mobile_class }}{{ hide_desktop_class }}"
   id="certifications"
   aria-labelledby="certifications-heading"
+  style="
+    --section-pt: {{ section.settings.padding_top | default: 60 }}px;
+    --section-pb: {{ section.settings.padding_bottom | default: 60 }}px;
+    --section-bg: {{ section.settings.bg_color | default: 'transparent' }};
+  "
 >
+  {%- if section.settings.bg_image != blank -%}
+    <div class="section__bg-wrap" aria-hidden="true">
+      {{
+        section.settings.bg_image
+        | image_url: width: 2000
+        | image_tag: class: 'section__bg-image', alt: '', loading: 'lazy'
+      }}
+      <div
+        class="section__overlay"
+        style="--section-overlay-opacity: {{ section.settings.overlay_opacity | default: 0 | divided_by: 100.0 }};"
+      ></div>
+    </div>
+  {%- endif -%}
+
   <div class="container">
 
     {%- render 'section-header',
       eyebrow: section.settings.eyebrow,
       heading: section.settings.heading,
       subtitle: section.settings.subtitle,
+      description: section.settings.description,
       heading_tag: 'h2',
-      align: 'center',
+      align: section.settings.alignment | default: 'center',
+      animate: section.settings.enable_animation,
       section_id: 'certifications-heading'
     -%}
 
     {%- if cert_blocks.size > 0 -%}
-      <div class="certifications__grid">
+      <div
+        class="certifications__grid"
+        {% if section.settings.enable_animation %}
+          data-animate="{{ section.settings.animation_type | default: 'fade-up' }}"
+        {% endif %}
+      >
         {%- for block in cert_blocks -%}
-          <div
-            class="cert-card"
-            data-animate="fade-up"
-            data-delay="{{ forloop.index | times: 100 }}"
-            {{ block.shopify_attributes }}
-          >
-            <div class="cert-card__icon-wrap">
-              {%- if block.settings.icon_name != blank -%}
-                {% render 'icon', name: block.settings.icon_name, size: 36 %}
-              {%- else -%}
-                {% render 'icon', name: 'shield', size: 36 %}
+          <div class="cert-card" {{ block.shopify_attributes }}>
+            <div class="cert-card__icon-wrap" aria-hidden="true">
+              {% render 'icon', name: block.settings.icon, size: 28 %}
+            </div>
+
+            <div class="cert-card__content">
+              <h3 class="cert-card__title">{{ block.settings.title }}</h3>
+              <p class="cert-card__desc">{{ block.settings.description }}</p>
+              {%- if block.settings.badge_number != blank -%}
+                <span class="cert-card__number">{{ block.settings.badge_number }}</span>
               {%- endif -%}
             </div>
-            <h3 class="cert-card__title">{{ block.settings.title }}</h3>
-            <p class="cert-card__desc">{{ block.settings.description }}</p>
           </div>
         {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.cta_text != blank -%}
+      <div class="certifications__footer-cta">
+        <a
+          href="{{ section.settings.cta_url | default: '/pages/contact' }}"
+          class="btn btn--secondary"
+        >
+          {{ section.settings.cta_text }}
+          <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 16 %}</span>
+        </a>
       </div>
     {%- endif -%}
 
@@ -57,37 +96,52 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: var(--space-6);
-    margin-top: var(--space-8);
   }
 
   .cert-card {
     background-color: var(--color-white);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-2xl);
     padding: var(--space-6);
-    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-3);
+    text-align: center;
+    gap: var(--space-4);
+    box-shadow: var(--shadow-sm);
     transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   }
 
   .cert-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--color-accent);
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--color-primary-light);
   }
 
   .cert-card__icon-wrap {
-    width: 64px;
-    height: 64px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    background-color: rgba(245, 130, 32, 0.1);
-    color: var(--color-accent);
+    background: linear-gradient(135deg, var(--color-primary-light), rgba(245, 130, 32, 0.08));
+    color: var(--color-primary);
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    transition: transform var(--transition), background var(--transition), color var(--transition);
+  }
+
+  .cert-card:hover .cert-card__icon-wrap {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: var(--color-white);
+    transform: scale(1.1);
+  }
+
+  .cert-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    flex: 1;
   }
 
   .cert-card__title {
@@ -104,13 +158,26 @@
     margin: 0;
   }
 
+  .cert-card__number {
+    display: inline-block;
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    margin-top: var(--space-2);
+  }
+
+  .certifications__footer-cta {
+    margin-top: var(--space-10);
+    text-align: center;
+  }
+
   @media (max-width: 1024px) {
     .certifications__grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     .certifications__grid {
       grid-template-columns: 1fr;
     }
@@ -119,111 +186,196 @@
 
 {% schema %}
 {
-  "name": "Certifications & Trust",
+  "name": "Certifications",
   "class": "section-certifications",
   "limit": 1,
   "settings": [
     {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
       "type": "text",
       "id": "eyebrow",
-      "label": "Eyebrow",
+      "label": "Eyebrow label",
       "default": "Compliance & Quality"
     },
     {
       "type": "textarea",
       "id": "heading",
-      "label": "Heading",
-      "default": "Certified Industrial Standards"
+      "label": "Section heading",
+      "default": "Certified to Global Standards"
     },
     {
       "type": "textarea",
       "id": "subtitle",
-      "label": "Subtitle",
-      "default": "Manufactured strictly following national and international quality guidelines."
+      "label": "Section subtitle",
+      "default": "Our manufacturing facility operates under international quality standards and government certifications."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Detailed description"
+    },
+    {
+      "type": "header",
+      "content": "CTA Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "Download Compliance Certificates"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Background & Styling"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "transparent"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay darkness",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Visibility Controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_mobile",
+      "label": "Hide on mobile devices",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_desktop",
+      "label": "Hide on desktop devices",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Animations"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animation",
+      "label": "Enable scroll animations",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "animation_type",
+      "label": "Animation type",
+      "options": [
+        { "value": "fade-up", "label": "Fade Up" },
+        { "value": "fade-left", "label": "Fade Left" },
+        { "value": "fade-right", "label": "Fade Right" },
+        { "value": "zoom-in", "label": "Zoom In" }
+      ],
+      "default": "fade-up"
     }
   ],
   "blocks": [
     {
-      "type": "certification",
+      "type": "cert",
       "name": "Certification Badge",
+      "limit": 6,
       "settings": [
         {
           "type": "select",
-          "id": "icon_name",
+          "id": "icon",
           "label": "Icon",
           "options": [
-            {
-              "value": "shield",
-              "label": "Shield"
-            },
-            {
-              "value": "award",
-              "label": "Award"
-            },
-            {
-              "value": "factory",
-              "label": "Factory"
-            },
-            {
-              "value": "check-circle",
-              "label": "Check Circle"
-            }
+            { "value": "shield", "label": "Shield" },
+            { "value": "award", "label": "Award" },
+            { "value": "check-circle", "label": "Check Circle" },
+            { "value": "factory", "label": "Factory" }
           ],
           "default": "shield"
         },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "ISO 9001:2015"
-        },
-        {
-          "type": "textarea",
-          "id": "description",
-          "label": "Description",
-          "default": "Certified Quality Management System for design, manufacturing, and assembly."
-        }
+        { "type": "text", "id": "title", "label": "Title", "default": "ISO 9001:2015" },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "Quality Management System certified for hardware manufacturing." },
+        { "type": "text", "id": "badge_number", "label": "Badge code / reg number", "default": "ISO-9001 Certified" }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Certifications & Trust",
+      "name": "Certifications",
+      "settings": {
+        "eyebrow": "Compliance & Quality",
+        "heading": "Certified to Global Standards",
+        "subtitle": "Our manufacturing facility operates under international quality standards and government certifications.",
+        "cta_text": "Download Compliance Certificates",
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "enable_animation": true,
+        "animation_type": "fade-up"
+      },
       "blocks": [
-        {
-          "type": "certification",
-          "settings": {
-            "icon_name": "shield",
-            "title": "ISO 9001:2015 Certified",
-            "description": "Compliant quality management systems covering end-to-end hardware manufacturing."
-          }
-        },
-        {
-          "type": "certification",
-          "settings": {
-            "icon_name": "factory",
-            "title": "Make In India Initiative",
-            "description": "Proudly engineered and manufactured in Vatwa GIDC, Ahmedabad, Gujarat."
-          }
-        },
-        {
-          "type": "certification",
-          "settings": {
-            "icon_name": "award",
-            "title": "MSME Registered",
-            "description": "Recognized enterprise manufacturing partner with government vendor approvals."
-          }
-        },
-        {
-          "type": "certification",
-          "settings": {
-            "icon_name": "check-circle",
-            "title": "IP65 Weatherproof",
-            "description": "Enclosures tested and certified for dust and water ingress protection for outdoor use."
-          }
-        }
+        { "type": "cert", "settings": { "icon": "shield", "title": "ISO 9001:2015", "description": "Quality Management System Certified", "badge_number": "ISO-9001 Certified" } },
+        { "type": "cert", "settings": { "icon": "award", "title": "Make in India", "description": "100% Indigenous Fabrication & Assembly", "badge_number": "Government Verified" } },
+        { "type": "cert", "settings": { "icon": "check-circle", "title": "MSME Registered", "description": "Recognized Enterprise Manufacturer", "badge_number": "UDYAM Registered" } },
+        { "type": "cert", "settings": { "icon": "factory", "title": "IP65 Weatherproof", "description": "Ingress Protection Certified Kiosks", "badge_number": "IP65 Rating" } }
       ]
     }
-  ]
+  ],
+  "enabled_on": { "templates": ["*"] }
 }
 {% endschema %}

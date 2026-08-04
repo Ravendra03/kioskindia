@@ -50,6 +50,13 @@
     </p>
   {%- endif -%}
 
+  {%- if description != blank -%}
+    <div class="section-description{% if theme == 'dark' %} section-description--light{% endif %}"
+      {%- if do_animate %} data-animate="fade-up" data-delay="250"{% endif %}>
+      {{ description }}
+    </div>
+  {%- endif -%}
+
   {%- if cta_text != blank and cta_url != blank -%}
     <a href="{{ cta_url }}"
        class="btn btn--{{ cta_style }} section-header__cta"
