@@ -191,6 +191,85 @@
         "c-7": { "type": "client", "settings": { "name": "Reliance Industries" } }
       },
       "block_order": ["c-1", "c-2", "c-3", "c-4", "c-5", "c-6", "c-7"]
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {
+        "bg_style": "alt",
+        "eyebrow": "Client Reviews",
+        "heading": "What Industry Leaders Say About Maxwell",
+        "subtitle": "Read feedback from healthcare administrators, smart city project heads, and system integrators."
+      },
+      "blocks": {
+        "t-1": { "type": "testimonial", "settings": { "quote": "Maxwell Automatic delivered 50 custom touch kiosks for our OPD registration network. Build quality and thermal management exceeded expectations.", "author_name": "Dr. Rajesh Sharma", "author_title": "Head of IT & Operations", "company": "Apex Healthcare Group" } },
+        "t-2": { "type": "testimonial", "settings": { "quote": "The outdoor IP65 Totems manufactured by Maxwell have been running non-stop in high ambient humidity for 2 years without a single display failure.", "author_name": "Vikram Patel", "author_title": "Project Director", "company": "Smart City Infra Solutions" } },
+        "t-3": { "type": "testimonial", "settings": { "quote": "Outstanding sheet metal precision and powder coating quality for electrical enclosures. Their engineering team is extremely collaborative.", "author_name": "Sanjay Mehta", "author_title": "General Manager - Procurement", "company": "Precision OEM Automation" } }
+      },
+      "block_order": ["t-1", "t-2", "t-3"]
+    },
+    "certifications": {
+      "type": "certifications",
+      "settings": {
+        "eyebrow": "Compliance & Quality",
+        "heading": "Certified Industrial Standards",
+        "subtitle": "Manufactured strictly following national and international quality guidelines."
+      },
+      "blocks": {
+        "cert-1": { "type": "certification", "settings": { "icon_name": "shield", "title": "ISO 9001:2015 Certified", "description": "Compliant quality management systems covering end-to-end hardware manufacturing." } },
+        "cert-2": { "type": "certification", "settings": { "icon_name": "factory", "title": "Make In India Initiative", "description": "Proudly engineered and manufactured in Vatwa GIDC, Ahmedabad, Gujarat." } },
+        "cert-3": { "type": "certification", "settings": { "icon_name": "award", "title": "MSME Registered", "description": "Recognized enterprise manufacturing partner with government vendor approvals." } },
+        "cert-4": { "type": "certification", "settings": { "icon_name": "check-circle", "title": "IP65 Weatherproof", "description": "Enclosures tested and certified for dust and water ingress protection for outdoor use." } }
+      },
+      "block_order": ["cert-1", "cert-2", "cert-3", "cert-4"]
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "eyebrow": "Frequently Asked Questions",
+        "heading": "Everything You Need to Know",
+        "subtitle": "Answers to common questions regarding customization, MOQ, delivery times, and warranty."
+      },
+      "blocks": {
+        "faq-1": { "type": "faq", "settings": { "question": "What is the typical manufacturing lead time for custom kiosks?", "answer": "Standard kiosk models take 2–3 weeks. Custom engineered OEM projects take approximately 3–4 weeks from technical design sign-off." } },
+        "faq-2": { "type": "faq", "settings": { "question": "Do you provide on-site installation and support across India?", "answer": "Yes, we offer complete pan-India freight delivery with optional on-site installation, software integration support, and commissioning." } },
+        "faq-3": { "type": "faq", "settings": { "question": "Can kiosks be customized with our company logo and brand color powder coating?", "answer": "Absolutely. All kiosk enclosures can be custom powder coated in any RAL color shade and customized with laser-etched or vinyl brand logos." } },
+        "faq-4": { "type": "faq", "settings": { "question": "What warranty and post-sales support do you offer?", "answer": "All Maxwell products come with a 1-year comprehensive hardware warranty, extendable up to 3 years under an Annual Maintenance Contract (AMC)." } }
+      },
+      "block_order": ["faq-1", "faq-2", "faq-3", "faq-4"]
+    },
+    "contact-cta": {
+      "type": "contact-cta",
+      "settings": {
+        "eyebrow": "Get In Touch",
+        "heading": "Ready to Build Your Custom Solution?",
+        "subtitle": "Send us your project specifications or request a custom quote from our engineering team."
+      }
+    },
+    "latest-blogs": {
+      "type": "latest-blogs",
+      "settings": {
+        "eyebrow": "Industry Insights",
+        "heading": "Latest Articles & Manufacturing Trends",
+        "subtitle": "Technical guides, kiosk design trends, and smart signage industry updates.",
+        "posts_to_show": 3,
+        "cta_text": "View All Articles"
+      },
+      "blocks": {
+        "b-1": { "type": "sample_article", "settings": { "date": "Aug 02, 2026", "title": "Choosing IP65 Weatherproof Enclosures for Smart Cities", "excerpt": "Key technical considerations when deploying outdoor digital signages in extreme Indian climate conditions." } },
+        "b-2": { "type": "sample_article", "settings": { "date": "Jul 28, 2026", "title": "5 Ways Interactive Kiosks Streamline OPD Hospital Workflows", "excerpt": "How smart registration terminals reduce patient queuing times and improve hospital operational efficiency." } },
+        "b-3": { "type": "sample_article", "settings": { "date": "Jul 15, 2026", "title": "Sheet Metal Fabrication Standards in Industrial Enclosures", "excerpt": "Understanding CNC bending, powder coating thickness, and anti-vandal structural designs." } }
+      },
+      "block_order": ["b-1", "b-2", "b-3"]
+    },
+    "google-map": {
+      "type": "google-map",
+      "settings": {
+        "eyebrow": "Factory Unit",
+        "heading": "Visit Our Manufacturing Plant",
+        "subtitle": "Located in Vatwa GIDC industrial estate, Ahmedabad, Gujarat.",
+        "card_title": "Maxwell Manufacturing Unit",
+        "working_hours": "Mon - Sat: 9:00 AM - 7:00 PM (Sunday Closed)"
+      }
     }
   },
   "order": [
@@ -202,6 +281,12 @@
     "manufacturing-process",
     "why-choose-us",
     "projects",
-    "clients"
+    "clients",
+    "testimonials",
+    "certifications",
+    "faq",
+    "contact-cta",
+    "latest-blogs",
+    "google-map"
   ]
 }

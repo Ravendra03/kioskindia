@@ -1,0 +1,394 @@
+{%- comment -%}
+  MAXWELL LATEST BLOGS / INDUSTRY INSIGHTS SECTION
+  ─────────────────────────────────────────────────────────────────────────────
+  Features:
+  - Article card grid from Shopify Blog
+  - Shows date, author, excerpt, and featured image
+  - Fallback cards if blog is empty
+  ─────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+
+{%- liquid
+  assign blog = blogs[section.settings.blog]
+  assign posts_to_show = section.settings.posts_to_show | default: 3
+  assign has_blog = false
+  if blog != blank and blog.articles_count > 0
+    assign has_blog = true
+  endif
+-%}
+
+<section
+  class="section section--alt latest-blogs"
+  id="latest-blogs"
+  aria-labelledby="blogs-heading"
+>
+  <div class="container">
+
+    <div class="latest-blogs__header">
+      {%- render 'section-header',
+        eyebrow: section.settings.eyebrow,
+        heading: section.settings.heading,
+        subtitle: section.settings.subtitle,
+        heading_tag: 'h2',
+        align: 'left',
+        section_id: 'blogs-heading'
+      -%}
+
+      {%- if has_blog and section.settings.cta_text != blank -%}
+        <a href="{{ blog.url }}" class="btn btn--ghost latest-blogs__header-cta">
+          {{ section.settings.cta_text }}
+          {% render 'icon', name: 'arrow-right', size: 18 %}
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="latest-blogs__grid">
+
+      {%- if has_blog -%}
+        {%- for article in blog.articles limit: posts_to_show -%}
+          <article class="blog-card" data-animate="fade-up" data-delay="{{ forloop.index | times: 100 }}">
+            <a href="{{ article.url }}" class="blog-card__image-link" tabindex="-1">
+              <div class="blog-card__image-wrap">
+                {%- if article.image != blank -%}
+                  {{
+                    article.image
+                    | image_url: width: 600
+                    | image_tag:
+                      class: 'blog-card__image',
+                      alt: article.title,
+                      loading: 'lazy',
+                      width: 600
+                  }}
+                {%- else -%}
+                  <div class="blog-card__placeholder">
+                    {% render 'icon', name: 'monitor', size: 48 %}
+                  </div>
+                {%- endif -%}
+              </div>
+            </a>
+
+            <div class="blog-card__body">
+              <div class="blog-card__meta">
+                <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%b %d, %Y' }}</time>
+              </div>
+
+              <h3 class="blog-card__title">
+                <a href="{{ article.url }}">{{ article.title }}</a>
+              </h3>
+
+              <p class="blog-card__excerpt">
+                {{ article.excerpt_or_content | strip_html | truncate: 110 }}
+              </p>
+
+              <a href="{{ article.url }}" class="blog-card__link">
+                Read Article
+                {% render 'icon', name: 'arrow-right', size: 16 %}
+              </a>
+            </div>
+          </article>
+        {%- endfor -%}
+
+      {%- else -%}
+
+        {%- comment -%} Manual sample blog posts if no blog assigned {%- endcomment -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'sample_article' -%}
+            <article class="blog-card" data-animate="fade-up" data-delay="{{ forloop.index | times: 100 }}" {{ block.shopify_attributes }}>
+              <div class="blog-card__image-wrap">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 600
+                    | image_tag:
+                      class: 'blog-card__image',
+                      alt: block.settings.title,
+                      loading: 'lazy',
+                      width: 600
+                  }}
+                {%- else -%}
+                  <div class="blog-card__placeholder">
+                    {% render 'icon', name: 'monitor', size: 48 %}
+                  </div>
+                {%- endif -%}
+              </div>
+
+              <div class="blog-card__body">
+                <div class="blog-card__meta">
+                  <span>{{ block.settings.date }}</span>
+                </div>
+
+                <h3 class="blog-card__title">
+                  <a href="{{ block.settings.url | default: '#' }}">{{ block.settings.title }}</a>
+                </h3>
+
+                <p class="blog-card__excerpt">
+                  {{ block.settings.excerpt }}
+                </p>
+
+                <a href="{{ block.settings.url | default: '#' }}" class="blog-card__link">
+                  Read Article
+                  {% render 'icon', name: 'arrow-right', size: 16 %}
+                </a>
+              </div>
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+
+      {%- endif -%}
+
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .latest-blogs__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-6);
+    margin-bottom: var(--space-10);
+  }
+
+  .latest-blogs__header-cta {
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  .latest-blogs__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+
+  .blog-card {
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+
+  .blog-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .blog-card__image-wrap {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background-color: var(--color-bg-section);
+  }
+
+  .blog-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out);
+  }
+
+  .blog-card:hover .blog-card__image {
+    transform: scale(1.05);
+  }
+
+  .blog-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    opacity: 0.3;
+  }
+
+  .blog-card__body {
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+
+  .blog-card__meta {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .blog-card__title {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-snug);
+    margin: 0;
+  }
+
+  .blog-card__title a {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+
+  .blog-card__title a:hover {
+    color: var(--color-primary);
+  }
+
+  .blog-card__excerpt {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+    flex: 1;
+  }
+
+  .blog-card__link {
+    margin-top: var(--space-4);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .blog-card__link:hover {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 1024px) {
+    .latest-blogs__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .latest-blogs__grid {
+      grid-template-columns: 1fr;
+    }
+    .latest-blogs__header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Latest News & Blogs",
+  "class": "section-latest-blogs",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Industry Insights"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Latest Articles & Manufacturing Trends"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Technical guides, kiosk design trends, and smart signage industry updates."
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog",
+      "info": "Select Shopify blog to fetch articles automatically."
+    },
+    {
+      "type": "range",
+      "id": "posts_to_show",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "label": "Articles to show",
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "View All CTA Text",
+      "default": "View All Articles"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "sample_article",
+      "name": "Sample Article Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date",
+          "default": "August 2026"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Article Title",
+          "default": "How to Choose the Right IP Rating for Outdoor Touch Kiosks"
+        },
+        {
+          "type": "textarea",
+          "id": "excerpt",
+          "label": "Excerpt",
+          "default": "A comprehensive guide on IP65 vs IP54 enclosures for high heat and dust environments in India."
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Article URL"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "sample_article",
+        "settings": {
+          "date": "Aug 02, 2026",
+          "title": "Choosing IP65 Weatherproof Enclosures for Smart Cities",
+          "excerpt": "Key technical considerations when deploying outdoor digital signages in extreme Indian climate conditions."
+        }
+      },
+      {
+        "type": "sample_article",
+        "settings": {
+          "date": "Jul 28, 2026",
+          "title": "5 Ways Interactive Kiosks Streamline OPD Hospital Workflows",
+          "excerpt": "How smart registration terminals reduce patient queuing times and improve hospital operational efficiency."
+        }
+      },
+      {
+        "type": "sample_article",
+        "settings": {
+          "date": "Jul 15, 2026",
+          "title": "Sheet Metal Fabrication Standards in Industrial Enclosures",
+          "excerpt": "Understanding CNC bending, powder coating thickness, and anti-vandal structural designs."
+        }
+      }
+    ]
+  },
+  "presets": [
+    {
+      "name": "Latest News & Blogs"
+    }
+  ]
+}
+{% endschema %}

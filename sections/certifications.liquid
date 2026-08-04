@@ -1,0 +1,219 @@
+{%- comment -%}
+  MAXWELL CERTIFICATIONS & COMPLIANCE SECTION
+  ─────────────────────────────────────────────────────────────────────────────
+  Features:
+  - ISO, MSME, Make in India, CE, IP65 certification badge grid
+  - Hover effects & trust metrics
+  - Fully editable via Theme Customizer blocks
+  ─────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+
+{%- assign cert_blocks = section.blocks | where: 'type', 'certification' -%}
+
+<section
+  class="section certifications"
+  id="certifications"
+  aria-labelledby="certifications-heading"
+>
+  <div class="container">
+
+    {%- render 'section-header',
+      eyebrow: section.settings.eyebrow,
+      heading: section.settings.heading,
+      subtitle: section.settings.subtitle,
+      heading_tag: 'h2',
+      align: 'center',
+      section_id: 'certifications-heading'
+    -%}
+
+    {%- if cert_blocks.size > 0 -%}
+      <div class="certifications__grid">
+        {%- for block in cert_blocks -%}
+          <div
+            class="cert-card"
+            data-animate="fade-up"
+            data-delay="{{ forloop.index | times: 100 }}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="cert-card__icon-wrap">
+              {%- if block.settings.icon_name != blank -%}
+                {% render 'icon', name: block.settings.icon_name, size: 36 %}
+              {%- else -%}
+                {% render 'icon', name: 'shield', size: 36 %}
+              {%- endif -%}
+            </div>
+            <h3 class="cert-card__title">{{ block.settings.title }}</h3>
+            <p class="cert-card__desc">{{ block.settings.description }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  .certifications__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+  }
+
+  .cert-card {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  }
+
+  .cert-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-accent);
+  }
+
+  .cert-card__icon-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: rgba(245, 130, 32, 0.1);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cert-card__title {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .cert-card__desc {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .certifications__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .certifications__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Certifications & Trust",
+  "class": "section-certifications",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Compliance & Quality"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Certified Industrial Standards"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Manufactured strictly following national and international quality guidelines."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "certification",
+      "name": "Certification Badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_name",
+          "label": "Icon",
+          "options": [
+            { "value": "shield", "label": "Shield" },
+            { "value": "award", "label": "Award" },
+            { "value": "factory", "label": "Factory" },
+            { "value": "check-circle", "label": "Check Circle" }
+          ],
+          "default": "shield"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "ISO 9001:2015"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Certified Quality Management System for design, manufacturing, and assembly."
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "certification",
+        "settings": {
+          "icon_name": "shield",
+          "title": "ISO 9001:2015 Certified",
+          "description": "Compliant quality management systems covering end-to-end hardware manufacturing."
+        }
+      },
+      {
+        "type": "certification",
+        "settings": {
+          "icon_name": "factory",
+          "title": "Make In India Initiative",
+          "description": "Proudly engineered and manufactured in Vatwa GIDC, Ahmedabad, Gujarat."
+        }
+      },
+      {
+        "type": "certification",
+        "settings": {
+          "icon_name": "award",
+          "title": "MSME Registered",
+          "description": "Recognized enterprise manufacturing partner with government vendor approvals."
+        }
+      },
+      {
+        "type": "certification",
+        "settings": {
+          "icon_name": "check-circle",
+          "title": "IP65 Weatherproof",
+          "description": "Enclosures tested and certified for dust and water ingress protection for outdoor use."
+        }
+      }
+    ]
+  },
+  "presets": [
+    {
+      "name": "Certifications & Trust"
+    }
+  ]
+}
+{% endschema %}

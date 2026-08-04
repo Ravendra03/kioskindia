@@ -1,0 +1,229 @@
+{%- comment -%}
+  MAXWELL GOOGLE MAP & FACTORY LOCATION SECTION
+  ─────────────────────────────────────────────────────────────────────────────
+  Features:
+  - Interactive Google Maps embed for Vatwa GIDC manufacturing unit
+  - Factory address, contact numbers, and working hours info card
+  ─────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+
+<section
+  class="section google-map-section"
+  id="factory-location"
+  aria-labelledby="map-heading"
+>
+  <div class="container">
+
+    {%- render 'section-header',
+      eyebrow: section.settings.eyebrow,
+      heading: section.settings.heading,
+      subtitle: section.settings.subtitle,
+      heading_tag: 'h2',
+      align: 'center',
+      section_id: 'map-heading'
+    -%}
+
+    <div class="google-map__wrap" data-animate="fade-up">
+
+      {%- comment -%} Map Embed {%- endcomment -%}
+      <div class="google-map__embed">
+        <iframe
+          src="{{ section.settings.map_iframe_url | default: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3673.559287317765!2d72.64189!3d22.96701!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e890255555555%3A0x5555555555555555!2sGIDC%20Vatwa%2C%20Ahmedabad!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin' }}"
+          width="100%"
+          height="450"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Maxwell Automatic Factory Location Map"
+        ></iframe>
+      </div>
+
+      {%- comment -%} Location Detail Card {%- endcomment -%}
+      <div class="google-map__info-card">
+        <h3 class="google-map__info-title">{{ section.settings.card_title | default: "Maxwell Manufacturing Unit" }}</h3>
+
+        <div class="google-map__info-list">
+          <div class="google-map__info-item">
+            <span class="google-map__info-icon">{% render 'icon', name: 'map-pin', size: 20 %}</span>
+            <div>
+              <strong>Address</strong>
+              <p>{{ settings.contact_address_full | default: "Phase 4, Plot No. 2012, GIDC, Vatwa, Ahmedabad, Gujarat 382445" }}</p>
+            </div>
+          </div>
+
+          <div class="google-map__info-item">
+            <span class="google-map__info-icon">{% render 'icon', name: 'clock', size: 20 %}</span>
+            <div>
+              <strong>Working Hours</strong>
+              <p>{{ section.settings.working_hours | default: "Mon - Sat: 9:00 AM - 7:00 PM (Sunday Closed)" }}</p>
+            </div>
+          </div>
+
+          <div class="google-map__info-item">
+            <span class="google-map__info-icon">{% render 'icon', name: 'phone', size: 20 %}</span>
+            <div>
+              <strong>Direct Support</strong>
+              <p>{{ settings.contact_phone | default: "+91 79 4254 0370" }}</p>
+            </div>
+          </div>
+        </div>
+
+        <a
+          href="{{ section.settings.directions_url | default: 'https://maps.google.com' }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn--primary google-map__directions-btn"
+        >
+          Get Directions
+          {% render 'icon', name: 'external-link', size: 16 %}
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .google-map__wrap {
+    position: relative;
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--color-border);
+    margin-top: var(--space-8);
+  }
+
+  .google-map__embed iframe {
+    display: block;
+    width: 100%;
+    height: 480px;
+  }
+
+  .google-map__info-card {
+    position: absolute;
+    top: var(--space-6);
+    right: var(--space-6);
+    width: 360px;
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-2xl);
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    z-index: 2;
+  }
+
+  .google-map__info-title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    margin: 0;
+  }
+
+  .google-map__info-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .google-map__info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+  }
+
+  .google-map__info-item strong {
+    display: block;
+    color: var(--color-text);
+  }
+
+  .google-map__info-item p {
+    margin: 0;
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+  }
+
+  .google-map__info-icon {
+    color: var(--color-accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .google-map__directions-btn {
+    width: 100%;
+  }
+
+  @media (max-width: 900px) {
+    .google-map__info-card {
+      position: relative;
+      top: 0;
+      right: 0;
+      width: 100%;
+      border-radius: 0;
+      box-shadow: none;
+      border: none;
+      border-top: 1px solid var(--color-border);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Google Map & Location",
+  "class": "section-google-map",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Factory Unit"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Visit Our Manufacturing Plant"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Located in Vatwa GIDC industrial estate, Ahmedabad, Gujarat."
+    },
+    {
+      "type": "textarea",
+      "id": "map_iframe_url",
+      "label": "Google Maps Embed URL",
+      "info": "Paste the src attribute from Google Maps Embed iframe."
+    },
+    {
+      "type": "text",
+      "id": "card_title",
+      "label": "Card Title",
+      "default": "Maxwell Manufacturing Unit"
+    },
+    {
+      "type": "text",
+      "id": "working_hours",
+      "label": "Working Hours",
+      "default": "Mon - Sat: 9:00 AM - 7:00 PM (Sunday Closed)"
+    },
+    {
+      "type": "url",
+      "id": "directions_url",
+      "label": "Get Directions Google Maps URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Google Map & Location"
+    }
+  ]
+}
+{% endschema %}

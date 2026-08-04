@@ -1,57 +1,368 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
-  </div>
+{%- comment -%}
+  MAXWELL ENTERPRISE CORPORATE FOOTER SECTION
+  ─────────────────────────────────────────────────────────────────────────────
+  Features:
+  - Enterprise footer layout with 4 block-driven columns
+  - Company profile, contact numbers, address, and GST badge
+  - Newsletter / catalog subscription form
+  - Copyright, privacy policy, and social links
+  ─────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
 
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
 
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
-    {% endif %}
+    <div class="site-footer__main">
+
+      {%- comment -%} Brand & Info Column {%- endcomment -%}
+      <div class="site-footer__col site-footer__col--brand">
+        <a href="{{ routes.root_url }}" class="site-footer__logo-link">
+          {%- if settings.header_logo != blank -%}
+            {{
+              settings.header_logo
+              | image_url: width: 180
+              | image_tag:
+                class: 'site-footer__logo',
+                alt: settings.company_name | default: shop.name,
+                loading: 'lazy',
+                width: 180
+            }}
+          {%- else -%}
+            <strong class="site-footer__brand-name">{{ settings.company_name | default: shop.name }}</strong>
+          {%- endif -%}
+        </a>
+
+        <p class="site-footer__about">
+          {{ settings.company_description | default: "India's leading manufacturer of interactive kiosks, digital signages, and electrical enclosures. ISO 9001:2015 certified." }}
+        </p>
+
+        <div class="site-footer__contact-info">
+          {%- if settings.contact_phone != blank -%}
+            <a href="tel:{{ settings.contact_phone_raw }}" class="site-footer__contact-link">
+              {% render 'icon', name: 'phone', size: 16 %}
+              <span>{{ settings.contact_phone }}</span>
+            </a>
+          {%- endif -%}
+
+          {%- if settings.contact_email != blank -%}
+            <a href="mailto:{{ settings.contact_email }}" class="site-footer__contact-link">
+              {% render 'icon', name: 'email', size: 16 %}
+              <span>{{ settings.contact_email }}</span>
+            </a>
+          {%- endif -%}
+
+          {%- if settings.contact_address_short != blank -%}
+            <div class="site-footer__contact-link">
+              {% render 'icon', name: 'map-pin', size: 16 %}
+              <span>{{ settings.contact_address_short }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- comment -%} Navigation Columns (blocks) {%- endcomment -%}
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'menu' -%}
+            <div class="site-footer__col" {{ block.shopify_attributes }}>
+              <h3 class="site-footer__col-title">{{ block.settings.title }}</h3>
+              {%- assign footer_menu = linklists[block.settings.menu] -%}
+              {%- if footer_menu != blank and footer_menu.links.size > 0 -%}
+                <ul class="site-footer__menu" role="list">
+                  {%- for link in footer_menu.links -%}
+                    <li>
+                      <a href="{{ link.url }}" class="site-footer__menu-link">
+                        {% render 'icon', name: 'chevron-right', size: 12 %}
+                        {{ link.title }}
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </div>
+
+          {%- when 'newsletter' -%}
+            <div class="site-footer__col site-footer__col--newsletter" {{ block.shopify_attributes }}>
+              <h3 class="site-footer__col-title">{{ block.settings.title | default: "Download Catalog" }}</h3>
+              <p class="site-footer__newsletter-desc">{{ block.settings.description | default: "Subscribe to receive our latest product catalog and technical datasheets." }}</p>
+
+              {%- form 'customer', class: 'site-footer__newsletter-form' -%}
+                <input type="hidden" name="contact[tags]" value="newsletter,catalog_download">
+                <div class="site-footer__newsletter-field">
+                  <input
+                    type="email"
+                    name="contact[email]"
+                    class="form-input site-footer__newsletter-input"
+                    placeholder="Enter business email"
+                    required
+                  >
+                  <button type="submit" class="btn btn--accent site-footer__newsletter-btn" aria-label="Subscribe">
+                    {% render 'icon', name: 'arrow-right', size: 18 %}
+                  </button>
+                </div>
+              {%- endform -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+
+    </div>
+
+    {%- comment -%} Footer Bottom Bar {%- endcomment -%}
+    <div class="site-footer__bottom">
+      <div class="site-footer__copyright">
+        &copy; {{ 'now' | date: '%Y' }} {{ settings.company_name | default: shop.name }}. All rights reserved.
+        {%- if settings.contact_gst != blank -%}
+          <span class="site-footer__gst">| GSTIN: {{ settings.contact_gst }}</span>
+        {%- endif -%}
+      </div>
+
+      <div class="site-footer__social">
+        {%- if settings.social_linkedin != blank -%}
+          <a href="{{ settings.social_linkedin }}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            {% render 'icon', name: 'linkedin', size: 18 %}
+          </a>
+        {%- endif -%}
+        {%- if settings.social_instagram != blank -%}
+          <a href="{{ settings.social_instagram }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            {% render 'icon', name: 'instagram', size: 18 %}
+          </a>
+        {%- endif -%}
+        {%- if settings.social_youtube != blank -%}
+          <a href="{{ settings.social_youtube }}" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+            {% render 'icon', name: 'youtube', size: 18 %}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+
   </div>
 </footer>
 
-{% stylesheet %}
-  footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
+<style>
+  .site-footer {
+    background-color: #001a33;
+    color: rgba(255, 255, 255, 0.85);
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-8);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
-  footer a {
+
+  .site-footer__main {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(3, 1fr);
+    gap: var(--space-10);
+    padding-bottom: var(--space-12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .site-footer__col-title {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-white);
+    margin-bottom: var(--space-4);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .site-footer__brand-name {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-white);
+  }
+
+  .site-footer__about {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.7);
+    line-height: var(--leading-relaxed);
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+
+  .site-footer__contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+  }
+
+  .site-footer__contact-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
-    color: var(--color-foreground);
+    transition: color var(--transition);
   }
-  footer .footer__links,
-  footer .footer__payment {
+
+  .site-footer__contact-link:hover {
+    color: var(--color-accent);
+  }
+
+  .site-footer__contact-link .icon {
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  .site-footer__menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
+    gap: var(--space-2);
   }
-{% endstylesheet %}
+
+  .site-footer__menu-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color var(--transition), transform var(--transition);
+  }
+
+  .site-footer__menu-link:hover {
+    color: var(--color-white);
+    transform: translateX(4px);
+  }
+
+  .site-footer__menu-link .icon {
+    color: var(--color-accent);
+  }
+
+  .site-footer__newsletter-desc {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.7);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-4);
+  }
+
+  .site-footer__newsletter-field {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .site-footer__newsletter-input {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--color-white);
+  }
+
+  .site-footer__newsletter-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--space-6);
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .site-footer__gst {
+    margin-left: var(--space-2);
+  }
+
+  .site-footer__social {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  .site-footer__social a {
+    color: rgba(255, 255, 255, 0.7);
+    transition: color var(--transition);
+  }
+
+  .site-footer__social a:hover {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 1024px) {
+    .site-footer__main {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .site-footer__main {
+      grid-template-columns: 1fr;
+    }
+    .site-footer__bottom {
+      flex-direction: column;
+      gap: var(--space-4);
+      text-align: center;
+    }
+  }
+</style>
 
 {% schema %}
 {
-  "name": "t:general.footer",
-  "settings": [
+  "name": "Footer",
+  "class": "section-footer",
+  "limit": 1,
+  "settings": [],
+  "blocks": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
+      "type": "menu",
+      "name": "Navigation Column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Column Title",
+          "default": "Products"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu Linklist"
+        }
+      ]
     },
     {
-      "type": "checkbox",
-      "id": "show_payment_icons",
-      "label": "t:labels.show_payment_icons",
-      "default": true
+      "type": "newsletter",
+      "name": "Newsletter / Catalog",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Download Catalog"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Subscribe to receive our latest product catalog and technical datasheets."
+        }
+      ]
     }
-  ]
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "menu",
+        "settings": {
+          "title": "Products"
+        }
+      },
+      {
+        "type": "menu",
+        "settings": {
+          "title": "Company"
+        }
+      },
+      {
+        "type": "newsletter",
+        "settings": {
+          "title": "Catalog & Updates",
+          "description": "Get direct access to our engineering datasheets and product updates."
+        }
+      }
+    ]
+  }
 }
 {% endschema %}
