@@ -297,31 +297,30 @@
 ─── SEARCH OVERLAY ──────────────────────────────────────────────────────────
 ─────────────────────────────────────────────────────────────────────────── {%- endcomment -%}
 <div
-  class="search-overlay overlay"
+  class="search-bar-strip"
   data-search-overlay
-  role="dialog"
-  aria-modal="true"
+  role="search"
   aria-label="Search products"
   id="search-overlay"
 >
-  <div class="search-overlay__box">
-    <form action="{{ routes.search_url }}" method="get" class="search-overlay__form" role="search">
+  <div class="container">
+    <form action="{{ routes.search_url }}" method="get" class="search-bar-strip__form" role="search">
       <input type="hidden" name="type" value="product">
       <label for="search-overlay-input" class="visually-hidden">Search products</label>
-      <div class="search-overlay__field">
-        <span class="search-overlay__icon">{% render 'icon', name: 'search', size: 18 %}</span>
+      <div class="search-bar-strip__field">
+        <span class="search-bar-strip__icon">{% render 'icon', name: 'search', size: 20 %}</span>
         <input
           type="search"
           name="q"
           id="search-overlay-input"
-          class="search-overlay__input"
+          class="search-bar-strip__input"
           data-search-input
           placeholder="{{ section.settings.search_placeholder | default: 'Search kiosks, signages, enclosures…' }}"
           autocomplete="off"
           autocorrect="off"
           spellcheck="false"
         >
-        <button type="button" class="search-overlay__close" data-search-close aria-label="Close search">
+        <button type="button" class="search-bar-strip__close" data-search-close aria-label="Close search">
           {% render 'icon', name: 'close', size: 18 %}
         </button>
       </div>
@@ -868,82 +867,87 @@
     color: var(--color-white);
   }
 
-  /* ── Search Overlay ───────────────────────────────────────────────────────── */
-  .search-overlay {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 75px;
-    background-color: rgba(0, 15, 32, 0.4);
-    backdrop-filter: blur(4px);
+  /* ── Header Search Slide-Down Strip (No Page Masking) ──────────────────────── */
+  .search-bar-strip {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 10px 25px rgba(0, 31, 64, 0.12);
+    padding-block: 0.6rem;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out);
   }
 
-  .search-overlay__box {
-    width: 92%;
-    max-width: 480px;
-    padding: 0;
-    transform: translateY(-12px);
-    transition: transform var(--duration-base) var(--ease-out);
-  }
-
-  .search-overlay.is-active .search-overlay__box {
+  .search-bar-strip.is-active {
+    opacity: 1;
+    pointer-events: auto;
     transform: translateY(0);
   }
 
-  .search-overlay__form {
-    background-color: var(--color-white);
-    border-radius: var(--radius-full);
-    box-shadow: 0 10px 30px rgba(0, 31, 64, 0.2);
-    border: 1px solid var(--color-border);
-    overflow: hidden;
+  .search-bar-strip__form {
+    max-width: 640px;
+    margin-inline: auto;
   }
 
-  .search-overlay__field {
+  .search-bar-strip__field {
     display: flex;
     align-items: center;
+    gap: 0.75rem;
+    background-color: var(--color-bg-section);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
     padding: 0.35rem 0.5rem 0.35rem 1.15rem;
-    gap: 0.5rem;
     height: 44px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .search-overlay__icon {
+  .search-bar-strip__field:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+  }
+
+  .search-bar-strip__icon {
     color: var(--color-primary);
-    flex-shrink: 0;
     display: flex;
+    flex-shrink: 0;
   }
 
-  .search-overlay__input {
+  .search-bar-strip__input {
     flex: 1;
     border: none;
     outline: none;
-    font-size: 0.88rem;
-    font-family: inherit;
-    color: var(--color-text);
     background: transparent;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-text);
   }
 
-  .search-overlay__input::placeholder {
+  .search-bar-strip__input::placeholder {
     color: var(--color-text-muted);
-    font-size: 0.85rem;
   }
 
-  .search-overlay__close {
+  .search-bar-strip__close {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 32px;
     height: 32px;
     border: none;
-    background: var(--color-bg-section);
+    background: var(--color-white);
     color: var(--color-text-muted);
     cursor: pointer;
-    border-radius: var(--radius-full);
+    border-radius: 50%;
     flex-shrink: 0;
-    transition: color var(--transition), background-color var(--transition);
-    padding: 0;
+    transition: color 0.2s ease, background-color 0.2s ease;
   }
 
-  .search-overlay__close:hover {
+  .search-bar-strip__close:hover {
     color: var(--color-white);
     background-color: var(--color-primary);
   }

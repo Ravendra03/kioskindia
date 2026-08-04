@@ -344,13 +344,11 @@ const SearchOverlay = {
 
   open() {
     this.overlay.classList.add('is-active');
-    document.body.classList.add('scroll-locked');
     setTimeout(() => this.input?.focus(), 100);
   },
 
   close() {
     this.overlay.classList.remove('is-active');
-    document.body.classList.remove('scroll-locked');
     this.openBtn?.focus();
   }
 };
