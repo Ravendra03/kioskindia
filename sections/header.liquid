@@ -109,10 +109,13 @@
               fetchpriority: 'high'
           }}
         {%- else -%}
-          {%- comment -%} Text fallback — always renders if no logo uploaded {%- endcomment -%}
-          <div class="brand-logo__text" aria-hidden="true">
-            <span class="brand-logo__name">{{ settings.company_name | default: shop.name }}</span>
-            <span class="brand-logo__tagline">{{ settings.company_tagline | truncate: 36 }}</span>
+          {%- comment -%} 3D Corporate Emblem Logo Fallback {%- endcomment -%}
+          <div class="brand-logo__text-wrap" aria-hidden="true">
+            <span class="brand-logo__emblem">M</span>
+            <div class="brand-logo__text-group">
+              <span class="brand-logo__title">{{ settings.company_name | default: 'MAXWELL AUTOMATIC' }}</span>
+              <span class="brand-logo__subtitle">INTERACTIVE KIOSKS & SIGNAGES</span>
+            </div>
           </div>
         {%- endif -%}
       </a>
@@ -120,113 +123,79 @@
       {%- comment -%} ── Desktop Navigation ────────────────────────────────── {%- endcomment -%}
       <nav class="header-nav" aria-label="Main navigation">
         <ul class="header-nav__list" role="list">
-          {%- for link in menu.links -%}
-            {%- liquid
-              assign has_children = false
-              if link.links.size > 0
-                assign has_children = true
-              endif
-              assign is_active = false
-              if link.active
-                assign is_active = true
-              endif
-            -%}
+          {%- if menu != blank and menu.links.size > 0 -%}
+            {%- for link in menu.links -%}
+              {%- liquid
+                assign has_children = false
+                if link.links.size > 0
+                  assign has_children = true
+                endif
+                assign is_active = false
+                if link.active
+                  assign is_active = true
+                endif
+              -%}
 
-            <li class="header-nav__item{% if has_children %} header-nav__item--has-dropdown{% endif %}{% if is_active %} header-nav__item--active{% endif %}"
-              {%- if has_children %} data-mega-menu-item{%- endif -%}>
+              <li class="header-nav__item{% if has_children %} header-nav__item--has-dropdown{% endif %}{% if is_active %} header-nav__item--active{% endif %}"
+                {%- if has_children %} data-mega-menu-item{%- endif -%}>
 
-              {%- if has_children -%}
-                <button
-                  class="header-nav__link header-nav__link--dropdown"
-                  data-mega-menu-trigger
-                  aria-expanded="false"
-                  aria-haspopup="true"
-                  aria-controls="dropdown-{{ forloop.index }}"
-                  type="button"
-                >
-                  {{ link.title }}
-                  <span class="header-nav__chevron" aria-hidden="true">
-                    {% render 'icon', name: 'chevron-down', size: 16 %}
-                  </span>
-                </button>
+                {%- if has_children -%}
+                  <button
+                    class="header-nav__link header-nav__link--dropdown"
+                    data-mega-menu-trigger
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-controls="dropdown-{{ forloop.index }}"
+                    type="button"
+                  >
+                    <span>{{ link.title }}</span>
+                    <span class="header-nav__chevron" aria-hidden="true">
+                      {% render 'icon', name: 'chevron-down', size: 14 %}
+                    </span>
+                  </button>
 
-                {%- comment -%} ── Mega Menu Dropdown Panel ────────────────── {%- endcomment -%}
-                <div
-                  class="mega-menu"
-                  id="dropdown-{{ forloop.index }}"
-                  data-mega-menu-panel
-                  aria-hidden="true"
-                  role="region"
-                  aria-label="{{ link.title }} menu"
-                >
-                  <div class="container">
-                    <div class="mega-menu__inner">
+                  {%- comment -%} ── Mega Menu Dropdown Panel ────────────────── {%- endcomment -%}
+                  <div
+                    class="mega-menu"
+                    id="dropdown-{{ forloop.index }}"
+                    data-mega-menu-panel
+                    aria-hidden="true"
+                    role="region"
+                    aria-label="{{ link.title }} menu"
+                  >
+                    <div class="container">
+                      <div class="mega-menu__inner">
 
-                      {%- comment -%} ── Sub-links grouped in columns ──────── {%- endcomment -%}
-                      <div class="mega-menu__columns">
-                        {%- for child_link in link.links -%}
-                          <div class="mega-menu__column">
-                            {%- if child_link.links.size > 0 -%}
-                              <p class="mega-menu__heading">{{ child_link.title }}</p>
-                              <ul class="mega-menu__sublist" role="list">
-                                {%- for grandchild in child_link.links -%}
-                                  <li>
-                                    <a
-                                      href="{{ grandchild.url }}"
-                                      class="mega-menu__link{% if grandchild.active %} is-active{% endif %}"
-                                    >
-                                      {% render 'icon', name: 'chevron-right', size: 14 %}
-                                      {{ grandchild.title }}
-                                    </a>
-                                  </li>
-                                {%- endfor -%}
-                              </ul>
-                            {%- else -%}
-                              <a
-                                href="{{ child_link.url }}"
-                                class="mega-menu__link mega-menu__link--standalone{% if child_link.active %} is-active{% endif %}"
-                              >
-                                {% render 'icon', name: 'chevron-right', size: 14 %}
-                                {{ child_link.title }}
-                              </a>
-                            {%- endif -%}
-                          </div>
-                        {%- endfor -%}
-                      </div>
-
-                      {%- comment -%} ── Featured panel (from section blocks) ─ {%- endcomment -%}
-                      {%- assign featured_block = nil -%}
-                      {%- for block in section.blocks -%}
-                        {%- if block.type == 'mega_menu_feature' and block.settings.menu_item == link.title -%}
-                          {%- assign featured_block = block -%}
-                        {%- endif -%}
-                      {%- endfor -%}
-
-                      {%- if featured_block != nil and featured_block.settings.image != blank -%}
-                        <div class="mega-menu__featured" {{ featured_block.shopify_attributes }}>
-                          <a href="{{ featured_block.settings.link | default: '#' }}" class="mega-menu__featured-card">
-                            {{
-                              featured_block.settings.image
-                              | image_url: width: 400
-                              | image_tag:
-                                class: 'mega-menu__featured-img',
-                                alt: featured_block.settings.heading | default: link.title,
-                                loading: 'lazy',
-                                width: 400
-                            }}
-                            <div class="mega-menu__featured-content">
-                              {%- if featured_block.settings.badge != blank -%}
-                                <span class="badge badge--accent">{{ featured_block.settings.badge }}</span>
-                              {%- endif -%}
-                              <p class="mega-menu__featured-heading">{{ featured_block.settings.heading }}</p>
-                              {%- if featured_block.settings.cta_text != blank -%}
-                                <span class="btn btn--ghost btn--sm">
-                                  {{ featured_block.settings.cta_text }}
-                                  {% render 'icon', name: 'arrow-right', size: 14 %}
-                                </span>
+                        {%- comment -%} ── Sub-links grouped in columns ──────── {%- endcomment -%}
+                        <div class="mega-menu__columns">
+                          {%- for child_link in link.links -%}
+                            <div class="mega-menu__column">
+                              {%- if child_link.links.size > 0 -%}
+                                <p class="mega-menu__heading">{{ child_link.title }}</p>
+                                <ul class="mega-menu__sublist" role="list">
+                                  {%- for grandchild in child_link.links -%}
+                                    <li>
+                                      <a
+                                        href="{{ grandchild.url }}"
+                                        class="mega-menu__link{% if grandchild.active %} is-active{% endif %}"
+                                      >
+                                        {% render 'icon', name: 'chevron-right', size: 14 %}
+                                        {{ grandchild.title }}
+                                      </a>
+                                    </li>
+                                  {%- endfor -%}
+                                </ul>
+                              {%- else -%}
+                                <a
+                                  href="{{ child_link.url }}"
+                                  class="mega-menu__link mega-menu__link--standalone{% if child_link.active %} is-active{% endif %}"
+                                >
+                                  {% render 'icon', name: 'chevron-right', size: 14 %}
+                                  {{ child_link.title }}
+                                </a>
                               {%- endif -%}
                             </div>
-                          </a>
+                          {%- endfor -%}
                         </div>
                       {%- endif -%}
 
@@ -452,23 +421,19 @@
       transform var(--duration-base) var(--ease-out);
   }
 
-  /* Transparent state (over hero) */
-  .site-header.header--transparent {
-    background-color: transparent;
+  /* Corporate Header States */
+  .site-header {
+    background-color: #001730;
+    box-shadow: 0 4px 20px rgba(0, 15, 32, 0.25);
   }
 
   .site-header.header--transparent .header-topbar {
-    display: none;
+    display: block;
   }
 
-  /* Scrolled state (solid) */
   .site-header.header--scrolled {
-    background-color: var(--color-white);
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 4px 20px rgba(0, 0, 0, 0.08);
-  }
-
-  .site-header.header--scrolled .header-main {
-    border-bottom: none;
+    background-color: #001730;
+    box-shadow: 0 4px 20px rgba(0, 15, 32, 0.35);
   }
 
   /* Hide on scroll down (mobile) */
@@ -546,15 +511,9 @@
 
   /* ── Main Nav Bar ───────────────────────────────────────────────────────── */
   .header-main {
-    background-color: var(--color-white);
-    border-bottom: 1px solid var(--color-border);
+    background: linear-gradient(180deg, #001F3F 0%, #001730 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     transition: background-color var(--duration-slow) var(--ease-out);
-  }
-
-  /* Transparent mode: override background */
-  .header--transparent .header-main {
-    background-color: transparent;
-    border-bottom-color: rgba(255, 255, 255, 0.12);
   }
 
   .header-main__inner {
@@ -564,13 +523,45 @@
     height: 72px;
   }
 
-  /* ── Logo state transitions ──────────────────────────────────────────────── */
-  .header--transparent .brand-logo__name {
-    color: var(--color-white);
+  /* ── 3D Corporate Logo ────────────────────────────────────────────────── */
+  .brand-logo__text-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
   }
 
-  .header--transparent .brand-logo__tagline {
-    color: rgba(255, 255, 255, 0.6);
+  .brand-logo__emblem {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #0066CC 0%, #001A33 100%);
+    color: #FFFFFF;
+    font-size: 1.35rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.45), 0 4px 14px rgba(0, 102, 204, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .brand-logo__title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: 0.03em;
+    display: block;
+    line-height: 1.1;
+  }
+
+  .brand-logo__subtitle {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #0066CC;
+    letter-spacing: 0.12em;
+    display: block;
+    margin-top: 2px;
   }
 
   /* ── Desktop Nav ─────────────────────────────────────────────────────────── */
@@ -584,7 +575,7 @@
   .header-nav__list {
     display: flex;
     align-items: center;
-    gap: 0;
+    gap: 0.25rem;
     list-style: none;
   }
 
@@ -596,10 +587,10 @@
     display: flex;
     align-items: center;
     gap: var(--space-1);
-    padding: var(--space-3) var(--space-4);
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text);
+    padding: 0.5rem 0.9rem;
+    font-size: 0.92rem;
+    font-weight: var(--font-weight-semibold);
+    color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     border: none;
     background: none;
@@ -615,8 +606,8 @@
     content: '';
     position: absolute;
     bottom: 4px;
-    left: var(--space-4);
-    right: var(--space-4);
+    left: var(--space-3);
+    right: var(--space-3);
     height: 2px;
     background-color: var(--color-accent);
     transform: scaleX(0);
@@ -634,17 +625,7 @@
   .header-nav__link:hover,
   .header-nav__link.is-active,
   .header-nav__item.is-open .header-nav__link {
-    color: var(--color-primary);
-  }
-
-  /* Transparent header nav links */
-  .header--transparent .header-nav__link {
-    color: rgba(255, 255, 255, 0.9);
-  }
-
-  .header--transparent .header-nav__link:hover,
-  .header--transparent .header-nav__item.is-open .header-nav__link {
-    color: var(--color-white);
+    color: #FFFFFF;
   }
 
   .header-nav__chevron {
