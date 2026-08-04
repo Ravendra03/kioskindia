@@ -202,67 +202,6 @@
   </div>
 </section>
 
-<script>
-(function() {
-  var section = document.getElementById('product-categories');
-  if (!section) return;
-
-  var tabs = section.querySelectorAll('.product-categories__tab');
-  var cards = section.querySelectorAll('.product-categories__card');
-
-  function filterCards(filter) {
-    cards.forEach(function(card) {
-      var match = filter === 'all' || card.dataset.category === filter;
-      if (match) {
-        card.style.display = '';
-        requestAnimationFrame(function() {
-          card.style.opacity = '1';
-          card.style.transform = 'scale(1) translateY(0)';
-        });
-      } else {
-        card.style.opacity = '0';
-        card.style.transform = 'scale(0.95) translateY(8px)';
-        setTimeout(function() {
-          if (card.style.opacity === '0') card.style.display = 'none';
-        }, 250);
-      }
-    });
-  }
-
-  tabs.forEach(function(tab) {
-    tab.addEventListener('click', function() {
-      // Update active state
-      tabs.forEach(function(t) {
-        t.classList.remove('is-active');
-        t.setAttribute('aria-selected', 'false');
-      });
-      this.classList.add('is-active');
-      this.setAttribute('aria-selected', 'true');
-
-      filterCards(this.dataset.filter);
-    });
-
-    // Keyboard: left/right arrow nav
-    tab.addEventListener('keydown', function(e) {
-      var tabArr = Array.from(tabs);
-      var idx = tabArr.indexOf(this);
-      if (e.key === 'ArrowRight') {
-        tabArr[(idx + 1) % tabArr.length].focus();
-        tabArr[(idx + 1) % tabArr.length].click();
-      } else if (e.key === 'ArrowLeft') {
-        tabArr[(idx - 1 + tabArr.length) % tabArr.length].focus();
-        tabArr[(idx - 1 + tabArr.length) % tabArr.length].click();
-      }
-    });
-  });
-
-  // Set initial transition on all cards
-  cards.forEach(function(card) {
-    card.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
-  });
-})();
-</script>
-
 <style>
   /* =========================================================================
      PRODUCT CATEGORIES

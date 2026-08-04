@@ -370,21 +370,6 @@
   }
 </style>
 
-<script>
-// Animate process connector on scroll
-(function() {
-  var connector = document.querySelector('#manufacturing-process .mfg-process__connector-progress');
-  if (!connector) return;
-  var observer = new IntersectionObserver(function(entries) {
-    if (entries[0].isIntersecting) {
-      connector.classList.add('is-animated');
-      observer.disconnect();
-    }
-  }, { threshold: 0.4 });
-  observer.observe(connector);
-})();
-</script>
-
 {% schema %}
 {
   "name": "Manufacturing Process",

@@ -130,10 +130,7 @@
               id="about-video-btn"
             >
               <span class="company-overview__play-icon" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <circle cx="12" cy="12" r="10" fill="var(--color-primary)" opacity="0.1"/>
-                  <polygon points="10 8 16 12 10 16 10 8" fill="var(--color-primary)"/>
-                </svg>
+                {% render 'icon', name: 'play', size: 18 %}
               </span>
               {{ section.settings.video_cta_text | default: 'Watch our process' }}
             </button>
@@ -195,52 +192,6 @@
     <div class="video-modal__embed" id="video-embed-{{ section.id }}"></div>
   </div>
 </div>
-
-<script>
-(function() {
-  var modal = document.getElementById('video-modal-{{ section.id }}');
-  var embed = document.getElementById('video-embed-{{ section.id }}');
-  var openBtns = document.querySelectorAll('[data-video-modal]');
-  var closeBtn = modal ? modal.querySelector('[data-video-modal-close]') : null;
-
-  function openModal(videoUrl) {
-    if (!modal) return;
-    // Convert YouTube/Vimeo URLs to embed format
-    var embedUrl = videoUrl
-      .replace('watch?v=', 'embed/')
-      .replace('youtu.be/', 'youtube.com/embed/')
-      .replace('vimeo.com/', 'player.vimeo.com/video/');
-
-    embed.innerHTML = '<iframe src="' + embedUrl + '?autoplay=1&rel=0" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" title="Manufacturing process video" style="width:100%;aspect-ratio:16/9;border-radius:8px;"></iframe>';
-    modal.classList.add('is-active');
-    document.body.classList.add('scroll-locked');
-    closeBtn && closeBtn.focus();
-  }
-
-  function closeModal() {
-    if (!modal) return;
-    modal.classList.remove('is-active');
-    document.body.classList.remove('scroll-locked');
-    embed.innerHTML = '';
-    openBtns[0] && openBtns[0].focus();
-  }
-
-  openBtns.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      openModal(this.dataset.videoUrl);
-    });
-  });
-
-  closeBtn && closeBtn.addEventListener('click', closeModal);
-  modal && modal.addEventListener('click', function(e) {
-    if (e.target === modal) closeModal();
-  });
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeModal();
-  });
-})();
-</script>
 {%- endif -%}
 
 <style>

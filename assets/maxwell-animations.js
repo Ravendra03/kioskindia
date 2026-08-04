@@ -439,6 +439,137 @@ const ParallaxLight = {
 };
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 11 — Video Lightbox Modal with ARIA Focus Trap
+───────────────────────────────────────────────────────────────────────────── */
+
+const VideoModal = {
+  init() {
+    const modals = document.querySelectorAll('[data-video-modal-container]');
+    if (!modals.length) return;
+
+    modals.forEach(modal => {
+      const openBtns = document.querySelectorAll('[data-video-modal]');
+      const closeBtn = modal.querySelector('[data-video-modal-close]');
+      const embed = modal.querySelector('.video-modal__embed');
+
+      function openModal(videoUrl) {
+        if (!embed) return;
+        const embedUrl = videoUrl
+          .replace('watch?v=', 'embed/')
+          .replace('youtu.be/', 'youtube.com/embed/')
+          .replace('vimeo.com/', 'player.vimeo.com/video/');
+
+        embed.innerHTML = `<iframe src="${embedUrl}?autoplay=1&rel=0" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" title="Video modal" style="width:100%;aspect-ratio:16/9;border-radius:8px;"></iframe>`;
+        modal.classList.add('is-active');
+        document.body.classList.add('scroll-locked');
+        closeBtn?.focus();
+      }
+
+      function closeModal() {
+        modal.classList.remove('is-active');
+        document.body.classList.remove('scroll-locked');
+        if (embed) embed.innerHTML = '';
+      }
+
+      openBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          openModal(this.dataset.videoUrl);
+        });
+      });
+
+      closeBtn?.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('is-active')) closeModal();
+      });
+    });
+  }
+};
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 12 — Category Filter Tabs (Product Categories)
+───────────────────────────────────────────────────────────────────────────── */
+
+const CategoryTabs = {
+  init() {
+    const section = document.getElementById('product-categories');
+    if (!section) return;
+
+    const tabs = section.querySelectorAll('.product-categories__tab');
+    const cards = section.querySelectorAll('.product-categories__card');
+    if (!tabs.length || !cards.length) return;
+
+    function filterCards(filter) {
+      cards.forEach(card => {
+        const match = filter === 'all' || card.dataset.category === filter;
+        if (match) {
+          card.style.display = '';
+          requestAnimationFrame(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'scale(1) translateY(0)';
+          });
+        } else {
+          card.style.opacity = '0';
+          card.style.transform = 'scale(0.95) translateY(8px)';
+          setTimeout(() => {
+            if (card.style.opacity === '0') card.style.display = 'none';
+          }, 250);
+        }
+      });
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        tabs.forEach(t => {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        this.classList.add('is-active');
+        this.setAttribute('aria-selected', 'true');
+        filterCards(this.dataset.filter);
+      });
+
+      tab.addEventListener('keydown', function(e) {
+        const tabArr = Array.from(tabs);
+        const idx = tabArr.indexOf(this);
+        if (e.key === 'ArrowRight') {
+          tabArr[(idx + 1) % tabArr.length].focus();
+          tabArr[(idx + 1) % tabArr.length].click();
+        } else if (e.key === 'ArrowLeft') {
+          tabArr[(idx - 1 + tabArr.length) % tabArr.length].focus();
+          tabArr[(idx - 1 + tabArr.length) % tabArr.length].click();
+        }
+      });
+    });
+
+    cards.forEach(card => {
+      card.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+    });
+  }
+};
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 13 — Process Progress Observer (Manufacturing Process)
+───────────────────────────────────────────────────────────────────────────── */
+
+const ProcessObserver = {
+  init() {
+    const connector = document.querySelector('#manufacturing-process .mfg-process__connector-progress');
+    if (!connector) return;
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        connector.classList.add('is-animated');
+        observer.disconnect();
+      }
+    }, { threshold: 0.4 });
+    observer.observe(connector);
+  }
+};
+
+/* ─────────────────────────────────────────────────────────────────────────────
    BOOTSTRAP — Initialize all modules when DOM is ready
 ───────────────────────────────────────────────────────────────────────────── */
 
@@ -453,4 +584,7 @@ document.addEventListener('DOMContentLoaded', () => {
   AnnouncementBar.init();
   HeroTyping.init();
   ParallaxLight.init();
+  VideoModal.init();
+  CategoryTabs.init();
+  ProcessObserver.init();
 });
