@@ -1,0 +1,528 @@
+{%- comment -%}
+  MAXWELL MANUFACTURING PROCESS SECTION
+  ─────────────────────────────────────────────────────────────────────────────
+  Features:
+  - Numbered steps with horizontal connector line (desktop)
+  - Icon + title + description per step (blocks)
+  - Alternating content/visual layout (zig-zag) on large screens
+  - Vertical timeline on mobile
+  - Step counter animation on scroll
+  - Light background with strong visual hierarchy
+  ─────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+
+{%- assign step_blocks = section.blocks | where: 'type', 'step' -%}
+
+<section
+  class="section{% if section.settings.bg_style == 'alt' %} section--alt{% endif %} mfg-process"
+  id="manufacturing-process"
+  aria-labelledby="process-heading"
+>
+  <div class="container">
+
+    {%- render 'section-header',
+      eyebrow: section.settings.eyebrow,
+      heading: section.settings.heading,
+      subtitle: section.settings.subtitle,
+      heading_tag: 'h2',
+      align: 'center',
+      section_id: 'process-heading'
+    -%}
+
+    {%- if step_blocks.size > 0 -%}
+
+      {%- comment -%} ── Step Flow: numbered horizontal steps ─────────────── {%- endcomment -%}
+      <div class="mfg-process__steps" role="list">
+
+        {%- comment -%} Connecting line (desktop only) {%- endcomment -%}
+        <div class="mfg-process__connector" aria-hidden="true">
+          <div class="mfg-process__connector-progress"></div>
+        </div>
+
+        {%- for block in step_blocks -%}
+          <div
+            class="mfg-process__step"
+            role="listitem"
+            data-animate="fade-up"
+            data-delay="{{ forloop.index | times: 100 }}"
+            {{ block.shopify_attributes }}
+          >
+            {%- comment -%} Step number bubble {%- endcomment -%}
+            <div class="mfg-process__step-number" aria-hidden="true">
+              <span class="mfg-process__step-num-inner">{{ forloop.index }}</span>
+            </div>
+
+            {%- comment -%} Icon area {%- endcomment -%}
+            <div class="mfg-process__step-icon" aria-hidden="true">
+              {% render 'icon', name: block.settings.icon, size: 32 %}
+            </div>
+
+            {%- comment -%} Content {%- endcomment -%}
+            <div class="mfg-process__step-content">
+              <h3 class="mfg-process__step-title">{{ block.settings.title }}</h3>
+              <p class="mfg-process__step-desc">{{ block.settings.description }}</p>
+              {%- if block.settings.duration != blank -%}
+                <span class="mfg-process__step-duration">
+                  {% render 'icon', name: 'clock', size: 14 %}
+                  {{ block.settings.duration }}
+                </span>
+              {%- endif -%}
+            </div>
+
+          </div>
+
+          {%- comment -%} Arrow between steps (desktop, not on last) {%- endcomment -%}
+          {%- unless forloop.last -%}
+            <div class="mfg-process__arrow" aria-hidden="true">
+              {% render 'icon', name: 'chevron-right', size: 20 %}
+            </div>
+          {%- endunless -%}
+
+        {%- endfor -%}
+      </div>
+
+      {%- comment -%} ── Bottom Guarantee Bar ─────────────────────────────── {%- endcomment -%}
+      {%- if section.settings.show_guarantee -%}
+        <div class="mfg-process__guarantee" data-animate="fade-up" data-delay="500">
+          <div class="mfg-process__guarantee-icon" aria-hidden="true">
+            {% render 'icon', name: 'shield', size: 28 %}
+          </div>
+          <div class="mfg-process__guarantee-content">
+            <strong class="mfg-process__guarantee-title">{{ section.settings.guarantee_title | default: 'Quality Guarantee' }}</strong>
+            <span class="mfg-process__guarantee-text">{{ section.settings.guarantee_text }}</span>
+          </div>
+          {%- if section.settings.guarantee_cta_text != blank -%}
+            <a
+              href="{{ section.settings.guarantee_cta_url | default: '/pages/contact' }}"
+              class="btn btn--primary btn--sm mfg-process__guarantee-cta"
+            >
+              {{ section.settings.guarantee_cta_text }}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    {%- else -%}
+      <div class="mfg-process__empty">Add step blocks from Theme Editor to show your manufacturing process.</div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  /* =========================================================================
+     MANUFACTURING PROCESS
+     ========================================================================= */
+
+  .mfg-process {
+    overflow: hidden;
+  }
+
+  /* ── Steps Layout ──────────────────────────────────────────────────────── */
+  .mfg-process__steps {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    margin-top: var(--space-4);
+    padding-top: var(--space-8);
+  }
+
+  /* ── Connector line ────────────────────────────────────────────────────── */
+  .mfg-process__connector {
+    position: absolute;
+    top: calc(var(--space-8) + 28px); /* aligns with center of step number */
+    left: 5%;
+    right: 5%;
+    height: 2px;
+    background-color: var(--color-border);
+    border-radius: var(--radius-full);
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .mfg-process__connector-progress {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+    border-radius: var(--radius-full);
+    transition: width 1.5s var(--ease-out);
+  }
+
+  .mfg-process__connector-progress.is-animated {
+    width: 100%;
+  }
+
+  /* ── Individual Step ───────────────────────────────────────────────────── */
+  .mfg-process__step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-4);
+    flex: 1;
+    min-width: 0;
+    padding-inline: var(--space-3);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Step number bubble */
+  .mfg-process__step-number {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 6px var(--color-white), 0 0 0 8px var(--color-primary-light);
+    transition: box-shadow var(--transition), transform var(--transition);
+  }
+
+  .mfg-process__step:hover .mfg-process__step-number {
+    box-shadow: 0 0 0 6px var(--color-white), 0 0 0 10px rgba(0, 51, 102, 0.3);
+    transform: scale(1.08);
+  }
+
+  .mfg-process__step-num-inner {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-white);
+    line-height: 1;
+  }
+
+  /* Icon */
+  .mfg-process__step-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background-color: var(--color-primary-light);
+    border-radius: var(--radius-lg);
+    color: var(--color-primary);
+    transition: background-color var(--transition), color var(--transition), transform var(--transition);
+  }
+
+  .mfg-process__step:hover .mfg-process__step-icon {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    transform: rotate(-6deg) scale(1.05);
+  }
+
+  /* Content */
+  .mfg-process__step-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .mfg-process__step-title {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    line-height: var(--leading-snug);
+    margin: 0;
+  }
+
+  .mfg-process__step-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+  }
+
+  .mfg-process__step-duration {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-accent);
+    background-color: rgba(245, 130, 32, 0.1);
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-full);
+    width: fit-content;
+    margin-inline: auto;
+    margin-top: var(--space-1);
+  }
+
+  /* ── Arrow between steps ───────────────────────────────────────────────── */
+  .mfg-process__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    padding-top: calc(var(--space-8) + 18px);
+    opacity: 0.4;
+  }
+
+  /* ── Guarantee Bar ─────────────────────────────────────────────────────── */
+  .mfg-process__guarantee {
+    margin-top: var(--space-16);
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    padding: var(--space-6) var(--space-8);
+    background: linear-gradient(135deg, var(--color-primary-light), rgba(245, 130, 32, 0.05));
+    border: 1px solid var(--color-primary-light);
+    border-left: 4px solid var(--color-primary);
+    border-radius: var(--radius-lg);
+  }
+
+  .mfg-process__guarantee-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-md);
+    color: var(--color-white);
+    flex-shrink: 0;
+  }
+
+  .mfg-process__guarantee-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    flex: 1;
+  }
+
+  .mfg-process__guarantee-title {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+  }
+
+  .mfg-process__guarantee-text {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+  }
+
+  .mfg-process__guarantee-cta {
+    flex-shrink: 0;
+  }
+
+  /* ── Empty State ───────────────────────────────────────────────────────── */
+  .mfg-process__empty {
+    text-align: center;
+    padding: var(--space-12);
+    color: var(--color-text-muted);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-bg-section);
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .mfg-process__steps {
+      flex-wrap: wrap;
+      gap: var(--space-8);
+      justify-content: center;
+    }
+    .mfg-process__connector,
+    .mfg-process__arrow {
+      display: none;
+    }
+    .mfg-process__step {
+      flex: 0 1 calc(50% - var(--space-8));
+      min-width: 200px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .mfg-process__steps {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+    .mfg-process__step {
+      flex: 1;
+      flex-direction: row;
+      text-align: left;
+      align-items: flex-start;
+      padding: var(--space-6) 0;
+      border-bottom: 1px solid var(--color-border);
+      gap: var(--space-5);
+    }
+    .mfg-process__step:last-child {
+      border-bottom: none;
+    }
+    .mfg-process__step-content {
+      align-items: flex-start;
+    }
+    .mfg-process__step-duration {
+      margin-inline: 0;
+    }
+    .mfg-process__guarantee {
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+    .mfg-process__guarantee-cta {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+// Animate process connector on scroll
+(function() {
+  var connector = document.querySelector('#manufacturing-process .mfg-process__connector-progress');
+  if (!connector) return;
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      connector.classList.add('is-animated');
+      observer.disconnect();
+    }
+  }, { threshold: 0.4 });
+  observer.observe(connector);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Manufacturing Process",
+  "class": "section-mfg-process",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "select",
+      "id": "bg_style",
+      "label": "Background",
+      "options": [
+        { "value": "white", "label": "White" },
+        { "value": "alt", "label": "Light grey" }
+      ],
+      "default": "alt"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "How We Work"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "From Concept to Installation"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Section subtitle",
+      "default": "Our proven 6-step process ensures every project is delivered on time, within budget, and built to last."
+    },
+    {
+      "type": "header",
+      "content": "Guarantee Bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_guarantee",
+      "label": "Show guarantee bar below steps",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "guarantee_title",
+      "label": "Guarantee title",
+      "default": "Maxwell Quality Guarantee"
+    },
+    {
+      "type": "textarea",
+      "id": "guarantee_text",
+      "label": "Guarantee description",
+      "default": "Every product ships with a minimum 1-year comprehensive warranty, post-installation support, and a dedicated account manager for enterprise clients."
+    },
+    {
+      "type": "text",
+      "id": "guarantee_cta_text",
+      "label": "Guarantee button text",
+      "default": "Contact Our Team"
+    },
+    {
+      "type": "url",
+      "id": "guarantee_cta_url",
+      "label": "Guarantee button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Process step",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "headphones", "label": "Consultation" },
+            { "value": "settings", "label": "Design / Engineering" },
+            { "value": "check-circle", "label": "Approval / Review" },
+            { "value": "factory", "label": "Manufacturing" },
+            { "value": "shield", "label": "Quality Testing" },
+            { "value": "package", "label": "Packaging" },
+            { "value": "truck", "label": "Delivery / Dispatch" },
+            { "value": "cog", "label": "Installation" },
+            { "value": "thumbs-up", "label": "Handover / Support" },
+            { "value": "users", "label": "Training" }
+          ],
+          "default": "headphones"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Step title",
+          "default": "Consultation"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Step description",
+          "default": "We understand your requirements and recommend the right solution."
+        },
+        {
+          "type": "text",
+          "id": "duration",
+          "label": "Duration label (optional)",
+          "placeholder": "1–2 Days",
+          "info": "Displayed as a small badge, e.g. '1–2 Days'"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "settings": {
+      "bg_style": "alt",
+      "eyebrow": "How We Work",
+      "heading": "From Concept to Installation",
+      "subtitle": "Our proven 6-step process ensures every project is delivered on time, within budget, and built to last.",
+      "show_guarantee": true,
+      "guarantee_title": "Maxwell Quality Guarantee",
+      "guarantee_text": "Every product ships with a minimum 1-year comprehensive warranty, post-installation support, and a dedicated account manager for enterprise clients.",
+      "guarantee_cta_text": "Contact Our Team"
+    },
+    "blocks": [
+      { "type": "step", "settings": { "icon": "headphones", "title": "Consultation", "description": "Share your requirements. Our team responds within 24 hours.", "duration": "Day 1–2" } },
+      { "type": "step", "settings": { "icon": "settings", "title": "Design & Engineering", "description": "We design and engineer a custom solution matched to your specifications.", "duration": "Day 3–7" } },
+      { "type": "step", "settings": { "icon": "check-circle", "title": "Approval", "description": "Design drawings and bill of materials submitted for your sign-off.", "duration": "Day 7–10" } },
+      { "type": "step", "settings": { "icon": "factory", "title": "Manufacturing", "description": "In-house production at our Ahmedabad facility with real-time tracking.", "duration": "Day 10–25" } },
+      { "type": "step", "settings": { "icon": "shield", "title": "Quality Testing", "description": "Rigorous QA/QC: functional, safety, and endurance testing before dispatch.", "duration": "Day 25–28" } },
+      { "type": "step", "settings": { "icon": "cog", "title": "Delivery & Installation", "description": "Pan-India delivery with optional on-site installation and commissioning.", "duration": "Day 28–32" } }
+    ]
+  },
+  "presets": [
+    {
+      "name": "Manufacturing Process"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,336 @@
+{%- comment -%}
+  MAXWELL WHY CHOOSE US SECTION
+  ─────────────────────────────────────────────────────────────────────────────
+  Features:
+  - Grid of Unique Selling Points (USPs) with custom icons
+  - Animated counters for key statistics
+  - High impact visual structure
+  - Editable via Theme Editor blocks
+  ─────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+
+{%- assign usp_blocks = section.blocks | where: 'type', 'usp' -%}
+
+<section
+  class="section{% if section.settings.bg_style == 'alt' %} section--alt{% endif %} why-choose-us"
+  id="why-choose-us"
+  aria-labelledby="why-us-heading"
+>
+  <div class="container">
+
+    {%- render 'section-header',
+      eyebrow: section.settings.eyebrow,
+      heading: section.settings.heading,
+      subtitle: section.settings.subtitle,
+      heading_tag: 'h2',
+      align: 'center',
+      section_id: 'why-us-heading'
+    -%}
+
+    {%- if usp_blocks.size > 0 -%}
+      <div class="why-us__grid">
+        {%- for block in usp_blocks -%}
+          <div
+            class="why-us__card"
+            data-animate="fade-up"
+            data-delay="{{ forloop.index | times: 100 }}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="why-us__card-icon" aria-hidden="true">
+              {% render 'icon', name: block.settings.icon, size: 32 %}
+            </div>
+            <h3 class="why-us__card-title">{{ block.settings.title }}</h3>
+            <p class="why-us__card-desc">{{ block.settings.description }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_banner -%}
+      <div class="why-us__banner" data-animate="fade-up">
+        <div class="why-us__banner-content">
+          <h3 class="why-us__banner-title">{{ section.settings.banner_title | default: "Ready to discuss your custom manufacturing requirements?" }}</h3>
+          <p class="why-us__banner-desc">{{ section.settings.banner_desc | default: "Talk directly with our technical engineering team for customized OEM/ODM solutions." }}</p>
+        </div>
+        {%- if section.settings.banner_cta_text != blank -%}
+          <a href="{{ section.settings.banner_cta_url | default: '/pages/contact' }}" class="btn btn--accent btn--lg why-us__banner-cta">
+            {{ section.settings.banner_cta_text }}
+            {% render 'icon', name: 'arrow-right', size: 18 %}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  /* ── Why Choose Us ─────────────────────────────────────────────────────── */
+  .why-choose-us {
+    position: relative;
+  }
+
+  .why-us__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+  }
+
+  .why-us__card {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  }
+
+  .why-us__card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--color-primary-light);
+  }
+
+  .why-us__card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background-color: var(--color-primary-light);
+    border-radius: var(--radius-lg);
+    color: var(--color-primary);
+    transition: background-color var(--transition), color var(--transition);
+  }
+
+  .why-us__card:hover .why-us__card-icon {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .why-us__card-title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .why-us__card-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+  }
+
+  .why-us__banner {
+    margin-top: var(--space-16);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    border-radius: var(--radius-2xl);
+    padding: var(--space-10) var(--space-12);
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+    box-shadow: var(--shadow-2xl);
+  }
+
+  .why-us__banner-title {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-white);
+    margin-bottom: var(--space-2);
+  }
+
+  .why-us__banner-desc {
+    font-size: var(--text-base);
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+  }
+
+  .why-us__banner-cta {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .why-us__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .why-us__banner {
+      flex-direction: column;
+      text-align: center;
+      padding: var(--space-8);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .why-us__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Why Choose Us",
+  "class": "section-why-choose-us",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "select",
+      "id": "bg_style",
+      "label": "Background Style",
+      "options": [
+        { "value": "white", "label": "White" },
+        { "value": "alt", "label": "Light Grey" }
+      ],
+      "default": "white"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Why Partner With Maxwell"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Enterprise Grade Excellence in Manufacturing"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "We deliver custom interactive hardware built to international standards with complete in-house control."
+    },
+    {
+      "type": "header",
+      "content": "Callout Banner"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_banner",
+      "label": "Show bottom banner",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "banner_title",
+      "label": "Banner Title",
+      "default": "Ready to discuss your custom manufacturing requirements?"
+    },
+    {
+      "type": "textarea",
+      "id": "banner_desc",
+      "label": "Banner Description",
+      "default": "Talk directly with our technical engineering team for customized OEM/ODM solutions."
+    },
+    {
+      "type": "text",
+      "id": "banner_cta_text",
+      "label": "Banner CTA Text",
+      "default": "Talk to Engineering"
+    },
+    {
+      "type": "url",
+      "id": "banner_cta_url",
+      "label": "Banner CTA Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "USP Card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "factory", "label": "Factory" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "cog", "label": "Cog" },
+            { "value": "award", "label": "Award" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "headphones", "label": "Support" }
+          ],
+          "default": "factory"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "100% In-House Production"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Laser cutting, CNC bending, powder coating, and final assembly all under one roof in Vatwa GIDC."
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "usp",
+        "settings": {
+          "icon": "factory",
+          "title": "100% In-House Production",
+          "description": "Complete manufacturing control from raw metal sheets to finished kiosk assembly at our Vatwa unit."
+        }
+      },
+      {
+        "type": "usp",
+        "settings": {
+          "icon": "shield",
+          "title": "ISO 9001:2015 Certified",
+          "description": "Strict quality protocols ensuring rugged hardware reliability, thermal compliance, and IP rating security."
+        }
+      },
+      {
+        "type": "usp",
+        "settings": {
+          "icon": "cog",
+          "title": "Bespoke Customization",
+          "description": "Tailor-made designs for specialized peripheral integration including biometric, thermal printers, and POS."
+        }
+      },
+      {
+        "type": "usp",
+        "settings": {
+          "icon": "award",
+          "title": "Industrial Grade Materials",
+          "description": "Heavy gauge CRCA/SS sheet fabrication with anti-vandal toughened glass and premium powder coating finish."
+        }
+      },
+      {
+        "type": "usp",
+        "settings": {
+          "icon": "truck",
+          "title": "Pan-India Logistics",
+          "description": "Safe wooden crate packaging and reliable freight distribution network delivering across all Indian states."
+        }
+      },
+      {
+        "type": "usp",
+        "settings": {
+          "icon": "headphones",
+          "title": "Dedicated SLA Support",
+          "description": "Robust post-deployment technical assistance, spare supply, and remote maintenance support."
+        }
+      }
+    ]
+  },
+  "presets": [
+    {
+      "name": "Why Choose Us"
+    }
+  ]
+}
+{% endschema %}

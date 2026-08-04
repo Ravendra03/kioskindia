@@ -1,0 +1,356 @@
+{%- comment -%}
+  MAXWELL PROJECTS / CASE STUDIES SECTION
+  ─────────────────────────────────────────────────────────────────────────────
+  Features:
+  - Featured projects showcase with client badges and details
+  - Filter or gallery layout
+  - Fully editable via Theme Customizer blocks
+  ─────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+
+{%- assign project_blocks = section.blocks | where: 'type', 'project' -%}
+
+<section
+  class="section section--alt projects-showcase"
+  id="featured-projects"
+  aria-labelledby="projects-heading"
+>
+  <div class="container">
+
+    <div class="projects-showcase__header">
+      {%- render 'section-header',
+        eyebrow: section.settings.eyebrow,
+        heading: section.settings.heading,
+        subtitle: section.settings.subtitle,
+        heading_tag: 'h2',
+        align: 'left',
+        section_id: 'projects-heading'
+      -%}
+
+      {%- if section.settings.cta_text != blank -%}
+        <a href="{{ section.settings.cta_url | default: '/pages/projects' }}" class="btn btn--ghost projects-showcase__header-cta">
+          {{ section.settings.cta_text }}
+          {% render 'icon', name: 'arrow-right', size: 18 %}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if project_blocks.size > 0 -%}
+      <div class="projects-showcase__grid">
+        {%- for block in project_blocks -%}
+          <article
+            class="project-card"
+            data-animate="fade-up"
+            data-delay="{{ forloop.index | times: 100 }}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="project-card__image-wrap">
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 700
+                  | image_tag:
+                    class: 'project-card__image',
+                    alt: block.settings.title,
+                    loading: 'lazy',
+                    width: 700
+                }}
+              {%- else -%}
+                <div class="project-card__placeholder">
+                  {% render 'icon', name: 'building', size: 48 %}
+                </div>
+              {%- endif -%}
+              {%- if block.settings.tag != blank -%}
+                <span class="badge badge--accent project-card__tag">{{ block.settings.tag }}</span>
+              {%- endif -%}
+            </div>
+
+            <div class="project-card__body">
+              {%- if block.settings.client != blank -%}
+                <span class="project-card__client">{{ block.settings.client }}</span>
+              {%- endif -%}
+              <h3 class="project-card__title">{{ block.settings.title }}</h3>
+              <p class="project-card__desc">{{ block.settings.description }}</p>
+
+              {%- if block.settings.metric_val != blank -%}
+                <div class="project-card__metric">
+                  <span class="project-card__metric-val">{{ block.settings.metric_val }}</span>
+                  <span class="project-card__metric-lbl">{{ block.settings.metric_label }}</span>
+                </div>
+              {%- endif -%}
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  .projects-showcase__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-6);
+    margin-bottom: var(--space-10);
+  }
+
+  .projects-showcase__header-cta {
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  .projects-showcase__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+
+  .project-card {
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+
+  .project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .project-card__image-wrap {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background-color: var(--color-bg-section);
+  }
+
+  .project-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out);
+  }
+
+  .project-card:hover .project-card__image {
+    transform: scale(1.05);
+  }
+
+  .project-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    opacity: 0.3;
+  }
+
+  .project-card__tag {
+    position: absolute;
+    top: var(--space-4);
+    left: var(--space-4);
+  }
+
+  .project-card__body {
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+
+  .project-card__client {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-accent);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
+  .project-card__title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .project-card__desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+    flex: 1;
+  }
+
+  .project-card__metric {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+
+  .project-card__metric-val {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+  }
+
+  .project-card__metric-lbl {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 1024px) {
+    .projects-showcase__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .projects-showcase__grid {
+      grid-template-columns: 1fr;
+    }
+    .projects-showcase__header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Projects Showcase",
+  "class": "section-projects-showcase",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Case Studies"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Installations Across India"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Explore key deployments delivered for government, healthcare, smart cities, and enterprise clients."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Text",
+      "default": "Explore All Projects"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "project",
+      "name": "Project Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Project Image"
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Tag",
+          "default": "Healthcare"
+        },
+        {
+          "type": "text",
+          "id": "client",
+          "label": "Client Name",
+          "default": "AIIMS OPD Network"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Project Title",
+          "default": "Self-Registration & Patient Check-in Kiosks"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Custom manufactured dual-screen touchscreen terminals integrated with hospital management software."
+        },
+        {
+          "type": "text",
+          "id": "metric_val",
+          "label": "Metric Value",
+          "default": "120+"
+        },
+        {
+          "type": "text",
+          "id": "metric_label",
+          "label": "Metric Label",
+          "default": "Kiosks Deployed"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "project",
+        "settings": {
+          "tag": "Healthcare",
+          "client": "Apex Multispeciality Hospital",
+          "title": "Smart OPD Check-in Kiosks",
+          "description": "High-speed thermal printer equipped check-in terminals reducing patient wait times by 40%.",
+          "metric_val": "50+",
+          "metric_label": "Units Installed"
+        }
+      },
+      {
+        "type": "project",
+        "settings": {
+          "tag": "Smart City",
+          "client": "Municipal Corporation",
+          "title": "Outdoor IP65 Information Totems",
+          "description": "2500-nit high brightness outdoor digital signage displays engineered for extreme weather.",
+          "metric_val": "85+",
+          "metric_label": "Locations Active"
+        }
+      },
+      {
+        "type": "project",
+        "settings": {
+          "tag": "Government",
+          "client": "State E-Governance Dept",
+          "title": "Citizen Services Payment Terminals",
+          "description": "Ruggedized cash and UPI acceptance kiosks providing 24/7 public utility payments.",
+          "metric_val": "200+",
+          "metric_label": "Terminals Deployed"
+        }
+      }
+    ]
+  },
+  "presets": [
+    {
+      "name": "Projects Showcase"
+    }
+  ]
+}
+{% endschema %}

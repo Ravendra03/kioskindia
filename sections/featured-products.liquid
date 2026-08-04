@@ -1,0 +1,679 @@
+{%- comment -%}
+  MAXWELL FEATURED PRODUCTS SECTION
+  ─────────────────────────────────────────────────────────────────────────────
+  Features:
+  - Pulls products from a configurable Shopify collection
+  - Manual product blocks as fallback (for stores with no live products yet)
+  - Premium product cards: image hover zoom, price, badge, quick CTA
+  - Badge system: New, Sale, Featured — auto-detects from product tags
+  - "View All" CTA links to the collection
+  - Responsive 4→2→1 grid
+  - All settings editable from Theme Editor
+  ─────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+
+{%- liquid
+  assign products_to_show = section.settings.products_to_show | default: 4
+  assign collection = collections[section.settings.collection]
+  assign has_collection = false
+  if collection != blank and collection.products_count > 0
+    assign has_collection = true
+  endif
+-%}
+
+<section
+  class="section featured-products"
+  id="featured-products"
+  aria-labelledby="featured-products-heading"
+>
+  <div class="container">
+
+    {%- comment -%} ── Section Header with inline CTA ─────────────────────── {%- endcomment -%}
+    <div class="featured-products__header">
+      <div class="featured-products__header-text">
+        {%- render 'section-header',
+          eyebrow: section.settings.eyebrow,
+          heading: section.settings.heading,
+          subtitle: section.settings.subtitle,
+          heading_tag: 'h2',
+          align: 'left',
+          section_id: 'featured-products-heading'
+        -%}
+      </div>
+      {%- if section.settings.cta_text != blank and has_collection -%}
+        <a
+          href="{{ collection.url }}"
+          class="btn btn--ghost featured-products__header-cta"
+          data-animate="fade-left"
+          id="featured-products-cta"
+        >
+          {{ section.settings.cta_text }}
+          <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 18 %}</span>
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Products Grid ────────────────────────────────────────── {%- endcomment -%}
+    <div
+      class="featured-products__grid"
+      data-animate="fade-up"
+      data-delay="100"
+    >
+
+      {%- if has_collection -%}
+
+        {%- comment -%} Render from Shopify collection {%- endcomment -%}
+        {%- for product in collection.products limit: products_to_show -%}
+          {%- liquid
+            assign badge_text = ''
+            assign badge_type = ''
+            if product.tags contains 'new' or product.tags contains 'New'
+              assign badge_text = 'New'
+              assign badge_type = 'new'
+            elsif product.compare_at_price > product.price
+              assign badge_text = 'Sale'
+              assign badge_type = 'sale'
+            elsif product.tags contains 'featured' or product.tags contains 'Featured'
+              assign badge_text = 'Featured'
+              assign badge_type = 'featured'
+            endif
+            assign discount_pct = 0
+            if product.compare_at_price > product.price
+              assign savings = product.compare_at_price | minus: product.price
+              assign discount_pct = savings | times: 100 | divided_by: product.compare_at_price
+            endif
+          -%}
+          <article class="product-card" aria-label="{{ product.title }}">
+
+            <a href="{{ product.url }}" class="product-card__image-link" tabindex="-1" aria-hidden="true">
+              <div class="product-card__image-wrap">
+                {%- if product.featured_image != blank -%}
+                  {{
+                    product.featured_image
+                    | image_url: width: 600
+                    | image_tag:
+                      class: 'product-card__image product-card__image--primary',
+                      alt: product.featured_image.alt | default: product.title,
+                      loading: 'lazy',
+                      width: 600
+                  }}
+                  {%- if product.images[1] != blank -%}
+                    {{
+                      product.images[1]
+                      | image_url: width: 600
+                      | image_tag:
+                        class: 'product-card__image product-card__image--secondary',
+                        alt: product.images[1].alt | default: product.title,
+                        loading: 'lazy',
+                        width: 600
+                    }}
+                  {%- endif -%}
+                {%- else -%}
+                  <div class="product-card__image-placeholder" aria-hidden="true">
+                    {% render 'icon', name: 'package', size: 48 %}
+                  </div>
+                {%- endif -%}
+
+                {%- if badge_text != blank -%}
+                  <span class="product-card__badge product-card__badge--{{ badge_type }}">
+                    {%- if discount_pct > 0 -%}
+                      -{{ discount_pct }}%
+                    {%- else -%}
+                      {{ badge_text }}
+                    {%- endif -%}
+                  </span>
+                {%- endif -%}
+              </div>
+            </a>
+
+            <div class="product-card__body">
+              {%- if product.vendor != blank -%}
+                <span class="product-card__vendor">{{ product.vendor }}</span>
+              {%- endif -%}
+              <h3 class="product-card__title">
+                <a href="{{ product.url }}" class="product-card__title-link">{{ product.title }}</a>
+              </h3>
+              {%- if product.description != blank -%}
+                <p class="product-card__desc">{{ product.description | strip_html | truncate: 80 }}</p>
+              {%- endif -%}
+              <div class="product-card__footer">
+                <div class="product-card__price">
+                  {%- if product.compare_at_price > product.price -%}
+                    <span class="product-card__price-sale">{{ product.price | money }}</span>
+                    <span class="product-card__price-compare">{{ product.compare_at_price | money }}</span>
+                  {%- elsif product.price == 0 -%}
+                    <span class="product-card__price-label">Get Quote</span>
+                  {%- else -%}
+                    <span class="product-card__price-regular">{{ product.price | money }}</span>
+                  {%- endif -%}
+                </div>
+                <a
+                  href="{{ product.url }}"
+                  class="product-card__cta btn btn--primary btn--sm"
+                  aria-label="View {{ product.title }}"
+                >
+                  {{ section.settings.card_cta_text | default: 'View Details' }}
+                </a>
+              </div>
+            </div>
+
+          </article>
+        {%- endfor -%}
+
+      {%- elsif section.blocks.size > 0 -%}
+
+        {%- comment -%} Fallback: manual product blocks from Theme Editor {%- endcomment -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'product_card' -%}
+            <article class="product-card" aria-label="{{ block.settings.title }}" {{ block.shopify_attributes }}>
+
+              <div class="product-card__image-wrap">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 600
+                    | image_tag:
+                      class: 'product-card__image product-card__image--primary',
+                      alt: block.settings.title,
+                      loading: 'lazy',
+                      width: 600
+                  }}
+                {%- else -%}
+                  <div class="product-card__image-placeholder" aria-hidden="true">
+                    {% render 'icon', name: 'package', size: 48 %}
+                  </div>
+                {%- endif -%}
+                {%- if block.settings.badge != blank -%}
+                  <span class="product-card__badge product-card__badge--featured">{{ block.settings.badge }}</span>
+                {%- endif -%}
+              </div>
+
+              <div class="product-card__body">
+                <h3 class="product-card__title">
+                  <a href="{{ block.settings.link | default: '#' }}" class="product-card__title-link">{{ block.settings.title }}</a>
+                </h3>
+                {%- if block.settings.description != blank -%}
+                  <p class="product-card__desc">{{ block.settings.description | truncate: 80 }}</p>
+                {%- endif -%}
+                <div class="product-card__footer">
+                  <div class="product-card__price">
+                    {%- if block.settings.price != blank -%}
+                      <span class="product-card__price-regular">{{ block.settings.price }}</span>
+                    {%- else -%}
+                      <span class="product-card__price-label">Get Quote</span>
+                    {%- endif -%}
+                  </div>
+                  <a
+                    href="{{ block.settings.link | default: '/pages/contact' }}"
+                    class="product-card__cta btn btn--primary btn--sm"
+                  >
+                    {{ section.settings.card_cta_text | default: 'View Details' }}
+                  </a>
+                </div>
+              </div>
+
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+
+      {%- else -%}
+        <div class="featured-products__empty">
+          <p>Select a product collection in Theme Editor, or add manual product blocks to display products here.</p>
+        </div>
+      {%- endif -%}
+
+    </div>
+
+    {%- comment -%} ── Mobile CTA (hidden on desktop — shows in header) ──── {%- endcomment -%}
+    {%- if section.settings.cta_text != blank -%}
+      <div class="featured-products__mobile-cta" data-animate="fade-up">
+        <a
+          href="{{ collection.url | default: '/collections/all' }}"
+          class="btn btn--secondary"
+        >
+          {{ section.settings.cta_text }}
+          <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 18 %}</span>
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  /* =========================================================================
+     FEATURED PRODUCTS
+     ========================================================================= */
+
+  .featured-products__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-6);
+    margin-bottom: var(--space-10);
+  }
+
+  .featured-products__header-text {
+    flex: 1;
+  }
+
+  .featured-products__header-text .section-header {
+    margin-bottom: 0;
+  }
+
+  .featured-products__header-cta {
+    flex-shrink: 0;
+    align-self: center;
+    white-space: nowrap;
+  }
+
+  /* ── Products Grid ─────────────────────────────────────────────────────── */
+  .featured-products__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+  }
+
+  /* ── Product Card ──────────────────────────────────────────────────────── */
+  .product-card {
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    transition:
+      box-shadow var(--transition),
+      border-color var(--transition),
+      transform var(--transition);
+  }
+
+  .product-card:hover {
+    box-shadow: var(--shadow-xl);
+    border-color: transparent;
+    transform: translateY(-4px);
+  }
+
+  /* ── Card Image ────────────────────────────────────────────────────────── */
+  .product-card__image-link {
+    display: block;
+  }
+
+  .product-card__image-wrap {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    background-color: var(--color-bg-section);
+  }
+
+  .product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity var(--duration-base) var(--ease-out), transform var(--duration-slow) var(--ease-out);
+  }
+
+  .product-card__image--secondary {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+
+  .product-card:hover .product-card__image--primary {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+
+  .product-card:hover .product-card__image--secondary {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+
+  .product-card:hover .product-card__image--primary:only-child {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+
+  /* Placeholder */
+  .product-card__image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    opacity: 0.25;
+  }
+
+  /* Badges */
+  .product-card__badge {
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-3);
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-full);
+    line-height: 1;
+    z-index: 2;
+  }
+
+  .product-card__badge--new {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .product-card__badge--sale {
+    background-color: #e53e3e;
+    color: var(--color-white);
+  }
+
+  .product-card__badge--featured {
+    background-color: var(--color-accent);
+    color: var(--color-white);
+  }
+
+  /* ── Card Body ─────────────────────────────────────────────────────────── */
+  .product-card__body {
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+
+  .product-card__vendor {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-accent);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
+  .product-card__title {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--leading-snug);
+    margin: 0;
+  }
+
+  .product-card__title-link {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+
+  .product-card__title-link:hover {
+    color: var(--color-primary);
+  }
+
+  .product-card__desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+    flex: 1;
+  }
+
+  /* ── Card Footer ───────────────────────────────────────────────────────── */
+  .product-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .product-card__price {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .product-card__price-regular {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+  }
+
+  .product-card__price-sale {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    color: #e53e3e;
+  }
+
+  .product-card__price-compare {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    text-decoration: line-through;
+  }
+
+  .product-card__price-label {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+  }
+
+  /* ── Empty State ───────────────────────────────────────────────────────── */
+  .featured-products__empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--space-16);
+    color: var(--color-text-muted);
+    background-color: var(--color-bg-section);
+    border-radius: var(--radius-lg);
+    border: 2px dashed var(--color-border);
+    font-size: var(--text-base);
+  }
+
+  /* ── Mobile CTA ────────────────────────────────────────────────────────── */
+  .featured-products__mobile-cta {
+    display: none;
+    margin-top: var(--space-10);
+    text-align: center;
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────────────────── */
+  @media (max-width: 1200px) {
+    .featured-products__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .featured-products__header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .featured-products__header-cta {
+      display: none;
+    }
+    .featured-products__mobile-cta {
+      display: block;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .featured-products__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-4);
+    }
+  }
+
+  @media (max-width: 479px) {
+    .featured-products__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Featured Products",
+  "class": "section-featured-products",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Top Products"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "Our Flagship Products"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Section subtitle",
+      "default": "Precision-built products trusted by 200+ clients across India."
+    },
+    {
+      "type": "header",
+      "content": "Products Source"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Product collection",
+      "info": "Select a Shopify collection to display. If empty, manual product blocks below will be used."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Number of products to show",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Card Settings"
+    },
+    {
+      "type": "text",
+      "id": "card_cta_text",
+      "label": "Card button text",
+      "default": "View Details"
+    },
+    {
+      "type": "header",
+      "content": "Section CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "View all button text",
+      "default": "View All Products"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_card",
+      "name": "Manual product card",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Product image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Product name",
+          "default": "Interactive Kiosk"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Short description",
+          "default": "Custom-built touch-screen kiosk for self-service applications."
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price or quote label",
+          "placeholder": "Get Quote",
+          "info": "Leave blank to show 'Get Quote'"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge text",
+          "placeholder": "New Launch"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Product link"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "settings": {
+      "eyebrow": "Top Products",
+      "heading": "Our Flagship Products",
+      "subtitle": "Precision-built products trusted by 200+ clients across India.",
+      "products_to_show": 4,
+      "card_cta_text": "View Details",
+      "cta_text": "View All Products"
+    },
+    "blocks": [
+      {
+        "type": "product_card",
+        "settings": {
+          "title": "Floor-Standing Interactive Kiosk",
+          "description": "21.5\" touch display, i5 processor, thermal printer, card reader — for airports, hospitals, retail.",
+          "badge": "Best Seller"
+        }
+      },
+      {
+        "type": "product_card",
+        "settings": {
+          "title": "Outdoor Digital Signage Totem",
+          "description": "IP65 weatherproof, 2500-nit brightness, 65\" 4K display for smart city and transit installations.",
+          "badge": "Popular"
+        }
+      },
+      {
+        "type": "product_card",
+        "settings": {
+          "title": "Smart Locker System",
+          "description": "Modular intelligent locker with cloud-based access control for office, campus, and courier use.",
+          "badge": "New"
+        }
+      },
+      {
+        "type": "product_card",
+        "settings": {
+          "title": "Queue Management Kiosk",
+          "description": "Token-dispensing kiosk with SMS alert integration for banks, hospitals, government offices.",
+          "badge": "Featured"
+        }
+      }
+    ]
+  },
+  "presets": [
+    {
+      "name": "Featured Products"
+    }
+  ]
+}
+{% endschema %}

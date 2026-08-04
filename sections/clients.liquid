@@ -1,0 +1,187 @@
+{%- comment -%}
+  MAXWELL CLIENTS / TRUST LOGO MARQUEE SECTION
+  ─────────────────────────────────────────────────────────────────────────────
+  Features:
+  - Infinite smooth scrolling logo ticker / marquee
+  - Supports client logo images and text fallback
+  - Fully responsive and performant (CSS marquee)
+  ─────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+
+{%- assign client_blocks = section.blocks | where: 'type', 'client' -%}
+
+<section
+  class="section clients-marquee"
+  id="clients-partners"
+  aria-labelledby="clients-heading"
+>
+  <div class="container">
+
+    {%- render 'section-header',
+      eyebrow: section.settings.eyebrow,
+      heading: section.settings.heading,
+      subtitle: section.settings.subtitle,
+      heading_tag: 'h2',
+      align: 'center',
+      section_id: 'clients-heading'
+    -%}
+
+    {%- if client_blocks.size > 0 -%}
+      <div class="marquee" data-animate="fade-up">
+        <div class="marquee__track">
+          {%- comment -%} Loop twice for smooth infinite marquee effect {%- endcomment -%}
+          {%- for i in (1..2) -%}
+            {%- for block in client_blocks -%}
+              <div class="marquee__item" {{ block.shopify_attributes }}>
+                {%- if block.settings.logo != blank -%}
+                  {{
+                    block.settings.logo
+                    | image_url: width: 240
+                    | image_tag:
+                      class: 'marquee__logo',
+                      alt: block.settings.name | default: 'Client Logo',
+                      loading: 'lazy',
+                      width: 120
+                  }}
+                {%- else -%}
+                  <span class="marquee__text">{{ block.settings.name }}</span>
+                {%- endif -%}
+              </div>
+            {%- forendfor -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  .clients-marquee {
+    overflow: hidden;
+    padding-block: var(--space-16);
+  }
+
+  .marquee {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin-top: var(--space-8);
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    width: max-content;
+    animation: marqueeScroll 25s linear infinite;
+  }
+
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    padding-inline: var(--space-4);
+    filter: grayscale(100%);
+    opacity: 0.65;
+    transition: filter var(--transition), opacity var(--transition);
+  }
+
+  .marquee__item:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+  }
+
+  .marquee__logo {
+    max-height: 44px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .marquee__text {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-muted);
+    letter-spacing: var(--tracking-wide);
+    white-space: nowrap;
+  }
+
+  @keyframes marqueeScroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Clients & Partners",
+  "class": "section-clients-marquee",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Trusted Nationwide"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Trusted by 200+ Enterprises & Institutions"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Partnering with leading healthcare providers, government organizations, and system integrators."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "client",
+      "name": "Client Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Client Logo Image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Client Name",
+          "default": "Enterprise Client"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "client", "settings": { "name": "AIIMS Hospitals" } },
+      { "type": "client", "settings": { "name": "Smart City Mission" } },
+      { "type": "client", "settings": { "name": "Indian Railways" } },
+      { "type": "client", "settings": { "name": "Apollo Healthcare" } },
+      { "type": "client", "settings": { "name": "State Bank of India" } },
+      { "type": "client", "settings": { "name": "L&T Construction" } },
+      { "type": "client", "settings": { "name": "Reliance Industries" } }
+    ]
+  },
+  "presets": [
+    {
+      "name": "Clients & Partners"
+    }
+  ]
+}
+{% endschema %}
