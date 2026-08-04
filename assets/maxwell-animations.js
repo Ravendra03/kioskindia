@@ -377,9 +377,26 @@ const AnnouncementBar = {
     dismissBtn?.addEventListener('click', () => {
       bar.classList.add('is-dismissed');
       sessionStorage.setItem(this.STORAGE_KEY, '1');
-      // Remove from DOM after transition
       bar.addEventListener('transitionend', () => bar.remove(), { once: true });
     });
+
+    // Auto-rotate items if multiple exist
+    const items = bar.querySelectorAll('.announcement-bar__item');
+    if (items.length > 1) {
+      let current = 0;
+      let timer = setInterval(rotate, 5000);
+
+      function rotate() {
+        items[current].classList.remove('is-active');
+        current = (current + 1) % items.length;
+        items[current].classList.add('is-active');
+      }
+
+      bar.addEventListener('mouseenter', () => clearInterval(timer));
+      bar.addEventListener('focusin', () => clearInterval(timer));
+      bar.addEventListener('mouseleave', () => { timer = setInterval(rotate, 5000); });
+      bar.addEventListener('focusout', () => { timer = setInterval(rotate, 5000); });
+    }
   }
 };
 

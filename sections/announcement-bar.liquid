@@ -93,35 +93,6 @@
   </div>
 </div>
 
-{%- comment -%} ── Auto-rotate script ─────────────────────────────────────── {%- endcomment -%}
-{%- if section.blocks.size > 1 -%}
-<script>
-  (function() {
-    var bar = document.getElementById('announcement-bar-{{ section.id }}');
-    if (!bar) return;
-    var items = bar.querySelectorAll('.announcement-bar__item');
-    if (items.length <= 1) return;
-
-    var current = 0;
-    var interval = {{ section.settings.rotation_interval | times: 1000 }};
-
-    function rotate() {
-      items[current].classList.remove('is-active');
-      current = (current + 1) % items.length;
-      items[current].classList.add('is-active');
-    }
-
-    var timer = setInterval(rotate, interval);
-
-    // Pause on hover / focus
-    bar.addEventListener('mouseenter', function() { clearInterval(timer); });
-    bar.addEventListener('focusin', function() { clearInterval(timer); });
-    bar.addEventListener('mouseleave', function() { timer = setInterval(rotate, interval); });
-    bar.addEventListener('focusout', function() { timer = setInterval(rotate, interval); });
-  })();
-</script>
-{%- endif -%}
-
 {%- endif -%}
 
 <style>
