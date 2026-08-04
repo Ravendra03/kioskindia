@@ -1,0 +1,242 @@
+{%- comment -%}
+  MAXWELL SEARCH RESULTS TEMPLATE — ENTERPRISE EDITION
+{%- endcomment -%}
+
+<section class="section search-page">
+  <div class="container">
+
+    <div class="search-page__header" data-animate="fade-up">
+      <h1 class="search-page__title">
+        {%- if search.performed -%}
+          Search Results for &ldquo;{{ search.terms | escape }}&rdquo;
+        {%- else -%}
+          Search Products & Specifications
+        {%- endif -%}
+      </h1>
+
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-page__form">
+        <input
+          type="search"
+          name="q"
+          value="{{ search.terms | escape }}"
+          class="form-input search-page__input"
+          placeholder="Search interactive kiosks, outdoor signages, enclosures..."
+          aria-label="Search product catalog"
+          required
+        >
+        <button type="submit" class="btn btn--accent">
+          Search
+          <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'search', size: 18 %}</span>
+        </button>
+      </form>
+    </div>
+
+    {%- if search.performed -%}
+      {%- paginate search.results by 12 -%}
+        {%- if search.results_count > 0 -%}
+          <div class="search-page__count">
+            Showing {{ search.results_count }} result{% if search.results_count != 1 %}s{% endif %}
+          </div>
+
+          <div class="search-page__grid">
+            {%- for item in search.results -%}
+              <article class="search-card">
+                {%- if item.object_type == 'product' -%}
+                  <div class="search-card__image-wrap">
+                    {%- if item.featured_image != blank -%}
+                      {{ item.featured_image | image_url: width: 500 | image_tag: class: 'search-card__image', alt: item.title, loading: 'lazy' }}
+                    {%- else -%}
+                      <div class="search-card__placeholder">{% render 'icon', name: 'package', size: 40 %}</div>
+                    {%- endif -%}
+                    <span class="search-card__badge">Product</span>
+                  </div>
+
+                  <div class="search-card__body">
+                    <h2 class="search-card__title">
+                      <a href="{{ item.url }}">{{ item.title }}</a>
+                    </h2>
+                    <p class="search-card__desc">{{ item.description | strip_html | truncate: 100 }}</p>
+                    <div class="search-card__footer">
+                      <span class="search-card__price">{{ item.price | money }}</span>
+                      <a href="{{ item.url }}" class="btn btn--primary btn--sm">View Product</a>
+                    </div>
+                  </div>
+
+                {%- else -%}
+                  <div class="search-card__body search-card__body--full">
+                    <span class="search-card__badge search-card__badge--page">{{ item.object_type | capitalize }}</span>
+                    <h2 class="search-card__title">
+                      <a href="{{ item.url }}">{{ item.title }}</a>
+                    </h2>
+                    <p class="search-card__desc">{{ item.content | strip_html | truncate: 140 }}</p>
+                    <a href="{{ item.url }}" class="btn btn--secondary btn--sm">Read Page</a>
+                  </div>
+                {%- endif -%}
+              </article>
+            {%- endfor -%}
+          </div>
+
+          {%- if paginate.pages > 1 -%}
+            <div class="pagination">
+              {{ paginate | default_pagination }}
+            </div>
+          {%- endif -%}
+
+        {%- else -%}
+          <div class="search-page__empty">
+            <p>No results found for &ldquo;{{ search.terms | escape }}&rdquo;. Please check spelling or try broader terms.</p>
+            <a href="/collections/all" class="btn btn--secondary">Browse All Products</a>
+          </div>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  .search-page__header {
+    text-align: center;
+    margin-bottom: var(--space-10);
+  }
+
+  .search-page__title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-6);
+  }
+
+  .search-page__form {
+    display: flex;
+    gap: var(--space-3);
+    max-width: 600px;
+    margin-inline: auto;
+  }
+
+  .search-page__input {
+    flex: 1;
+  }
+
+  .search-page__count {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+  }
+
+  .search-page__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+
+  .search-card {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .search-card__image-wrap {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background-color: var(--color-bg-section);
+  }
+
+  .search-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .search-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    opacity: 0.3;
+  }
+
+  .search-card__badge {
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-3);
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-bold);
+    background: var(--color-primary);
+    color: var(--color-white);
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+  }
+
+  .search-card__body {
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+
+  .search-card__title {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-bold);
+    margin: 0;
+  }
+
+  .search-card__title a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .search-card__desc {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+    margin: 0;
+    flex: 1;
+  }
+
+  .search-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .search-card__price {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+  }
+
+  .search-page__empty {
+    text-align: center;
+    padding: var(--space-12);
+    background-color: var(--color-bg-section);
+    border-radius: var(--radius-2xl);
+  }
+
+  @media (max-width: 1024px) {
+    .search-page__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .search-page__grid {
+      grid-template-columns: 1fr;
+    }
+    .search-page__form {
+      flex-direction: column;
+    }
+  }
+</style>

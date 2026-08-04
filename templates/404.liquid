@@ -1,0 +1,154 @@
+{%- comment -%}
+  MAXWELL 404 PAGE NOT FOUND TEMPLATE — ENTERPRISE EDITION
+{%- endcomment -%}
+
+<section class="section page-404">
+  <div class="container container--narrow">
+    <div class="page-404__card" data-animate="fade-up">
+
+      <div class="page-404__badge" aria-hidden="true">
+        <span>404</span>
+      </div>
+
+      <h1 class="page-404__title">Page Not Found</h1>
+
+      <p class="page-404__desc">
+        The page or product specification sheet you are looking for has been moved, renamed, or is currently undergoing technical updates.
+      </p>
+
+      <form action="{{ routes.search_url }}" method="get" role="search" class="page-404__search">
+        <div class="form-group">
+          <label for="404-search-input" class="visually-hidden">Search Products or Specifications</label>
+          <input
+            type="search"
+            id="404-search-input"
+            name="q"
+            class="form-input"
+            placeholder="Search kiosks, digital signages, enclosures..."
+            required
+          >
+        </div>
+        <button type="submit" class="btn btn--primary">
+          Search
+          <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'search', size: 18 %}</span>
+        </button>
+      </form>
+
+      <div class="page-404__actions">
+        <a href="{{ routes.root_url }}" class="btn btn--accent btn--lg">
+          Return to Homepage
+          <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'arrow-right', size: 18 %}</span>
+        </a>
+        <a href="/collections/all" class="btn btn--secondary btn--lg">
+          Browse Product Range
+        </a>
+      </div>
+
+      <div class="page-404__quick-links">
+        <span class="page-404__links-label">Quick Links:</span>
+        <a href="/pages/contact">Request Quote</a>
+        <span>·</span>
+        <a href="/pages/about">About Maxwell</a>
+        <span>·</span>
+        <a href="/pages/contact">Factory Location</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-404 {
+    padding-block: var(--space-20);
+    text-align: center;
+  }
+
+  .page-404__card {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-2xl);
+    padding: clamp(2rem, 5vw, 4rem);
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .page-404__badge {
+    font-size: clamp(4rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 1;
+    color: var(--color-primary);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .page-404__title {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .page-404__desc {
+    font-size: var(--text-base);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+    max-width: 540px;
+    margin: 0;
+  }
+
+  .page-404__search {
+    display: flex;
+    gap: var(--space-3);
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .page-404__search .form-group {
+    flex: 1;
+  }
+
+  .page-404__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .page-404__quick-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    width: 100%;
+    justify-content: center;
+  }
+
+  .page-404__quick-links a {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .page-404__quick-links a:hover {
+    color: var(--color-accent);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+</style>
