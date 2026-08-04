@@ -8,6 +8,9 @@
   assign has_collection = false
   if collection != blank and collection.products_count > 0
     assign has_collection = true
+  elsif collections.all != blank and collections.all.products_count > 0
+    assign collection = collections.all
+    assign has_collection = true
   endif
 -%}
 
