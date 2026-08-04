@@ -62,8 +62,14 @@
       "id": "grid_item_width",
       "label": "t:labels.grid_item_width",
       "options": [
-        { "value": "collections--compact", "label": "t:options.size.small" },
-        { "value": "collections--full", "label": "t:options.size.large" }
+        {
+          "value": "collections--compact",
+          "label": "t:options.size.small"
+        },
+        {
+          "value": "collections--full",
+          "label": "t:options.size.large"
+        }
       ],
       "default": "collections--full"
     },
@@ -78,6 +84,15 @@
       "default": 10
     }
   ],
-  "presets": [{ "name": "t:general.collections_grid" }]
+  "presets": [
+    {
+      "name": "t:general.collections_grid"
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "*"
+    ]
+  }
 }
 {% endschema %}

@@ -43,7 +43,11 @@
 {% schema %}
 {
   "name": "t:general.custom_section",
-  "blocks": [{ "type": "@theme" }],
+  "blocks": [
+    {
+      "type": "@theme"
+    }
+  ],
   "settings": [
     {
       "type": "image_picker",
@@ -55,6 +59,11 @@
     {
       "name": "t:general.custom_section"
     }
-  ]
+  ],
+  "enabled_on": {
+    "templates": [
+      "*"
+    ]
+  }
 }
 {% endschema %}
