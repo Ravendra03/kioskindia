@@ -109,14 +109,15 @@
               fetchpriority: 'high'
           }}
         {%- else -%}
-          {%- comment -%} 3D Corporate Emblem Logo Fallback {%- endcomment -%}
-          <div class="brand-logo__text-wrap" aria-hidden="true">
-            <span class="brand-logo__emblem">M</span>
-            <div class="brand-logo__text-group">
-              <span class="brand-logo__title">{{ settings.company_name | default: 'MAXWELL AUTOMATIC' }}</span>
-              <span class="brand-logo__subtitle">INTERACTIVE KIOSKS & SIGNAGES</span>
-            </div>
-          </div>
+          <img
+            src="{{ 'kiosk-india-logo.png' | asset_url }}"
+            alt="{{ settings.company_name | default: 'KIOSK INDIA' }}"
+            class="brand-logo__image"
+            width="180"
+            height="44"
+            loading="eager"
+            fetchpriority="high"
+          >
         {%- endif -%}
       </a>
 
@@ -531,6 +532,13 @@
   }
 
   /* ── 3D Corporate Logo ────────────────────────────────────────────────── */
+  .brand-logo__image {
+    max-height: 44px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+  }
   .brand-logo__text-wrap {
     display: flex;
     align-items: center;

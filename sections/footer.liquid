@@ -28,7 +28,14 @@
                 width: 180
             }}
           {%- else -%}
-            <strong class="site-footer__brand-name">{{ settings.company_name | default: shop.name }}</strong>
+            <img
+              src="{{ 'kiosk-india-logo.png' | asset_url }}"
+              alt="{{ settings.company_name | default: 'KIOSK INDIA' }}"
+              class="site-footer__logo"
+              width="180"
+              height="44"
+              loading="lazy"
+            >
           {%- endif -%}
         </a>
 
