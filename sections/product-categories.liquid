@@ -65,7 +65,8 @@
           {%- comment -%} Count blocks that match this tab {%- endcomment -%}
           {%- assign tab_count = 0 -%}
           {%- for block in category_blocks -%}
-            {%- if block.settings.category | handleize == tab_handle -%}
+            {%- assign block_cat_handle = block.settings.category | handleize -%}
+            {%- if block_cat_handle == tab_handle -%}
               {%- assign tab_count = tab_count | plus: 1 -%}
             {%- endif -%}
           {%- endfor -%}
@@ -700,104 +701,117 @@
           "id": "placeholder_icon",
           "label": "Placeholder icon (if no image)",
           "options": [
-            { "value": "package", "label": "Package" },
-            { "value": "monitor", "label": "Monitor / Screen" },
-            { "value": "layers", "label": "Layers" },
-            { "value": "cog", "label": "Gear / Settings" },
-            { "value": "factory", "label": "Factory" }
+            {
+              "value": "package",
+              "label": "Package"
+            },
+            {
+              "value": "monitor",
+              "label": "Monitor / Screen"
+            },
+            {
+              "value": "layers",
+              "label": "Layers"
+            },
+            {
+              "value": "cog",
+              "label": "Gear / Settings"
+            },
+            {
+              "value": "factory",
+              "label": "Factory"
+            }
           ],
           "default": "package"
         }
       ]
     }
   ],
-  "default": {
-    "settings": {
-      "eyebrow": "Our Product Range",
-      "heading": "Engineered for Every Sector",
-      "subtitle": "From interactive kiosks to smart enclosures — browse our full range of custom-built hardware solutions.",
-      "show_filter_tabs": true,
-      "filter_tabs": "Kiosks, Signage, Enclosures, Accessories",
-      "cta_text": "View All Products"
-    },
-    "blocks": [
-      {
-        "type": "category",
-        "settings": {
-          "name": "Interactive Kiosks",
-          "subtitle": "Self-service & information terminals",
-          "description": "Touch-enabled kiosks for airports, hospitals, retail, banks, and government offices.",
-          "category": "Kiosks",
-          "product_count": "18 Products",
-          "featured": true,
-          "cta_text": "Explore Kiosks",
-          "placeholder_icon": "monitor"
-        }
-      },
-      {
-        "type": "category",
-        "settings": {
-          "name": "Digital Signage",
-          "subtitle": "Indoor & outdoor display solutions",
-          "description": "High-brightness LED & LCD signage for malls, transit hubs, and corporate offices.",
-          "category": "Signage",
-          "product_count": "14 Products",
-          "cta_text": "Explore Signage",
-          "placeholder_icon": "monitor"
-        }
-      },
-      {
-        "type": "category",
-        "settings": {
-          "name": "Smart Lockers",
-          "subtitle": "Secure storage & parcel systems",
-          "description": "Automated locker systems for offices, universities, and e-commerce last-mile delivery.",
-          "category": "Kiosks",
-          "badge": "New",
-          "cta_text": "View Lockers",
-          "placeholder_icon": "locker"
-        }
-      },
-      {
-        "type": "category",
-        "settings": {
-          "name": "Electrical Enclosures",
-          "subtitle": "MS, SS & GRP panel boxes",
-          "description": "Powder-coated MS & stainless steel enclosures for industrial and OEM applications.",
-          "category": "Enclosures",
-          "product_count": "22 Products",
-          "cta_text": "View Enclosures",
-          "placeholder_icon": "package"
-        }
-      },
-      {
-        "type": "category",
-        "settings": {
-          "name": "Queue Management",
-          "subtitle": "Token & display systems",
-          "description": "Complete queue management hardware for banks, hospitals, and service centres.",
-          "category": "Kiosks",
-          "cta_text": "View Systems",
-          "placeholder_icon": "layers"
-        }
-      },
-      {
-        "type": "category",
-        "settings": {
-          "name": "Outdoor Kiosks",
-          "subtitle": "Weather-proof public installations",
-          "description": "IP65-rated outdoor kiosks for metro stations, bus stops, and smart city projects.",
-          "category": "Kiosks",
-          "badge": "Popular",
-          "cta_text": "Explore Outdoor",
-          "placeholder_icon": "factory"
-        }
-      }
-    ]
-  },
   "presets": [
     {
-      "name": "Product Categories"
+      "name": "Product Categories",
+      "settings": {
+        "eyebrow": "Our Product Range",
+        "heading": "Engineered for Every Sector",
+        "subtitle": "From interactive kiosks to smart enclosures — browse our full range of custom-built hardware solutions.",
+        "show_filter_tabs": true,
+        "filter_tabs": "Kiosks, Signage, Enclosures, Accessories",
+        "cta_text": "View All Products"
+      },
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "name": "Interactive Kiosks",
+            "subtitle": "Self-service & information terminals",
+            "description": "Touch-enabled kiosks for airports, hospitals, retail, banks, and government offices.",
+            "category": "Kiosks",
+            "product_count": "18 Products",
+            "featured": true,
+            "cta_text": "Explore Kiosks",
+            "placeholder_icon": "monitor"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "name": "Digital Signage",
+            "subtitle": "Indoor & outdoor display solutions",
+            "description": "High-brightness LED & LCD signage for malls, transit hubs, and corporate offices.",
+            "category": "Signage",
+            "product_count": "14 Products",
+            "cta_text": "Explore Signage",
+            "placeholder_icon": "monitor"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "name": "Smart Lockers",
+            "subtitle": "Secure storage & parcel systems",
+            "description": "Automated locker systems for offices, universities, and e-commerce last-mile delivery.",
+            "category": "Kiosks",
+            "badge": "New",
+            "cta_text": "View Lockers",
+            "placeholder_icon": "locker"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "name": "Electrical Enclosures",
+            "subtitle": "MS, SS & GRP panel boxes",
+            "description": "Powder-coated MS & stainless steel enclosures for industrial and OEM applications.",
+            "category": "Enclosures",
+            "product_count": "22 Products",
+            "cta_text": "View Enclosures",
+            "placeholder_icon": "package"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "name": "Queue Management",
+            "subtitle": "Token & display systems",
+            "description": "Complete queue management hardware for banks, hospitals, and service centres.",
+            "category": "Kiosks",
+            "cta_text": "View Systems",
+            "placeholder_icon": "layers"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "name": "Outdoor Kiosks",
+            "subtitle": "Weather-proof public installations",
+            "description": "IP65-rated outdoor kiosks for metro stations, bus stops, and smart city projects.",
+            "category": "Kiosks",
+            "badge": "Popular",
+            "cta_text": "Explore Outdoor",
+            "placeholder_icon": "factory"
+          }
+        }
+      ]
     }
   ]
 }

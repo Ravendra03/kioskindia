@@ -396,8 +396,14 @@
       "id": "bg_style",
       "label": "Background",
       "options": [
-        { "value": "white", "label": "White" },
-        { "value": "alt", "label": "Light grey" }
+        {
+          "value": "white",
+          "label": "White"
+        },
+        {
+          "value": "alt",
+          "label": "Light grey"
+        }
       ],
       "default": "alt"
     },
@@ -464,16 +470,46 @@
           "id": "icon",
           "label": "Icon",
           "options": [
-            { "value": "headphones", "label": "Consultation" },
-            { "value": "settings", "label": "Design / Engineering" },
-            { "value": "check-circle", "label": "Approval / Review" },
-            { "value": "factory", "label": "Manufacturing" },
-            { "value": "shield", "label": "Quality Testing" },
-            { "value": "package", "label": "Packaging" },
-            { "value": "truck", "label": "Delivery / Dispatch" },
-            { "value": "cog", "label": "Installation" },
-            { "value": "thumbs-up", "label": "Handover / Support" },
-            { "value": "users", "label": "Training" }
+            {
+              "value": "headphones",
+              "label": "Consultation"
+            },
+            {
+              "value": "settings",
+              "label": "Design / Engineering"
+            },
+            {
+              "value": "check-circle",
+              "label": "Approval / Review"
+            },
+            {
+              "value": "factory",
+              "label": "Manufacturing"
+            },
+            {
+              "value": "shield",
+              "label": "Quality Testing"
+            },
+            {
+              "value": "package",
+              "label": "Packaging"
+            },
+            {
+              "value": "truck",
+              "label": "Delivery / Dispatch"
+            },
+            {
+              "value": "cog",
+              "label": "Installation"
+            },
+            {
+              "value": "thumbs-up",
+              "label": "Handover / Support"
+            },
+            {
+              "value": "users",
+              "label": "Training"
+            }
           ],
           "default": "headphones"
         },
@@ -499,29 +535,75 @@
       ]
     }
   ],
-  "default": {
-    "settings": {
-      "bg_style": "alt",
-      "eyebrow": "How We Work",
-      "heading": "From Concept to Installation",
-      "subtitle": "Our proven 6-step process ensures every project is delivered on time, within budget, and built to last.",
-      "show_guarantee": true,
-      "guarantee_title": "Maxwell Quality Guarantee",
-      "guarantee_text": "Every product ships with a minimum 1-year comprehensive warranty, post-installation support, and a dedicated account manager for enterprise clients.",
-      "guarantee_cta_text": "Contact Our Team"
-    },
-    "blocks": [
-      { "type": "step", "settings": { "icon": "headphones", "title": "Consultation", "description": "Share your requirements. Our team responds within 24 hours.", "duration": "Day 1–2" } },
-      { "type": "step", "settings": { "icon": "settings", "title": "Design & Engineering", "description": "We design and engineer a custom solution matched to your specifications.", "duration": "Day 3–7" } },
-      { "type": "step", "settings": { "icon": "check-circle", "title": "Approval", "description": "Design drawings and bill of materials submitted for your sign-off.", "duration": "Day 7–10" } },
-      { "type": "step", "settings": { "icon": "factory", "title": "Manufacturing", "description": "In-house production at our Ahmedabad facility with real-time tracking.", "duration": "Day 10–25" } },
-      { "type": "step", "settings": { "icon": "shield", "title": "Quality Testing", "description": "Rigorous QA/QC: functional, safety, and endurance testing before dispatch.", "duration": "Day 25–28" } },
-      { "type": "step", "settings": { "icon": "cog", "title": "Delivery & Installation", "description": "Pan-India delivery with optional on-site installation and commissioning.", "duration": "Day 28–32" } }
-    ]
-  },
   "presets": [
     {
-      "name": "Manufacturing Process"
+      "name": "Manufacturing Process",
+      "settings": {
+        "bg_style": "alt",
+        "eyebrow": "How We Work",
+        "heading": "From Concept to Installation",
+        "subtitle": "Our proven 6-step process ensures every project is delivered on time, within budget, and built to last.",
+        "show_guarantee": true,
+        "guarantee_title": "Maxwell Quality Guarantee",
+        "guarantee_text": "Every product ships with a minimum 1-year comprehensive warranty, post-installation support, and a dedicated account manager for enterprise clients.",
+        "guarantee_cta_text": "Contact Our Team"
+      },
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "icon": "headphones",
+            "title": "Consultation",
+            "description": "Share your requirements. Our team responds within 24 hours.",
+            "duration": "Day 1–2"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "icon": "settings",
+            "title": "Design & Engineering",
+            "description": "We design and engineer a custom solution matched to your specifications.",
+            "duration": "Day 3–7"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "icon": "check-circle",
+            "title": "Approval",
+            "description": "Design drawings and bill of materials submitted for your sign-off.",
+            "duration": "Day 7–10"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "icon": "factory",
+            "title": "Manufacturing",
+            "description": "In-house production at our Ahmedabad facility with real-time tracking.",
+            "duration": "Day 10–25"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "icon": "shield",
+            "title": "Quality Testing",
+            "description": "Rigorous QA/QC: functional, safety, and endurance testing before dispatch.",
+            "duration": "Day 25–28"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "icon": "cog",
+            "title": "Delivery & Installation",
+            "description": "Pan-India delivery with optional on-site installation and commissioning.",
+            "duration": "Day 28–32"
+          }
+        }
+      ]
     }
   ]
 }

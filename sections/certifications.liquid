@@ -152,10 +152,22 @@
           "id": "icon_name",
           "label": "Icon",
           "options": [
-            { "value": "shield", "label": "Shield" },
-            { "value": "award", "label": "Award" },
-            { "value": "factory", "label": "Factory" },
-            { "value": "check-circle", "label": "Check Circle" }
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "award",
+              "label": "Award"
+            },
+            {
+              "value": "factory",
+              "label": "Factory"
+            },
+            {
+              "value": "check-circle",
+              "label": "Check Circle"
+            }
           ],
           "default": "shield"
         },
@@ -174,45 +186,43 @@
       ]
     }
   ],
-  "default": {
-    "blocks": [
-      {
-        "type": "certification",
-        "settings": {
-          "icon_name": "shield",
-          "title": "ISO 9001:2015 Certified",
-          "description": "Compliant quality management systems covering end-to-end hardware manufacturing."
-        }
-      },
-      {
-        "type": "certification",
-        "settings": {
-          "icon_name": "factory",
-          "title": "Make In India Initiative",
-          "description": "Proudly engineered and manufactured in Vatwa GIDC, Ahmedabad, Gujarat."
-        }
-      },
-      {
-        "type": "certification",
-        "settings": {
-          "icon_name": "award",
-          "title": "MSME Registered",
-          "description": "Recognized enterprise manufacturing partner with government vendor approvals."
-        }
-      },
-      {
-        "type": "certification",
-        "settings": {
-          "icon_name": "check-circle",
-          "title": "IP65 Weatherproof",
-          "description": "Enclosures tested and certified for dust and water ingress protection for outdoor use."
-        }
-      }
-    ]
-  },
   "presets": [
     {
-      "name": "Certifications & Trust"
+      "name": "Certifications & Trust",
+      "blocks": [
+        {
+          "type": "certification",
+          "settings": {
+            "icon_name": "shield",
+            "title": "ISO 9001:2015 Certified",
+            "description": "Compliant quality management systems covering end-to-end hardware manufacturing."
+          }
+        },
+        {
+          "type": "certification",
+          "settings": {
+            "icon_name": "factory",
+            "title": "Make In India Initiative",
+            "description": "Proudly engineered and manufactured in Vatwa GIDC, Ahmedabad, Gujarat."
+          }
+        },
+        {
+          "type": "certification",
+          "settings": {
+            "icon_name": "award",
+            "title": "MSME Registered",
+            "description": "Recognized enterprise manufacturing partner with government vendor approvals."
+          }
+        },
+        {
+          "type": "certification",
+          "settings": {
+            "icon_name": "check-circle",
+            "title": "IP65 Weatherproof",
+            "description": "Enclosures tested and certified for dust and water ingress protection for outdoor use."
+          }
+        }
+      ]
     }
   ]
 }
