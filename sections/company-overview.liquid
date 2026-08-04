@@ -30,10 +30,14 @@
                 width: 900
             }}
           {%- else -%}
-            <div class="company-overview__placeholder">
-              {% render 'icon', name: 'factory', size: 64 %}
-              <span>In-House Manufacturing Facility — Vatwa GIDC</span>
-            </div>
+            <img
+              src="{{ 'maxwell-factory.jpg' | asset_url }}"
+              alt="Maxwell Automatic Manufacturing Plant - Vatwa GIDC"
+              class="company-overview__image"
+              loading="lazy"
+              width="900"
+              height="675"
+            >
           {%- endif -%}
 
           {%- comment -%} Floating Experience Badge {%- endcomment -%}
