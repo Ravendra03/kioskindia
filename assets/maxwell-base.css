@@ -159,8 +159,8 @@ a {
 
 .eyebrow--light {
   color: var(--color-accent);
-  background-color: rgba(245, 130, 32, 0.12);
-  border-color: rgba(245, 130, 32, 0.2);
+  background-color: rgba(0, 102, 204, 0.12);
+  border-color: rgba(0, 102, 204, 0.2);
 }
 
 /* ── Section Header Snippet Component ────────────────────────────────────── */
@@ -266,8 +266,8 @@ a {
 }
 
 .btn--accent:hover {
-  background: linear-gradient(135deg, var(--color-accent-hover), #c85a00);
-  box-shadow: 0 10px 30px rgba(245, 130, 32, 0.5);
+  background: linear-gradient(135deg, var(--color-accent-hover), #003366);
+  box-shadow: 0 10px 30px rgba(0, 102, 204, 0.4);
   transform: translateY(-2px);
 }
 
