@@ -1,9 +1,9 @@
 {
-  "name": "Default Page",
+  "name": "Contact Us",
   "wrapper": "main",
   "sections": {
     "main": {
-      "type": "main-page",
+      "type": "main-contact",
       "settings": {}
     }
   },

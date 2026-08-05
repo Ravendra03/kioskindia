@@ -1,0 +1,32 @@
+{%- comment -%}
+  MAXWELL DEFAULT PAGE TEMPLATE SECTION
+{%- endcomment -%}
+
+<section class="section page-section">
+  <div class="container container--narrow">
+    <header class="section-header section-header--center">
+      <h1 class="section-header__heading">{{ page.title }}</h1>
+    </header>
+    <div class="page-content rte">
+      {{ page.content }}
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-section {
+    padding-block: var(--space-8);
+  }
+  .page-content {
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Default Page",
+  "settings": []
+}
+{% endschema %}

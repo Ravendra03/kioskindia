@@ -1,0 +1,347 @@
+{%- comment -%}
+  MAXWELL ENTERPRISE B2B CONTACT US SECTION
+{%- endcomment -%}
+
+<section class="contact-page">
+  {%- comment -%} Header Hero Banner {%- endcomment -%}
+  <div class="contact-page__hero">
+    <div class="container">
+      <div class="eyebrow eyebrow--light">
+        <span class="eyebrow__dot" aria-hidden="true"></span>
+        Factory & Sales Headquarters · Ahmedabad, Gujarat
+      </div>
+      <h1 class="contact-page__heading">Contact Our Engineering & Sales Team</h1>
+      <p class="contact-page__subtitle">
+        Have a custom kiosk project, digital signage requirement, or OEM enclosure specification? Talk directly with our Ahmedabad plant engineers.
+      </p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="contact-page__grid">
+
+      {%- comment -%} Left Column: Info Cards {%- endcomment -%}
+      <div class="contact-page__info">
+        <div class="contact-info-card">
+          <div class="contact-info-card__icon">
+            {% render 'icon', name: 'phone', size: 24 %}
+          </div>
+          <div class="contact-info-card__content">
+            <h3>Sales & Project Enquiries</h3>
+            <p><a href="tel:{{ settings.contact_phone_raw }}">{{ settings.contact_phone | default: '+91 79 4254 0370' }}</a></p>
+            <p class="subtext">WhatsApp: <a href="https://wa.me/{{ settings.contact_whatsapp }}" target="_blank" rel="noopener">{{ settings.contact_phone | default: '+91 79 4254 0370' }}</a></p>
+          </div>
+        </div>
+
+        <div class="contact-info-card">
+          <div class="contact-info-card__icon">
+            {% render 'icon', name: 'email', size: 24 %}
+          </div>
+          <div class="contact-info-card__content">
+            <h3>Email Us</h3>
+            <p><a href="mailto:{{ settings.contact_email }}">{{ settings.contact_email | default: 'info@maxwell-automatic.com' }}</a></p>
+            <p class="subtext">Direct response within 24 business hours</p>
+          </div>
+        </div>
+
+        <div class="contact-info-card">
+          <div class="contact-info-card__icon">
+            {% render 'icon', name: 'map-pin', size: 24 %}
+          </div>
+          <div class="contact-info-card__content">
+            <h3>Manufacturing Facility & Reg. Office</h3>
+            <p>{{ settings.contact_address | default: 'Phase 4, Plot No. 2012, GIDC, Vatwa, Ahmedabad – 382445, Gujarat, India' }}</p>
+            {% if settings.contact_gst != blank %}
+              <p class="subtext">GSTIN: <strong>{{ settings.contact_gst }}</strong></p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="contact-info-card">
+          <div class="contact-info-card__icon">
+            {% render 'icon', name: 'clock', size: 24 %}
+          </div>
+          <div class="contact-info-card__content">
+            <h3>Working Hours</h3>
+            <p>Monday – Saturday: 9:00 AM – 7:00 PM IST</p>
+            <p class="subtext">Sunday: Closed (Emergency support active for SLA clients)</p>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} Right Column: B2B Contact & RFQ Form {%- endcomment -%}
+      <div class="contact-page__form-wrap">
+        <h2 class="contact-page__form-title">Request a Custom Project Quote</h2>
+        <p class="contact-page__form-desc">Fill out the form below and our technical engineering team will get back to you with specs & pricing.</p>
+
+        {%- form 'contact', class: 'contact-page__form' -%}
+          {%- if form.posted_successfully? -%}
+            <div class="form-message form-message--success">
+              ✓ Thank you! Your project inquiry has been received. Our sales engineer will contact you within 24 hours.
+            </div>
+          {%- endif -%}
+
+          {%- if form.errors -%}
+            <div class="form-message form-message--error">
+              Please check the highlighted fields and try submitting again.
+            </div>
+          {%- endif -%}
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ContactFormName" class="form-label">Full Name *</label>
+              <input type="text" id="ContactFormName" name="contact[Name]" class="form-input" placeholder="e.g. Rahul Sharma" required>
+            </div>
+            <div class="form-group">
+              <label for="ContactFormCompany" class="form-label">Company Name</label>
+              <input type="text" id="ContactFormCompany" name="contact[Company]" class="form-input" placeholder="e.g. Apex Hospital / Tech Infra">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ContactFormEmail" class="form-label">Business Email *</label>
+              <input type="email" id="ContactFormEmail" name="contact[email]" class="form-input" placeholder="name@company.com" required>
+            </div>
+            <div class="form-group">
+              <label for="ContactFormPhone" class="form-label">Phone / Mobile *</label>
+              <input type="tel" id="ContactFormPhone" name="contact[phone]" class="form-input" placeholder="+91 98765 43210" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="ContactFormProduct" class="form-label">Product Requirement *</label>
+            <select id="ContactFormProduct" name="contact[Product Interest]" class="form-input">
+              <option value="Interactive Kiosks">Interactive Self-Service Kiosks</option>
+              <option value="Digital Signage">Outdoor / Indoor Digital Signages</option>
+              <option value="Smart Lockers">Smart Locker Systems</option>
+              <option value="Electrical Enclosures">Electrical Enclosures (MS / SS / GRP)</option>
+              <option value="Queue Management">Queue Management Systems</option>
+              <option value="Custom OEM/ODM">Custom OEM / Bespoke Manufacturing</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="ContactFormMessage" class="form-label">Project Details / Message</label>
+            <textarea id="ContactFormMessage" name="contact[body]" rows="4" class="form-textarea" placeholder="Tell us about your display size, quantity, custom features, or timeline..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--accent btn--lg" style="width: 100%;">
+            Submit Project Inquiry
+            <span class="btn__icon">{% render 'icon', name: 'arrow-right', size: 18 %}</span>
+          </button>
+        {%- endform -%}
+      </div>
+
+    </div>
+  </div>
+
+  {%- comment -%} Map Section {%- endcomment -%}
+  <div class="container contact-page__map-container">
+    <div class="contact-page__map-card">
+      <iframe
+        src="https://maps.google.com/maps?q=22.9671083,72.6417202&hl=en&z=16&output=embed"
+        width="100%"
+        height="380"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Maxwell Automatic Vatwa GIDC Factory Map"
+      ></iframe>
+      <div class="contact-page__map-bar">
+        <span>📍 Factory Unit: Phase 4, Plot No. 2012, GIDC, Vatwa, Ahmedabad – 382445</span>
+        <a href="https://maps.app.goo.gl/FnUGe8VYLgzpPRLA9" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--sm">
+          Get Directions {% render 'icon', name: 'external-link', size: 14 %}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-page {
+    background-color: var(--color-bg-page);
+    padding-bottom: var(--space-12);
+  }
+
+  .contact-page__hero {
+    background: linear-gradient(180deg, #001F3F 0%, #001730 100%);
+    color: var(--color-white);
+    padding-block: var(--space-8);
+    margin-bottom: var(--space-8);
+    text-align: center;
+  }
+
+  .contact-page__heading {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 800;
+    color: var(--color-white);
+    line-height: 1.15;
+    margin-bottom: var(--space-3);
+  }
+
+  .contact-page__subtitle {
+    font-size: var(--text-base);
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 680px;
+    margin-inline: auto;
+  }
+
+  .contact-page__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: var(--space-8);
+    align-items: start;
+    margin-bottom: var(--space-10);
+  }
+
+  .contact-page__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .contact-info-card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .contact-info-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary-light);
+  }
+
+  .contact-info-card__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #0066CC 0%, #001A33 100%);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 4px 12px rgba(0, 102, 204, 0.3);
+  }
+
+  .contact-info-card__content h3 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+  }
+
+  .contact-info-card__content p {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .contact-info-card__content a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .contact-info-card__content .subtext {
+    font-size: 0.8rem;
+    color: var(--color-text-light);
+    margin-top: 0.25rem;
+  }
+
+  .contact-page__form-wrap {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-md);
+  }
+
+  .contact-page__form-title {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+  }
+
+  .contact-page__form-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-5);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+
+  .form-group {
+    margin-bottom: var(--space-4);
+  }
+
+  .form-message {
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  .form-message--success {
+    background-color: #ECFDF5;
+    color: #065F46;
+    border: 1px solid #A7F3D0;
+  }
+
+  .form-message--error {
+    background-color: #FEF2F2;
+    color: #991B1B;
+    border: 1px solid #FCA5A5;
+  }
+
+  .contact-page__map-card {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+  }
+
+  .contact-page__map-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-5);
+    background-color: var(--color-white);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text);
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (max-width: 900px) {
+    .contact-page__grid {
+      grid-template-columns: 1fr;
+    }
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Main Contact Page",
+  "settings": []
+}
+{% endschema %}
