@@ -8,8 +8,9 @@
 -%}
 
 <section
-  class="section{% if section.settings.bg_style == 'alt' %} section--alt{% endif %} company-overview"
+  class="section company-overview"
   id="company-overview"
+  style="background-color: #FFFFFF;"
   aria-labelledby="company-overview-heading"
 >
   <div class="container">
@@ -58,7 +59,7 @@
           subtitle: section.settings.subtitle,
           heading_tag: 'h2',
           align: 'left',
-          theme: 'dark',
+          theme: 'light',
           section_id: 'company-overview-heading'
         -%}
 
@@ -220,6 +221,12 @@
     letter-spacing: var(--tracking-wider);
   }
 
+  .company-overview {
+    background-color: #FFFFFF !important;
+    position: relative;
+    z-index: 1;
+  }
+
   .company-overview .section-header {
     margin-bottom: var(--space-4);
   }
@@ -238,15 +245,17 @@
     align-items: flex-start;
     gap: var(--space-3);
     padding: var(--space-4);
-    background-color: var(--color-white);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-border);
-    transition: transform var(--transition), box-shadow var(--transition);
+    background-color: #FFFFFF;
+    border-radius: var(--radius-xl);
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 4px 14px rgba(0, 31, 63, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   }
 
   .company-overview__cap-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 31, 63, 0.12);
+    border-color: #0088FF;
   }
 
   .company-overview__cap-icon {
