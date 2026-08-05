@@ -11,23 +11,14 @@
     {%- comment -%} ── Favicon ─────────────────────────────────────────────── {%- endcomment -%}
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32 }}">
+    {%- else -%}
+      <link rel="icon" type="image/png" href="{{ 'kiosk-india-logo.png' | asset_url }}">
     {%- endif -%}
 
-    {%- comment -%}
-      Font Strategy:
-      1. Preconnect to Google Fonts CDN for DNS resolution
-      2. Preconnect to fonts.gstatic.com for font file downloads
-      3. Load Inter with display=swap to prevent FOIT
-      4. Shopify font_face renders @font-face from Shopify CDN (set in css-variables)
-    {%- endcomment -%}
+    {%- comment -%} ── Font Preconnects ──────────────────────────────────────── {%- endcomment -%}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-
-    {%- comment -%} If using custom font from Shopify font picker {%- endcomment -%}
-    {%- unless settings.type_primary_font.system? -%}
-      {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
-    {%- endunless -%}
 
     {%- comment -%} ── SEO, OG, Twitter Cards, Schema ──────────────────────── {%- endcomment -%}
     {% render 'meta-tags' %}
