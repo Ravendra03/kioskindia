@@ -103,8 +103,8 @@ a {
 
 /* ── Section Wrapper & Dynamic Controls ─────────────────────────────────── */
 .section {
-  padding-top: var(--section-pt, clamp(1.75rem, 3vw, 3rem));
-  padding-bottom: var(--section-pb, clamp(1.75rem, 3vw, 3rem));
+  padding-top: var(--section-pt, clamp(3.25rem, 5.5vw, 5.5rem));
+  padding-bottom: var(--section-pb, clamp(3.25rem, 5.5vw, 5.5rem));
   background-color: var(--section-bg, transparent);
   position: relative;
 }
@@ -183,7 +183,7 @@ section[id] {
 
 /* ── Section Header Snippet Component ────────────────────────────────────── */
 .section-header {
-  margin-bottom: clamp(1.25rem, 2.5vw, 2.25rem);
+  margin-bottom: clamp(2rem, 3.5vw, 3.25rem);
 }
 
 .section-header--center {

@@ -13,7 +13,7 @@
         "stats_card_label": "Our Achievements",
         "stats_cta_text": "View all projects",
         "show_trust_badges": true,
-        "show_scroll_indicator": true
+        "show_scroll_indicator": false
       },
       "blocks": {
         "stat-1": {
