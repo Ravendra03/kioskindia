@@ -749,7 +749,7 @@
       },
       "blocks": {
         "cert-1": {
-          "type": "certification",
+          "type": "cert",
           "settings": {
             "icon_name": "shield",
             "title": "ISO 9001:2015 Certified",
@@ -757,7 +757,7 @@
           }
         },
         "cert-2": {
-          "type": "certification",
+          "type": "cert",
           "settings": {
             "icon_name": "factory",
             "title": "Make In India Initiative",
@@ -765,7 +765,7 @@
           }
         },
         "cert-3": {
-          "type": "certification",
+          "type": "cert",
           "settings": {
             "icon_name": "award",
             "title": "MSME Registered",
@@ -773,7 +773,7 @@
           }
         },
         "cert-4": {
-          "type": "certification",
+          "type": "cert",
           "settings": {
             "icon_name": "check-circle",
             "title": "IP65 Weatherproof",
@@ -851,7 +851,7 @@
       },
       "blocks": {
         "b-1": {
-          "type": "sample_article",
+          "type": "article_card",
           "settings": {
             "date": "Aug 02, 2026",
             "title": "Choosing IP65 Weatherproof Enclosures for Smart Cities",
@@ -859,7 +859,7 @@
           }
         },
         "b-2": {
-          "type": "sample_article",
+          "type": "article_card",
           "settings": {
             "date": "Jul 28, 2026",
             "title": "5 Ways Interactive Kiosks Streamline OPD Hospital Workflows",
@@ -867,7 +867,7 @@
           }
         },
         "b-3": {
-          "type": "sample_article",
+          "type": "article_card",
           "settings": {
             "date": "Jul 15, 2026",
             "title": "Sheet Metal Fabrication Standards in Industrial Enclosures",
