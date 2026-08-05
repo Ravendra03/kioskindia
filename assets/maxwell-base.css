@@ -87,6 +87,12 @@ a {
   max-width: 960px;
 }
 
+#main-content {
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
 /* ── Section Wrapper & Dynamic Controls ─────────────────────────────────── */
 .section {
   padding-top: var(--section-pt, clamp(1.75rem, 3vw, 3rem));
