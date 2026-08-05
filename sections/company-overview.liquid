@@ -111,16 +111,23 @@
 
     </div>
 
-    {%- comment -%} Milestones Timeline {%- endcomment -%}
+    {%- comment -%} Milestones Timeline — Innovative Industrial Roadmap {%- endcomment -%}
     {%- if section.settings.show_timeline and milestone_blocks.size > 0 -%}
       <div class="company-overview__timeline-wrap" data-animate="fade-up">
-        <h3 class="company-overview__timeline-title">{{ section.settings.timeline_heading | default: 'Our Journey' }}</h3>
+        <div class="company-overview__timeline-header">
+          <span class="eyebrow eyebrow--light" style="margin-inline: auto;">Milestones & Growth</span>
+          <h3 class="company-overview__timeline-title">{{ section.settings.timeline_heading | default: 'Our Journey' }}</h3>
+        </div>
         <div class="company-overview__timeline">
           {%- for block in milestone_blocks -%}
             <div class="company-overview__milestone" {{ block.shopify_attributes }}>
-              <div class="company-overview__milestone-node" aria-hidden="true"></div>
-              <span class="company-overview__milestone-year">{{ block.settings.year }}</span>
-              <p class="company-overview__milestone-event">{{ block.settings.event }}</p>
+              <div class="company-overview__milestone-badge">
+                <span class="company-overview__milestone-node" aria-hidden="true"></span>
+                <span class="company-overview__milestone-year">{{ block.settings.year }}</span>
+              </div>
+              <div class="company-overview__milestone-card">
+                <p class="company-overview__milestone-event">{{ block.settings.event }}</p>
+              </div>
             </div>
           {%- endfor -%}
         </div>
@@ -305,26 +312,33 @@
     gap: var(--space-2);
   }
 
-  /* Timeline */
+  /* Innovative High-Tech Timeline */
   .company-overview__timeline-wrap {
-    margin-top: var(--space-16);
-    padding-top: var(--space-10);
-    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-12);
+    padding-top: var(--space-8);
+    border-top: 1px solid #E2E8F0;
+    position: relative;
+  }
+
+  .company-overview__timeline-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
   }
 
   .company-overview__timeline-title {
-    font-size: var(--text-lg);
-    font-weight: var(--font-weight-bold);
+    font-size: var(--text-3xl);
+    font-weight: 800;
     color: var(--color-primary);
-    text-align: center;
-    margin-bottom: var(--space-8);
+    margin-top: var(--space-2);
+    letter-spacing: var(--tracking-tight);
   }
 
   .company-overview__timeline {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: var(--space-6);
+    gap: var(--space-4);
     position: relative;
+    z-index: 1;
   }
 
   .company-overview__milestone {
@@ -332,27 +346,64 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    position: relative;
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .company-overview__milestone:hover {
+    transform: translateY(-6px);
+  }
+
+  .company-overview__milestone-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.35rem 0.85rem;
+    background: linear-gradient(135deg, #001F3F 0%, #004C99 100%);
+    border-radius: var(--radius-full);
+    color: #FFFFFF;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 4px 14px rgba(0, 31, 63, 0.25);
+    margin-bottom: var(--space-3);
+    border: 1px solid rgba(255, 255, 255, 0.25);
   }
 
   .company-overview__milestone-node {
-    width: 14px;
-    height: 14px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background-color: var(--color-primary);
-    box-shadow: 0 0 0 4px var(--color-white), 0 0 0 6px var(--color-primary-light);
-    margin-bottom: var(--space-3);
+    background-color: #00A3FF;
+    box-shadow: 0 0 10px #00A3FF;
   }
 
   .company-overview__milestone-year {
-    font-size: var(--text-sm);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-primary);
+    font-size: var(--text-xs);
+    font-weight: 800;
+    letter-spacing: var(--tracking-wider);
+  }
+
+  .company-overview__milestone-card {
+    background-color: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: 0 4px 14px rgba(0, 31, 63, 0.05);
+    width: 100%;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .company-overview__milestone:hover .company-overview__milestone-card {
+    border-color: #0088FF;
+    box-shadow: 0 12px 30px rgba(0, 136, 255, 0.18);
   }
 
   .company-overview__milestone-event {
     font-size: var(--text-xs);
-    color: var(--color-text-muted);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    line-height: var(--leading-relaxed);
     margin: 0;
   }
 
