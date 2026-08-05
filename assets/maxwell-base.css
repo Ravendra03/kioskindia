@@ -15,7 +15,7 @@ html {
   font-size: 16px;
   line-height: var(--leading-normal);
   color: var(--color-text);
-  background-color: var(--color-bg-page);
+  background-color: #001730;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -28,6 +28,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  background-color: #001730;
 }
 
 body.scroll-locked {
