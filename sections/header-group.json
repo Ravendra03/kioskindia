@@ -44,7 +44,7 @@
         "logo_width": 160,
         "nav_menu": "main-menu",
         "transparent_on_hero": true,
-        "show_topbar": true,
+        "show_topbar": false,
         "topbar_badge_1": "ISO Certified",
         "topbar_badge_2": "Make in India",
         "topbar_badge_3": "MSME Registered",

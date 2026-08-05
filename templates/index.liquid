@@ -1,0 +1,24 @@
+{%- comment -%}
+  MAXWELL HOMEPAGE TEMPLATE (OS 2.0 Fallback)
+  Renders content_for_index or default index sections if OS 2.0 JSON is inactive
+{%- endcomment -%}
+
+{% if content_for_index != blank and content_for_index.size > 20 %}
+  {{ content_for_index }}
+{% else %}
+  {% section 'hero' %}
+  {% section 'company-overview' %}
+  {% section 'product-categories' %}
+  {% section 'industries' %}
+  {% section 'featured-products' %}
+  {% section 'manufacturing-process' %}
+  {% section 'why-choose-us' %}
+  {% section 'projects' %}
+  {% section 'clients' %}
+  {% section 'testimonials' %}
+  {% section 'certifications' %}
+  {% section 'faq' %}
+  {% section 'contact-cta' %}
+  {% section 'latest-blogs' %}
+  {% section 'google-map' %}
+{% endif %}
