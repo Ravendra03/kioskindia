@@ -10,6 +10,7 @@
 <section
   class="section product-categories"
   id="product-categories"
+  style="background-color: #FFFFFF;"
   aria-labelledby="categories-heading"
 >
   <div class="container">
@@ -20,6 +21,7 @@
       subtitle: section.settings.subtitle,
       heading_tag: 'h2',
       align: 'center',
+      theme: 'light',
       section_id: 'categories-heading'
     -%}
 
@@ -137,17 +139,26 @@
 </section>
 
 <style>
+  .product-categories {
+    background-color: #FFFFFF !important;
+    position: relative;
+    z-index: 1;
+  }
+
+  .product-categories .section-header {
+    margin-bottom: var(--space-4);
+  }
   .product-categories__tabs {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
     flex-wrap: wrap;
-    margin-bottom: var(--space-10);
-    background-color: var(--color-bg-section);
-    padding: var(--space-2);
+    margin-bottom: var(--space-4);
+    background-color: #F8FAFC;
+    padding: 0.35rem 0.5rem;
     border-radius: var(--radius-full);
-    border: 1px solid var(--color-border);
+    border: 1px solid #E2E8F0;
     width: fit-content;
     margin-inline: auto;
   }
