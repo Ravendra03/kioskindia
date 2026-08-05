@@ -585,6 +585,62 @@ const ProcessObserver = {
 };
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   MODULE 14 — Smooth Hash Scroll & Navigation
+───────────────────────────────────────────────────────────────────────────── */
+
+const SmoothScroll = {
+  init() {
+    // 1. Handle clicks on all hash links across the page
+    document.body.addEventListener('click', (e) => {
+      const link = e.target.closest('a[href*="#"]');
+      if (!link) return;
+
+      const href = link.getAttribute('href');
+      if (!href || href === '#' || href === '#main-content') return;
+
+      try {
+        const url = new URL(link.href, window.location.href);
+        const targetId = url.hash.replace('#', '');
+        const targetEl = document.getElementById(targetId);
+
+        // If the target element exists on current page, smooth scroll to it
+        if (targetEl && url.pathname === window.location.pathname) {
+          e.preventDefault();
+          const headerOffset = 80;
+          const elementPosition = targetEl.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      } catch (err) {
+        // Fallback for relative hash links
+      }
+    });
+
+    // 2. Handle scroll on page load if URL contains hash (e.g. /#google-map)
+    if (window.location.hash) {
+      const targetId = window.location.hash.replace('#', '');
+      setTimeout(() => {
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          const headerOffset = 80;
+          const elementPosition = targetEl.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }, 200);
+    }
+  }
+};
+
+/* ─────────────────────────────────────────────────────────────────────────────
    BOOTSTRAP — Initialize all modules when DOM is ready
 ───────────────────────────────────────────────────────────────────────────── */
 
@@ -602,4 +658,5 @@ document.addEventListener('DOMContentLoaded', () => {
   VideoModal.init();
   CategoryTabs.init();
   ProcessObserver.init();
+  SmoothScroll.init();
 });
