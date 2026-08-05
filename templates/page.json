@@ -1,6 +1,4 @@
 {
-  "name": "Default Page",
-  "wrapper": "main",
   "sections": {
     "main": {
       "type": "main-page",
