@@ -91,6 +91,13 @@ a {
   margin: 0;
   padding: 0;
   display: block;
+  background-color: #001730;
+}
+
+.shopify-section-group-header-group {
+  background-color: #001730;
+  margin: 0;
+  padding: 0;
 }
 
 /* ── Section Wrapper & Dynamic Controls ─────────────────────────────────── */
