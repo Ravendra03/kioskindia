@@ -67,50 +67,91 @@
         </div>
       </div>
 
-      {%- comment -%} Navigation Columns (blocks) {%- endcomment -%}
-      {%- for block in section.blocks -%}
-        {%- case block.type -%}
-          {%- when 'menu' -%}
-            <div class="site-footer__col" {{ block.shopify_attributes }}>
-              <h3 class="site-footer__col-title">{{ block.settings.title }}</h3>
-              {%- assign footer_menu = linklists[block.settings.menu] -%}
-              {%- if footer_menu != blank and footer_menu.links.size > 0 -%}
-                <ul class="site-footer__menu" role="list">
-                  {%- for link in footer_menu.links -%}
-                    <li>
-                      <a href="{{ link.url }}" class="site-footer__menu-link">
-                        {% render 'icon', name: 'chevron-right', size: 12 %}
-                        {{ link.title }}
-                      </a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
-              {%- endif -%}
-            </div>
+      {%- comment -%} Navigation Columns (blocks with fallback) {%- endcomment -%}
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'menu' -%}
+              <div class="site-footer__col" {{ block.shopify_attributes }}>
+                <h3 class="site-footer__col-title">{{ block.settings.title }}</h3>
+                {%- assign footer_menu = linklists[block.settings.menu] -%}
+                {%- if footer_menu != blank and footer_menu.links.size > 0 -%}
+                  <ul class="site-footer__menu" role="list">
+                    {%- for link in footer_menu.links -%}
+                      <li>
+                        <a href="{{ link.url }}" class="site-footer__menu-link">
+                          {% render 'icon', name: 'chevron-right', size: 12 %}
+                          {{ link.title }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
 
-          {%- when 'newsletter' -%}
-            <div class="site-footer__col site-footer__col--newsletter" {{ block.shopify_attributes }}>
-              <h3 class="site-footer__col-title">{{ block.settings.title | default: "Download Catalog" }}</h3>
-              <p class="site-footer__newsletter-desc">{{ block.settings.description | default: "Subscribe to receive our latest product catalog and technical datasheets." }}</p>
+            {%- when 'newsletter' -%}
+              <div class="site-footer__col site-footer__col--newsletter" {{ block.shopify_attributes }}>
+                <h3 class="site-footer__col-title">{{ block.settings.title | default: "Download Catalog" }}</h3>
+                <p class="site-footer__newsletter-desc">{{ block.settings.description | default: "Subscribe to receive our latest product catalog and technical datasheets." }}</p>
 
-              {%- form 'customer', class: 'site-footer__newsletter-form' -%}
-                <input type="hidden" name="contact[tags]" value="newsletter,catalog_download">
-                <div class="site-footer__newsletter-field">
-                  <input
-                    type="email"
-                    name="contact[email]"
-                    class="form-input site-footer__newsletter-input"
-                    placeholder="Enter business email"
-                    required
-                  >
-                  <button type="submit" class="btn btn--accent site-footer__newsletter-btn" aria-label="Subscribe">
-                    {% render 'icon', name: 'arrow-right', size: 18 %}
-                  </button>
-                </div>
-              {%- endform -%}
+                {%- form 'customer', class: 'site-footer__newsletter-form' -%}
+                  <input type="hidden" name="contact[tags]" value="newsletter,catalog_download">
+                  <div class="site-footer__newsletter-field">
+                    <input
+                      type="email"
+                      name="contact[email]"
+                      class="form-input site-footer__newsletter-input"
+                      placeholder="Enter business email"
+                      required
+                    >
+                    <button type="submit" class="btn btn--accent site-footer__newsletter-btn" aria-label="Subscribe">
+                      {% render 'icon', name: 'arrow-right', size: 18 %}
+                    </button>
+                  </div>
+                {%- endform -%}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      {%- else -%}
+        <div class="site-footer__col">
+          <h3 class="site-footer__col-title">Quick Links</h3>
+          <ul class="site-footer__menu" role="list">
+            <li><a href="{{ routes.root_url }}" class="site-footer__menu-link">{% render 'icon', name: 'chevron-right', size: 12 %} Home</a></li>
+            <li><a href="{{ routes.root_url }}#company-overview" class="site-footer__menu-link">{% render 'icon', name: 'chevron-right', size: 12 %} About Us</a></li>
+            <li><a href="{{ routes.collections_url }}" class="site-footer__menu-link">{% render 'icon', name: 'chevron-right', size: 12 %} Product Range</a></li>
+            <li><a href="{{ routes.root_url }}#industries" class="site-footer__menu-link">{% render 'icon', name: 'chevron-right', size: 12 %} Key Industries</a></li>
+            <li><a href="{{ routes.root_url }}#google-map" class="site-footer__menu-link">{% render 'icon', name: 'chevron-right', size: 12 %} Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="site-footer__col">
+          <h3 class="site-footer__col-title">Solutions</h3>
+          <ul class="site-footer__menu" role="list">
+            <li><a href="{{ routes.root_url }}#product-categories" class="site-footer__menu-link">{% render 'icon', name: 'chevron-right', size: 12 %} Interactive Kiosks</a></li>
+            <li><a href="{{ routes.root_url }}#product-categories" class="site-footer__menu-link">{% render 'icon', name: 'chevron-right', size: 12 %} Digital Signages</a></li>
+            <li><a href="{{ routes.root_url }}#product-categories" class="site-footer__menu-link">{% render 'icon', name: 'chevron-right', size: 12 %} Outdoor Display Kiosks</a></li>
+            <li><a href="{{ routes.root_url }}#product-categories" class="site-footer__menu-link">{% render 'icon', name: 'chevron-right', size: 12 %} Electrical Enclosures</a></li>
+          </ul>
+        </div>
+        <div class="site-footer__col site-footer__col--newsletter">
+          <h3 class="site-footer__col-title">Download Catalog</h3>
+          <p class="site-footer__newsletter-desc">Subscribe to receive our latest product catalog and technical datasheets.</p>
+          {%- form 'customer', class: 'site-footer__newsletter-form' -%}
+            <input type="hidden" name="contact[tags]" value="newsletter,catalog_download">
+            <div class="site-footer__newsletter-field">
+              <input
+                type="email"
+                name="contact[email]"
+                class="form-input site-footer__newsletter-input"
+                placeholder="Enter business email"
+                required
+              >
+              <button type="submit" class="btn btn--accent site-footer__newsletter-btn" aria-label="Subscribe">
+                {% render 'icon', name: 'arrow-right', size: 18 %}
+              </button>
             </div>
-        {%- endcase -%}
-      {%- endfor -%}
+          {%- endform -%}
+        </div>
+      {%- endif -%}
 
     </div>
 

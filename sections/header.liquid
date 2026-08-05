@@ -217,11 +217,11 @@
         {%- else -%}
           <li class="header-nav__item"><a href="{{ routes.root_url }}" class="header-nav__link is-active">Home</a></li>
           <li class="header-nav__item"><a href="/collections/all" class="header-nav__link">Products</a></li>
-          <li class="header-nav__item"><a href="#product-categories" class="header-nav__link">Categories</a></li>
-          <li class="header-nav__item"><a href="#company-overview" class="header-nav__link">Company</a></li>
-          <li class="header-nav__item"><a href="#industries" class="header-nav__link">Industries</a></li>
-          <li class="header-nav__item"><a href="#manufacturing-process" class="header-nav__link">Process</a></li>
-          <li class="header-nav__item"><a href="/pages/contact" class="header-nav__link">Contact</a></li>
+          <li class="header-nav__item"><a href="{{ routes.root_url }}#product-categories" class="header-nav__link">Categories</a></li>
+          <li class="header-nav__item"><a href="{{ routes.root_url }}#company-overview" class="header-nav__link">Company</a></li>
+          <li class="header-nav__item"><a href="{{ routes.root_url }}#industries" class="header-nav__link">Industries</a></li>
+          <li class="header-nav__item"><a href="{{ routes.root_url }}#manufacturing-process" class="header-nav__link">Process</a></li>
+          <li class="header-nav__item"><a href="{{ routes.root_url }}#google-map" class="header-nav__link">Contact</a></li>
         {%- endif -%}
         </ul>
       </nav>
@@ -243,7 +243,7 @@
         {%- comment -%} Request a Quote CTA {%- endcomment -%}
         {%- if section.settings.cta_text != blank -%}
           <a
-            href="{{ section.settings.cta_url | default: '/pages/contact' }}"
+            href="{{ section.settings.cta_url | default: '#google-map' }}"
             class="btn btn--primary btn--sm header-actions__cta"
             id="header-cta-btn"
           >
@@ -386,7 +386,7 @@
   <div class="mobile-menu__footer">
     {%- if section.settings.cta_text != blank -%}
       <a
-        href="{{ section.settings.cta_url | default: '/pages/contact' }}"
+        href="{{ section.settings.cta_url | default: '#google-map' }}"
         class="btn btn--primary"
         style="width: 100%"
       >
