@@ -279,6 +279,7 @@
   role="search"
   aria-label="Search products"
   id="search-overlay"
+  style="display: none;"
 >
   <div class="container">
     <form action="{{ routes.search_url }}" method="get" class="search-bar-strip__form" role="search">
@@ -863,16 +864,16 @@
     color: var(--color-white);
   }
 
-  /* ── Header Search Slide-Down Strip (No Page Masking) ──────────────────────── */
+  /* ── Header Search Slide-Down Strip (Corporate Dark Styling) ──────────────────────── */
   .search-bar-strip {
     display: none;
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    background-color: var(--color-white);
-    border-bottom: 1px solid var(--color-border);
-    box-shadow: 0 10px 25px rgba(0, 31, 64, 0.12);
+    background: #001730;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 25px rgba(0, 15, 32, 0.4);
     padding-block: 0.6rem;
     z-index: 100;
     opacity: 0;
@@ -882,7 +883,7 @@
   }
 
   .search-bar-strip.is-active {
-    display: block;
+    display: block !important;
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
