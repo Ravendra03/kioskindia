@@ -2,11 +2,16 @@
   MAXWELL SEARCH RESULTS SECTION — ENTERPRISE EDITION
 {%- endcomment -%}
 
-<section class="section search-page">
+<div class="search-hero bg-industrial-grid-dark">
   <div class="container">
+    <div class="search-hero__inner" data-animate="fade-up">
 
-    <div class="search-page__header" data-animate="fade-up">
-      <h1 class="search-page__title">
+      <div class="eyebrow eyebrow--light">
+        <span class="eyebrow__dot" aria-hidden="true"></span>
+        Catalog Search · Instant Specs Lookup
+      </div>
+
+      <h1 class="search-hero__title">
         {%- if search.performed -%}
           Search Results for &ldquo;{{ search.terms | escape }}&rdquo;
         {%- else -%}
@@ -14,12 +19,12 @@
         {%- endif -%}
       </h1>
 
-      <form action="{{ routes.search_url }}" method="get" role="search" class="search-page__form">
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-hero__form">
         <input
           type="search"
           name="q"
           value="{{ search.terms | escape }}"
-          class="form-input search-page__input"
+          class="form-input search-hero__input"
           placeholder="Search interactive kiosks, outdoor signages, enclosures..."
           aria-label="Search product catalog"
           required
@@ -29,7 +34,13 @@
           <span class="btn__icon" aria-hidden="true">{% render 'icon', name: 'search', size: 18 %}</span>
         </button>
       </form>
+
     </div>
+  </div>
+</div>
+
+<section class="section search-page">
+  <div class="container">
 
     {%- if search.performed -%}
       {%- paginate search.results by 12 -%}
@@ -95,32 +106,49 @@
 </section>
 
 <style>
-  .search-page__header {
+  .search-hero {
+    background: linear-gradient(135deg, #001730 0%, #002B56 50%, #001226 100%);
+    color: var(--color-white);
+    padding-block: clamp(2rem, 3.5vw, 3rem);
     text-align: center;
-    margin-bottom: var(--space-10);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .search-page__title {
-    font-size: var(--text-3xl);
+  .search-hero__inner {
+    max-width: 680px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .search-hero__title {
+    font-size: clamp(1.85rem, 3vw, 2.5rem);
     font-weight: 800;
-    color: var(--color-text);
-    margin-bottom: var(--space-6);
+    color: var(--color-white);
+    margin-bottom: var(--space-4);
   }
 
-  .search-page__form {
+  .search-hero__form {
     display: flex;
     gap: var(--space-3);
-    max-width: 600px;
-    margin-inline: auto;
+    width: 100%;
   }
 
-  .search-page__input {
+  .search-hero__input {
     flex: 1;
+    background-color: #FFFFFF;
+    color: var(--color-text);
+  }
+
+  .search-page {
+    background-color: var(--color-bg-page, #FFFFFF);
+    padding-block: var(--space-6) var(--space-12);
   }
 
   .search-page__count {
     font-size: var(--text-sm);
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-bold);
     color: var(--color-text-muted);
     margin-bottom: var(--space-6);
   }
@@ -235,7 +263,7 @@
     .search-page__grid {
       grid-template-columns: 1fr;
     }
-    .search-page__form {
+    .search-hero__form {
       flex-direction: column;
     }
   }

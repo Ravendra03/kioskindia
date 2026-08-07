@@ -1,40 +1,25 @@
 {%- comment -%}
-  MAXWELL COLLECTION CATALOG SECTION — ENTERPRISE EDITION
+  MAXWELL COLLECTION CATALOG SECTION — ENTERPRISE EDITION (ULTRA COMPACT LAYOUT)
 {%- endcomment -%}
 
 <section class="section collection-page">
   <div class="container">
 
-    {%- comment -%} Collection Banner & Breadcrumbs {%- endcomment -%}
-    <div class="collection-page__header" data-animate="fade-up">
-      <div class="collection-page__breadcrumbs">
-        <a href="{{ routes.root_url }}">Home</a>
-        <span aria-hidden="true">/</span>
-        <span class="is-active">{{ collection.title | default: 'Products' }}</span>
-      </div>
-
-      <h1 class="collection-page__title">
-        {{ collection.title | default: 'Product Catalog' }}
-      </h1>
-
-      {%- if collection.description != blank -%}
-        <div class="collection-page__desc">
-          {{ collection.description }}
+    {%- comment -%} Compact Top Bar (Breadcrumbs + Title + Sort + Product Count) {%- endcomment -%}
+    <div class="collection-page__top-bar" data-animate="fade-up">
+      <div class="collection-page__heading-wrap">
+        <div class="collection-page__breadcrumbs">
+          <a href="{{ routes.root_url }}">Home</a>
+          <span aria-hidden="true" class="sep">/</span>
+          <span class="is-active">{{ collection.title | default: 'Products' }}</span>
         </div>
-      {%- else -%}
-        <p class="collection-page__desc">
-          Browse our complete range of custom-engineered interactive kiosks, digital signage totems, and IP65 electrical enclosures.
-        </p>
-      {%- endif -%}
-    </div>
-
-    {%- comment -%} Filter & Sort Toolbar {%- endcomment -%}
-    <div class="collection-page__toolbar" data-animate="fade-up">
-      <div class="collection-page__count">
-        Showing {{ collection.products_count }} product{% if collection.products_count != 1 %}s{% endif %}
+        <h1 class="collection-page__title">
+          {{ collection.title | default: 'Product Catalog' }}
+          <span class="collection-page__count-badge">{{ collection.products_count }} Products</span>
+        </h1>
       </div>
 
-      <div class="collection-page__sort">
+      <div class="collection-page__sort-wrap">
         <label for="sort-by" class="collection-page__sort-label">Sort by:</label>
         <select id="sort-by" class="form-select collection-page__sort-select" onchange="location = this.value;">
           <option value="{{ collection.url }}?sort_by=manual">Featured</option>
@@ -44,6 +29,20 @@
           <option value="{{ collection.url }}?sort_by=created-descending">Date, new to old</option>
         </select>
       </div>
+    </div>
+
+    {%- comment -%} Quick Category Filter Pills {%- endcomment -%}
+    <div class="collection-page__category-pills" data-animate="fade-up">
+      <a href="/collections/all" class="category-pill is-active">
+        All Products
+      </a>
+      {%- for cat in collections -%}
+        {%- if cat.handle != 'all' and cat.products_count > 0 -%}
+          <a href="{{ cat.url }}" class="category-pill{% if cat.handle == collection.handle %} is-active{% endif %}">
+            {{ cat.title }} ({{ cat.products_count }})
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
     </div>
 
     {%- comment -%} Product Grid {%- endcomment -%}
@@ -157,7 +156,18 @@
 
 <style>
   .collection-page {
-    padding-block: var(--space-12) var(--space-20);
+    background-color: var(--color-bg-page, #FFFFFF);
+    padding-block: var(--space-4) var(--space-12);
+  }
+
+  .collection-page__top-bar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-4);
+    gap: var(--space-4);
   }
 
   .collection-page__breadcrumbs {
@@ -167,7 +177,7 @@
     font-size: var(--text-xs);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-muted);
-    margin-bottom: var(--space-4);
+    margin-bottom: 0.25rem;
   }
 
   .collection-page__breadcrumbs a {
@@ -175,49 +185,38 @@
     text-decoration: none;
   }
 
-  .collection-page__header {
-    text-align: center;
-    max-width: 760px;
-    margin-inline: auto;
-    margin-bottom: var(--space-10);
+  .collection-page__breadcrumbs .sep {
+    color: var(--color-text-light);
+  }
+
+  .collection-page__breadcrumbs .is-active {
+    color: var(--color-text);
   }
 
   .collection-page__title {
-    font-size: var(--text-4xl);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
     font-weight: 800;
     color: var(--color-text);
-    margin-bottom: var(--space-3);
-  }
-
-  .collection-page__desc {
-    font-size: var(--text-base);
-    color: var(--color-text-muted);
-    line-height: var(--leading-relaxed);
     margin: 0;
-  }
-
-  .collection-page__toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-4) var(--space-6);
-    background-color: var(--color-white);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    margin-bottom: var(--space-8);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .collection-page__count {
-    font-size: var(--text-sm);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text);
-  }
-
-  .collection-page__sort {
     display: flex;
     align-items: center;
     gap: var(--space-3);
+  }
+
+  .collection-page__count-badge {
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(0, 51, 102, 0.1);
+  }
+
+  .collection-page__sort-wrap {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
   }
 
   .collection-page__sort-label {
@@ -225,15 +224,54 @@
     font-weight: var(--font-weight-bold);
     color: var(--color-text-muted);
     text-transform: uppercase;
+    white-space: nowrap;
   }
 
   .collection-page__sort-select {
-    padding: 0.4rem 1rem;
+    padding: 0.4rem 0.85rem;
     font-size: var(--text-xs);
     font-weight: var(--font-weight-semibold);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     background-color: var(--color-bg-section);
+  }
+
+  .collection-page__category-pills {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    overflow-x: auto;
+    padding-bottom: var(--space-3);
+    margin-bottom: var(--space-6);
+    scrollbar-width: thin;
+  }
+
+  .category-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.45rem 1rem;
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    background-color: var(--color-bg-section);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all var(--transition);
+  }
+
+  .category-pill:hover {
+    background-color: var(--color-primary-light);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .category-pill.is-active {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
   }
 
   .collection-page__grid {
@@ -242,7 +280,7 @@
     gap: var(--space-6);
   }
 
-  /* Fixed Product Card Image Sizing */
+  /* Product Card Image Sizing */
   .product-card {
     background-color: var(--color-white);
     border: 1px solid var(--color-border);
@@ -374,13 +412,12 @@
   }
 
   @media (max-width: 640px) {
+    .collection-page__top-bar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
     .collection-page__grid {
       grid-template-columns: 1fr;
-    }
-    .collection-page__toolbar {
-      flex-direction: column;
-      gap: var(--space-3);
-      align-items: flex-start;
     }
   }
 </style>

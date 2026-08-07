@@ -80,14 +80,11 @@
         "heading": "Trusted Manufacturer of Kiosks & Digital Signages",
         "subheading": "Custom-engineered interactive kiosks, digital signages, and electrical enclosures for hospitals, government, corporates, and smart city projects across India.",
         "cta_primary_text": "Explore Products",
-        "cta_primary_url": "",
         "cta_secondary_text": "Request a Quote",
-        "cta_secondary_url": "",
         "overlay_opacity": 80,
         "min_height": 90,
         "stats_card_label": "Our Achievements",
         "stats_cta_text": "View all projects",
-        "stats_cta_url": "",
         "show_trust_badges": true,
         "show_scroll_indicator": false
       }
@@ -182,9 +179,6 @@
         "experience_number": "8+",
         "experience_label": "Years of Excellence",
         "cta_primary_text": "Company Profile",
-        "cta_primary_url": "",
-        "video_url": "",
-        "video_cta_text": "Watch our process",
         "show_timeline": true,
         "timeline_heading": "Our Journey"
       }
@@ -200,10 +194,8 @@
             "description": "Touch-enabled kiosks for airports, hospitals, retail, banks, and government offices.",
             "category": "Kiosks",
             "product_count": "18 Products",
-            "badge": "",
             "placeholder_icon": "monitor",
-            "cta_text": "Explore Kiosks",
-            "link": ""
+            "cta_text": "Explore Kiosks"
           }
         },
         "cat-2": {
@@ -214,11 +206,8 @@
             "description": "High-brightness LED & LCD signage for malls, transit hubs, and corporate offices.",
             "category": "Signage",
             "product_count": "14 Products",
-            "badge": "",
-            "image": "shopify://shop_images/WhatsApp_Image_2026-08-06_at_1.44.26_PM_4.jpg",
             "placeholder_icon": "monitor",
-            "cta_text": "Explore Signage",
-            "link": ""
+            "cta_text": "Explore Signage"
           }
         },
         "cat-3": {
@@ -228,11 +217,9 @@
             "subtitle": "Secure storage & parcel systems",
             "description": "Automated locker systems for offices, universities, and e-commerce last-mile delivery.",
             "category": "Kiosks",
-            "product_count": "18 Products",
             "badge": "New",
             "placeholder_icon": "package",
-            "cta_text": "View Lockers",
-            "link": ""
+            "cta_text": "View Lockers"
           }
         },
         "cat-4": {
@@ -243,10 +230,8 @@
             "description": "Powder-coated MS & stainless steel enclosures for industrial and OEM applications.",
             "category": "Enclosures",
             "product_count": "22 Products",
-            "badge": "",
             "placeholder_icon": "package",
-            "cta_text": "View Enclosures",
-            "link": ""
+            "cta_text": "View Enclosures"
           }
         },
         "cat-5": {
@@ -256,11 +241,8 @@
             "subtitle": "Token & display systems",
             "description": "Complete queue management hardware for banks, hospitals, and service centres.",
             "category": "Kiosks",
-            "product_count": "18 Products",
-            "badge": "",
             "placeholder_icon": "layers",
-            "cta_text": "View Systems",
-            "link": ""
+            "cta_text": "View Systems"
           }
         },
         "cat-6": {
@@ -270,11 +252,9 @@
             "subtitle": "Weather-proof public installations",
             "description": "IP65-rated outdoor kiosks for metro stations, bus stops, and smart city projects.",
             "category": "Kiosks",
-            "product_count": "18 Products",
             "badge": "Popular",
             "placeholder_icon": "factory",
-            "cta_text": "Explore Outdoor",
-            "link": ""
+            "cta_text": "Explore Outdoor"
           }
         }
       },
@@ -412,8 +392,7 @@
         "heading": "Powering India's Key Sectors",
         "subtitle": "Our solutions are deployed across India's most demanding environments — from smart hospitals to government offices and transit hubs.",
         "show_stats": true,
-        "cta_text": "Discuss Your Project",
-        "cta_url": ""
+        "cta_text": "Discuss Your Project"
       }
     },
     "featured-products": {
@@ -424,9 +403,7 @@
           "settings": {
             "title": "Floor-Standing Interactive Kiosk",
             "description": "21.5\" touch display, i5 processor, thermal printer, card reader — for airports, hospitals, retail.",
-            "price": "",
-            "badge": "Best Seller",
-            "link": ""
+            "badge": "Best Seller"
           }
         },
         "fp-2": {
@@ -434,9 +411,7 @@
           "settings": {
             "title": "Outdoor Digital Signage Totem",
             "description": "IP65 weatherproof, 2500-nit brightness, 65\" 4K display for smart city and transit installations.",
-            "price": "",
-            "badge": "Popular",
-            "link": ""
+            "badge": "Popular"
           }
         },
         "fp-3": {
@@ -444,9 +419,7 @@
           "settings": {
             "title": "Smart Locker System",
             "description": "Modular intelligent locker with cloud-based access control for office, campus, and courier use.",
-            "price": "",
-            "badge": "New",
-            "link": ""
+            "badge": "New"
           }
         },
         "fp-4": {
@@ -454,9 +427,7 @@
           "settings": {
             "title": "Queue Management Kiosk",
             "description": "Token-dispensing kiosk with SMS alert integration for banks, hospitals, government offices.",
-            "price": "",
-            "badge": "Featured",
-            "link": ""
+            "badge": "Featured"
           }
         }
       },
@@ -470,7 +441,6 @@
         "eyebrow": "Top Products",
         "heading": "Our Flagship Products",
         "subtitle": "Precision-built products trusted by 200+ clients across India.",
-        "collection": "",
         "products_to_show": 4,
         "card_cta_text": "View Details",
         "cta_text": "View All Products"
@@ -550,8 +520,7 @@
         "show_guarantee": true,
         "guarantee_title": "Maxwell Quality Guarantee",
         "guarantee_text": "Every product ships with a minimum 1-year comprehensive warranty, post-installation support, and a dedicated account manager for enterprise clients.",
-        "guarantee_cta_text": "Contact Our Team",
-        "guarantee_cta_url": ""
+        "guarantee_cta_text": "Contact Our Team"
       }
     },
     "why-choose-us": {
@@ -562,9 +531,7 @@
           "settings": {
             "icon": "factory",
             "title": "100% In-House Production",
-            "description": "Complete manufacturing control from raw metal sheets to finished kiosk assembly at our Vatwa unit.",
-            "metric": "100%",
-            "metric_label": "In-House"
+            "description": "Complete manufacturing control from raw metal sheets to finished kiosk assembly at our Vatwa unit."
           }
         },
         "w-2": {
@@ -572,9 +539,7 @@
           "settings": {
             "icon": "shield",
             "title": "ISO 9001:2015 Certified",
-            "description": "Strict quality protocols ensuring rugged hardware reliability, thermal compliance, and IP rating security.",
-            "metric": "100%",
-            "metric_label": "In-House"
+            "description": "Strict quality protocols ensuring rugged hardware reliability, thermal compliance, and IP rating security."
           }
         },
         "w-3": {
@@ -582,9 +547,7 @@
           "settings": {
             "icon": "cog",
             "title": "Bespoke Customization",
-            "description": "Tailor-made designs for specialized peripheral integration including biometric, thermal printers, and POS.",
-            "metric": "100%",
-            "metric_label": "In-House"
+            "description": "Tailor-made designs for specialized peripheral integration including biometric, thermal printers, and POS."
           }
         },
         "w-4": {
@@ -592,9 +555,7 @@
           "settings": {
             "icon": "award",
             "title": "Industrial Grade Materials",
-            "description": "Heavy gauge CRCA/SS sheet fabrication with anti-vandal toughened glass and premium powder coating finish.",
-            "metric": "100%",
-            "metric_label": "In-House"
+            "description": "Heavy gauge CRCA/SS sheet fabrication with anti-vandal toughened glass and premium powder coating finish."
           }
         },
         "w-5": {
@@ -602,9 +563,7 @@
           "settings": {
             "icon": "truck",
             "title": "Pan-India Logistics",
-            "description": "Safe wooden crate packaging and reliable freight distribution network delivering across all Indian states.",
-            "metric": "100%",
-            "metric_label": "In-House"
+            "description": "Safe wooden crate packaging and reliable freight distribution network delivering across all Indian states."
           }
         },
         "w-6": {
@@ -612,9 +571,7 @@
           "settings": {
             "icon": "headphones",
             "title": "Dedicated SLA Support",
-            "description": "Robust post-deployment technical assistance, spare supply, and remote maintenance support.",
-            "metric": "100%",
-            "metric_label": "In-House"
+            "description": "Robust post-deployment technical assistance, spare supply, and remote maintenance support."
           }
         }
       },
@@ -630,21 +587,7 @@
         "eyebrow": "Why Partner With Maxwell",
         "heading": "Enterprise Grade Excellence in Manufacturing",
         "subtitle": "We deliver custom interactive hardware built to international standards with complete in-house control.",
-        "description": "",
-        "cta_text": "Talk to an Engineer",
-        "cta_url": "",
-        "show_banner": true,
-        "banner_heading": "Need a Custom Engineered Solution?",
-        "banner_subtext": "Talk directly to our chief hardware engineers for OEM design and high-volume production.",
-        "bg_color": "rgba(0,0,0,0)",
-        "overlay_opacity": 0,
-        "alignment": "center",
-        "padding_top": 80,
-        "padding_bottom": 80,
-        "hide_on_mobile": false,
-        "hide_on_desktop": false,
-        "enable_animation": true,
-        "animation_type": "fade-up"
+        "show_banner": true
       }
     },
     "projects": {
@@ -653,32 +596,22 @@
         "p-1": {
           "type": "project",
           "settings": {
-            "image": "shopify://shop_images/WhatsApp_Image_2026-08-06_at_1.44.26_PM_4.jpg",
             "title": "Smart OPD Check-in Kiosks",
-            "category": "Healthcare",
-            "description": "High-speed thermal printer equipped check-in terminals reducing patient wait times by 40%.",
-            "client_badge": "AIIMS Hospital",
-            "metric": "45 Kiosks Deployed"
+            "description": "High-speed thermal printer equipped check-in terminals reducing patient wait times by 40%."
           }
         },
         "p-2": {
           "type": "project",
           "settings": {
             "title": "Outdoor IP65 Information Totems",
-            "category": "Healthcare",
-            "description": "2500-nit high brightness outdoor digital signage displays engineered for extreme weather.",
-            "client_badge": "AIIMS Hospital",
-            "metric": "45 Kiosks Deployed"
+            "description": "2500-nit high brightness outdoor digital signage displays engineered for extreme weather."
           }
         },
         "p-3": {
           "type": "project",
           "settings": {
             "title": "Citizen Services Payment Terminals",
-            "category": "Healthcare",
-            "description": "Ruggedized cash and UPI acceptance kiosks providing 24/7 public utility payments.",
-            "client_badge": "AIIMS Hospital",
-            "metric": "45 Kiosks Deployed"
+            "description": "Ruggedized cash and UPI acceptance kiosks providing 24/7 public utility payments."
           }
         }
       },
@@ -691,18 +624,7 @@
         "eyebrow": "Case Studies",
         "heading": "Featured Installations Across India",
         "subtitle": "Explore key deployments delivered for government, healthcare, smart cities, and enterprise clients.",
-        "description": "",
-        "cta_text": "Explore All Projects",
-        "cta_url": "",
-        "bg_color": "rgba(0,0,0,0)",
-        "overlay_opacity": 0,
-        "alignment": "left",
-        "padding_top": 80,
-        "padding_bottom": 80,
-        "hide_on_mobile": false,
-        "hide_on_desktop": false,
-        "enable_animation": true,
-        "animation_type": "fade-up"
+        "cta_text": "Explore All Projects"
       }
     },
     "clients": {
@@ -763,19 +685,7 @@
       "settings": {
         "eyebrow": "Trusted Nationwide",
         "heading": "Trusted by 200+ Enterprises & Institutions",
-        "subtitle": "Partnering with leading healthcare providers, government organizations, and system integrators.",
-        "description": "",
-        "cta_text": "Become a Partner",
-        "cta_url": "",
-        "bg_color": "rgba(0,0,0,0)",
-        "overlay_opacity": 0,
-        "alignment": "center",
-        "padding_top": 60,
-        "padding_bottom": 60,
-        "hide_on_mobile": false,
-        "hide_on_desktop": false,
-        "enable_animation": true,
-        "animation_type": "fade-up"
+        "subtitle": "Partnering with leading healthcare providers, government organizations, and system integrators."
       }
     },
     "testimonials": {
@@ -817,19 +727,7 @@
       "settings": {
         "eyebrow": "Client Reviews",
         "heading": "What Industry Leaders Say About Maxwell",
-        "subtitle": "Read feedback from healthcare administrators, smart city project heads, and system integrators.",
-        "description": "",
-        "cta_text": "Read More Case Studies",
-        "cta_url": "",
-        "bg_color": "rgba(0,0,0,0)",
-        "overlay_opacity": 0,
-        "alignment": "center",
-        "padding_top": 80,
-        "padding_bottom": 80,
-        "hide_on_mobile": false,
-        "hide_on_desktop": false,
-        "enable_animation": true,
-        "animation_type": "fade-up"
+        "subtitle": "Read feedback from healthcare administrators, smart city project heads, and system integrators."
       }
     },
     "certifications": {
@@ -838,37 +736,29 @@
         "cert-1": {
           "type": "cert",
           "settings": {
-            "icon": "shield",
             "title": "ISO 9001:2015 Certified",
-            "description": "Compliant quality management systems covering end-to-end hardware manufacturing.",
-            "badge_number": "ISO-9001 Certified"
+            "description": "Compliant quality management systems covering end-to-end hardware manufacturing."
           }
         },
         "cert-2": {
           "type": "cert",
           "settings": {
-            "icon": "shield",
             "title": "Make In India Initiative",
-            "description": "Proudly engineered and manufactured in Vatwa GIDC, Ahmedabad, Gujarat.",
-            "badge_number": "ISO-9001 Certified"
+            "description": "Proudly engineered and manufactured in Vatwa GIDC, Ahmedabad, Gujarat."
           }
         },
         "cert-3": {
           "type": "cert",
           "settings": {
-            "icon": "shield",
             "title": "MSME Registered",
-            "description": "Recognized enterprise manufacturing partner with government vendor approvals.",
-            "badge_number": "ISO-9001 Certified"
+            "description": "Recognized enterprise manufacturing partner with government vendor approvals."
           }
         },
         "cert-4": {
           "type": "cert",
           "settings": {
-            "icon": "shield",
             "title": "IP65 Weatherproof",
-            "description": "Enclosures tested and certified for dust and water ingress protection for outdoor use.",
-            "badge_number": "ISO-9001 Certified"
+            "description": "Enclosures tested and certified for dust and water ingress protection for outdoor use."
           }
         }
       },
@@ -881,19 +771,7 @@
       "settings": {
         "eyebrow": "Compliance & Quality",
         "heading": "Certified Industrial Standards",
-        "subtitle": "Manufactured strictly following national and international quality guidelines.",
-        "description": "",
-        "cta_text": "Download Compliance Certificates",
-        "cta_url": "",
-        "bg_color": "rgba(0,0,0,0)",
-        "overlay_opacity": 0,
-        "alignment": "center",
-        "padding_top": 60,
-        "padding_bottom": 60,
-        "hide_on_mobile": false,
-        "hide_on_desktop": false,
-        "enable_animation": true,
-        "animation_type": "fade-up"
+        "subtitle": "Manufactured strictly following national and international quality guidelines."
       }
     },
     "faq": {
@@ -937,19 +815,7 @@
       "settings": {
         "eyebrow": "Frequently Asked Questions",
         "heading": "Everything You Need to Know",
-        "subtitle": "Answers to common questions regarding customization, MOQ, delivery times, and warranty.",
-        "description": "",
-        "cta_text": "Still Have Questions? Contact Sales",
-        "cta_url": "",
-        "bg_color": "rgba(0,0,0,0)",
-        "overlay_opacity": 0,
-        "alignment": "center",
-        "padding_top": 80,
-        "padding_bottom": 80,
-        "hide_on_mobile": false,
-        "hide_on_desktop": false,
-        "enable_animation": true,
-        "animation_type": "fade-up"
+        "subtitle": "Answers to common questions regarding customization, MOQ, delivery times, and warranty."
       }
     },
     "contact-cta": {
@@ -968,9 +834,7 @@
           "settings": {
             "title": "Choosing IP65 Weatherproof Enclosures for Smart Cities",
             "excerpt": "Key technical considerations when deploying outdoor digital signages in extreme Indian climate conditions.",
-            "date": "Aug 02, 2026",
-            "author": "Maxwell Engineering",
-            "link": ""
+            "date": "Aug 02, 2026"
           }
         },
         "b-2": {
@@ -978,9 +842,7 @@
           "settings": {
             "title": "5 Ways Interactive Kiosks Streamline OPD Hospital Workflows",
             "excerpt": "How smart registration terminals reduce patient queuing times and improve hospital operational efficiency.",
-            "date": "Jul 28, 2026",
-            "author": "Maxwell Engineering",
-            "link": ""
+            "date": "Jul 28, 2026"
           }
         },
         "b-3": {
@@ -988,9 +850,7 @@
           "settings": {
             "title": "Sheet Metal Fabrication Standards in Industrial Enclosures",
             "excerpt": "Understanding CNC bending, powder coating thickness, and anti-vandal structural designs.",
-            "date": "Jul 15, 2026",
-            "author": "Maxwell Engineering",
-            "link": ""
+            "date": "Jul 15, 2026"
           }
         }
       },
@@ -1003,20 +863,7 @@
         "eyebrow": "Industry Insights",
         "heading": "Latest Articles & Manufacturing Trends",
         "subtitle": "Technical guides, kiosk design trends, and smart signage industry updates.",
-        "description": "",
-        "blog": "",
-        "articles_to_show": 3,
-        "cta_text": "View All Articles",
-        "cta_url": "",
-        "bg_color": "rgba(0,0,0,0)",
-        "overlay_opacity": 0,
-        "alignment": "left",
-        "padding_top": 80,
-        "padding_bottom": 80,
-        "hide_on_mobile": false,
-        "hide_on_desktop": false,
-        "enable_animation": true,
-        "animation_type": "fade-up"
+        "cta_text": "View All Articles"
       }
     },
     "google-map": {
@@ -1024,23 +871,7 @@
       "settings": {
         "eyebrow": "Factory Unit",
         "heading": "Visit Our Manufacturing Plant",
-        "subtitle": "Located in Vatwa GIDC industrial estate, Ahmedabad, Gujarat.",
-        "description": "",
-        "map_embed_url": "",
-        "factory_name": "Maxwell Automatic Factory",
-        "factory_address": "Phase 1, Vatwa GIDC, Ahmedabad, Gujarat 382445, India",
-        "factory_hours": "Mon – Sat: 9:00 AM – 7:00 PM",
-        "cta_text": "Get Directions on Google Maps",
-        "cta_url": "",
-        "bg_color": "rgba(0,0,0,0)",
-        "overlay_opacity": 0,
-        "alignment": "center",
-        "padding_top": 48,
-        "padding_bottom": 48,
-        "hide_on_mobile": false,
-        "hide_on_desktop": false,
-        "enable_animation": true,
-        "animation_type": "fade-up"
+        "subtitle": "Located in Vatwa GIDC industrial estate, Ahmedabad, Gujarat."
       }
     }
   },
