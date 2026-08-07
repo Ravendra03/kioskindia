@@ -652,6 +652,7 @@
         "p-1": {
           "type": "project",
           "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-08-06_at_1.44.26_PM_4.jpg",
             "title": "Smart OPD Check-in Kiosks",
             "category": "Healthcare",
             "description": "High-speed thermal printer equipped check-in terminals reducing patient wait times by 40%.",
