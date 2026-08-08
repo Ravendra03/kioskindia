@@ -104,7 +104,10 @@
                   <span class="product-card__badge product-card__badge--{{ badge_type }}">
                     {{ badge_text }}
                   </span>
+                {%- else -%}
+                  <span class="badge badge--sale">Save 20%</span>
                 {%- endif -%}
+                <span class="rating-pill"><span class="star-icon">★</span> 4.8</span>
               </div>
             </a>
 
@@ -239,11 +242,11 @@
   }
 
   .product-card {
-    background-color: #FFFFFF;
-    border-radius: var(--radius-lg, 16px);
+    background-color: var(--color-bg-warm, #F5EFEA);
+    border-radius: var(--radius-xl, 24px);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    border: 1px solid var(--color-border, #DDE4EA);
+    border: 1px solid var(--color-border, #E8E2DC);
     display: flex;
     flex-direction: column;
     transition: transform var(--duration-fast) ease, box-shadow var(--duration-fast) ease, border-color var(--duration-fast) ease;
@@ -251,7 +254,7 @@
 
   .product-card:hover {
     box-shadow: var(--shadow-md);
-    border-color: var(--color-blue-primary, #0866D6);
+    border-color: var(--color-orange-primary, #FF6B00);
     transform: translateY(-4px);
   }
 
@@ -259,12 +262,12 @@
     position: relative;
     overflow: hidden;
     aspect-ratio: 1 / 1;
-    max-height: 200px;
-    background-color: #FFFFFF;
+    max-height: 220px;
+    background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px;
+    padding: 16px;
   }
 
   .product-card__image {
@@ -306,32 +309,41 @@
     padding: var(--space-4);
   }
 
-  .product-card__badge {
+  .product-card__badge,
+  .badge--sale {
     position: absolute;
-    top: var(--space-3);
-    left: var(--space-3);
-    font-size: 0.62rem;
+    top: 12px;
+    left: 12px;
+    font-size: 0.72rem;
     font-weight: var(--font-weight-bold);
-    letter-spacing: var(--tracking-wider);
-    text-transform: uppercase;
-    padding: 0.2rem 0.55rem;
-    border-radius: var(--radius-full);
+    letter-spacing: var(--tracking-wide);
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-full, 50px);
     line-height: 1;
+    background-color: var(--color-sale-red, #E51D48);
+    color: #FFFFFF !important;
+    z-index: 2;
   }
 
-  .product-card__badge--new {
-    background-color: var(--color-primary);
-    color: var(--color-white);
+  .rating-pill {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0.3rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-bold);
+    color: #171717;
+    background-color: #FFFFFF;
+    border-radius: var(--radius-full, 50px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    z-index: 2;
   }
 
-  .product-card__badge--sale {
-    background-color: #e53e3e;
-    color: var(--color-white);
-  }
-
-  .product-card__badge--featured {
-    background-color: var(--color-accent);
-    color: var(--color-white);
+  .rating-pill .star-icon {
+    color: var(--color-star-gold, #F59E0B);
   }
 
   .product-card__body {
