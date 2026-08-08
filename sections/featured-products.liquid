@@ -216,7 +216,7 @@
 
 <style>
   .featured-products {
-    background-color: #F8FAFC !important;
+    background-color: #FAFAFA !important;
     position: relative;
     z-index: 1;
   }
@@ -241,18 +241,18 @@
 
   .product-card {
     background-color: #FFFFFF;
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-md, 25px);
     overflow: hidden;
-    box-shadow: 0 4px 14px rgba(0, 31, 63, 0.06);
-    border: 1px solid #E2E8F0;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid #E5E5E5;
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    transition: transform var(--duration-instant) ease, box-shadow var(--duration-instant) ease, border-color var(--duration-instant) ease;
   }
 
   .product-card:hover {
-    box-shadow: 0 12px 30px rgba(0, 136, 255, 0.18);
-    border-color: #0088FF;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+    border-color: #E0A580;
     transform: translateY(-4px);
   }
 
