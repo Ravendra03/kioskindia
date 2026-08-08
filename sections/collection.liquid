@@ -264,15 +264,15 @@
   }
 
   .category-pill:hover {
-    background-color: #171717;
-    border-color: #171717;
-    color: #E0A580;
+    background-color: var(--color-blue-primary, #0866D6);
+    border-color: var(--color-blue-primary, #0866D6);
+    color: #FFFFFF;
   }
 
   .category-pill.is-active {
-    background-color: #000000;
+    background-color: var(--color-blue-primary, #0866D6);
     color: #FFFFFF;
-    border-color: #000000;
+    border-color: var(--color-blue-primary, #0866D6);
   }
 
   .collection-page__grid {
@@ -284,18 +284,19 @@
   /* Product Card Image Sizing */
   .product-card {
     background-color: var(--color-white);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-2xl);
+    border: 1px solid var(--color-border, #DDE4EA);
+    border-radius: var(--radius-lg, 16px);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     box-shadow: var(--shadow-sm);
-    transition: transform var(--transition-bounce), box-shadow var(--transition-bounce);
+    transition: transform var(--transition), box-shadow var(--transition);
   }
 
   .product-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-xl);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-blue-primary, #0866D6);
   }
 
   .product-card__image-link {

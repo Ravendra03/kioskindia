@@ -431,8 +431,8 @@
 
   /* Corporate Header States */
   .site-header {
-    background-color: #000000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    background-color: var(--color-navy-primary, #062B49);
+    box-shadow: 0 4px 20px rgba(3, 28, 47, 0.35);
   }
 
   .site-header.header--transparent .header-topbar {
@@ -440,8 +440,8 @@
   }
 
   .site-header.header--scrolled {
-    background-color: #000000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    background-color: var(--color-navy-primary, #062B49);
+    box-shadow: 0 4px 20px rgba(3, 28, 47, 0.45);
   }
 
   /* Hide on scroll down (mobile) */
@@ -451,7 +451,7 @@
 
   /* ── Top Info Bar ───────────────────────────────────────────────────────── */
   .header-topbar {
-    background-color: var(--color-primary);
+    background-color: var(--color-navy-deep, #031C2F);
     color: rgba(255, 255, 255, 0.9);
     font-size: var(--text-xs);
     padding-block: 0.5rem;
@@ -493,9 +493,9 @@
     letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
     padding: 0.2rem 0.6rem;
-    background-color: rgba(224, 165, 128, 0.15);
-    color: var(--color-accent);
-    border: 1px solid rgba(224, 165, 128, 0.3);
+    background-color: rgba(242, 140, 40, 0.12);
+    color: var(--color-orange-accent, #F28C28);
+    border: 1px solid rgba(242, 140, 40, 0.25);
     border-radius: var(--radius-full);
     white-space: nowrap;
   }
@@ -519,7 +519,7 @@
 
   /* ── Main Nav Bar ───────────────────────────────────────────────────────── */
   .header-main {
-    background-color: #000000;
+    background-color: var(--color-navy-primary, #062B49);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     transition: background-color var(--duration-slow) var(--ease-out);
   }
@@ -549,16 +549,16 @@
   .brand-logo__emblem {
     width: 40px;
     height: 40px;
-    border-radius: var(--radius-md);
-    background: linear-gradient(135deg, #171717 0%, #000000 100%);
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, #0866D6 0%, #062B49 100%);
     color: #FFFFFF;
     font-size: 1.35rem;
     font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.45), 0 4px 14px rgba(224, 165, 128, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.35), 0 4px 14px rgba(8, 102, 214, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.25);
   }
 
   .brand-logo__title {
@@ -573,7 +573,7 @@
   .brand-logo__subtitle {
     font-size: 0.62rem;
     font-weight: 700;
-    color: #E0A580;
+    color: var(--color-orange-accent, #F28C28);
     letter-spacing: 0.12em;
     display: block;
     margin-top: 2px;
@@ -624,7 +624,7 @@
     left: var(--space-3);
     right: var(--space-3);
     height: 2px;
-    background-color: var(--color-accent);
+    background-color: var(--color-blue-primary, #0866D6);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform var(--transition);
@@ -870,9 +870,9 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: #000000;
+    background: var(--color-navy-deep, #031C2F);
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 25px rgba(3, 28, 47, 0.5);
     padding-block: 0.6rem;
     z-index: 100;
     opacity: 0;

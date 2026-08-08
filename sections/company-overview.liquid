@@ -201,16 +201,16 @@
 
   .company-overview__exp-badge {
     position: absolute;
-    bottom: var(--space-6);
-    right: var(--space-6);
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    bottom: var(--sp-4);
+    right: var(--sp-4);
+    background: linear-gradient(135deg, var(--color-navy-primary, #062B49), var(--color-navy-deep, #031C2F));
     color: var(--color-white);
-    padding: var(--space-5) var(--space-6);
-    border-radius: var(--radius-xl);
+    padding: var(--sp-3) var(--sp-4);
+    border-radius: var(--radius-lg, 16px);
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: var(--shadow-2xl);
+    box-shadow: var(--shadow-xl);
     border: 2px solid rgba(255, 255, 255, 0.2);
   }
 
@@ -250,40 +250,39 @@
   .company-overview__cap-card {
     display: flex;
     align-items: flex-start;
-    gap: var(--space-3);
-    padding: var(--space-4);
+    gap: var(--sp-2);
+    padding: var(--sp-3);
     background-color: #FFFFFF;
-    border-radius: var(--radius-xl);
-    border: 1px solid #E2E8F0;
-    box-shadow: 0 4px 14px rgba(0, 31, 63, 0.06);
+    border-radius: var(--radius-lg, 16px);
+    border: 1px solid var(--color-border, #DDE4EA);
+    box-shadow: var(--shadow-sm);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   }
 
   .company-overview__cap-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0, 31, 63, 0.12);
-    border-color: #0088FF;
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-blue-primary, #0866D6);
   }
 
   .company-overview__cap-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, #0F4C81 0%, #001A33 100%);
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md, 12px);
+    background: linear-gradient(135deg, #0866D6 0%, #062B49 100%);
     color: #FFFFFF;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.45), inset 0 -3px 6px rgba(0, 0, 0, 0.6), 0 8px 18px -2px rgba(0, 51, 102, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.35), 0 6px 14px rgba(8, 102, 214, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     transition: transform 0.3s var(--ease-out), box-shadow 0.3s ease, background 0.3s ease;
   }
 
   .company-overview__cap-card:hover .company-overview__cap-icon {
-    transform: translateY(-3px) scale(1.05);
-    background: linear-gradient(135deg, #0055A5 0%, #001A33 100%);
-    box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.6), inset 0 -3px 6px rgba(0, 0, 0, 0.4), 0 10px 22px -3px rgba(0, 85, 165, 0.4);
+    transform: translateY(-2px) scale(1.05);
+    background: linear-gradient(135deg, #147BEF 0%, #062B49 100%);
   }
 
   .company-overview__cap-title {

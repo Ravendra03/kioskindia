@@ -112,11 +112,11 @@
 
 <style>
   .contact-cta__card {
-    background: radial-gradient(circle at 10% 20%, #002244 0%, #001226 100%);
-    border-radius: var(--radius-2xl);
+    background: radial-gradient(circle at 10% 20%, #062B49 0%, #031C2F 100%);
+    border-radius: var(--radius-xl, 20px);
     padding: clamp(2rem, 5vw, 4rem);
     color: var(--color-white);
-    box-shadow: var(--shadow-2xl);
+    box-shadow: var(--shadow-xl);
     border: 1px solid rgba(255, 255, 255, 0.12);
   }
 
@@ -172,7 +172,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-accent);
+    color: var(--color-orange-accent, #F28C28);
     flex-shrink: 0;
   }
 
@@ -192,10 +192,10 @@
   /* Form Wrap */
   .contact-cta__form-wrap {
     background-color: var(--color-white);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-lg, 16px);
     padding: clamp(1.5rem, 3vw, 2.5rem);
-    color: var(--color-text);
-    box-shadow: var(--shadow-xl);
+    color: var(--color-text-primary);
+    box-shadow: var(--shadow-lg);
   }
 
   .form-grid {

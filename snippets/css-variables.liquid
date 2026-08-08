@@ -1,35 +1,104 @@
 {%- comment -%}
-  MAXWELL DESIGN SYSTEM — CSS VARIABLES & TOKENS
-  Injected into <head> via layout/theme.liquid
+  KIOSK INDIA DESIGN SYSTEM — CSS VARIABLES & TOKENS
+  Industrial B2B Theme Specification
+  WCAG 2.2 AA Compliant
 {%- endcomment -%}
 
 <style>
   :root {
-    /* ── Colors ────────────────────────────────────────────────────────────── */
-    --color-primary: {{ settings.color_primary | default: '#001F3F' }};
-    --color-primary-dark: #001226;
-    --color-primary-light: #F0F6FF;
-    --color-secondary: {{ settings.color_secondary | default: '#004C99' }};
-    --color-accent: {{ settings.color_accent | default: '#0088FF' }};
-    --color-accent-hover: #0066CC;
-    --color-accent-light: rgba(0, 136, 255, 0.12);
-    --color-gold: #F59E0B;
-    --color-steel: #64748B;
-    --color-steel-light: #F1F5F9;
-    --color-bg-page: {{ settings.color_bg | default: '#FFFFFF' }};
-    --color-bg-section: {{ settings.color_bg_alt | default: '#F8FAFC' }};
-    --color-bg-dark: #001730;
-    --color-bg-dark-alt: #000F20;
-    --color-text: {{ settings.color_text | default: '#0F172A' }};
-    --color-text-muted: {{ settings.color_text_muted | default: '#475569' }};
-    --color-text-light: #94A3B8;
-    --color-white: #FFFFFF;
-    --color-border: #E2E8F0;
-    --color-border-dark: rgba(255, 255, 255, 0.14);
+    /* ── Kiosk India Primary Palette (Industrial B2B) ──────────────────────── */
+    --color-navy-primary: #062B49;
+    --color-navy-deep: #031C2F;
+    --color-blue-primary: #0866D6;
+    --color-blue-bright: #147BEF;
+    --color-orange-accent: #F28C28;
+    
+    /* Concept & Standard Semantic Mappings */
+    --color-primary: #062B49;
+    --color-primary-dark: #031C2F;
+    --color-primary-light: #F7F9FB;
+    --color-secondary: #0866D6;
+    --color-secondary-hover: #147BEF;
+    --color-accent: #F28C28;
+    --color-accent-hover: #E07B17;
+    --color-accent-light: rgba(242, 140, 40, 0.12);
+    --color-surface-base: #FFFFFF;
 
-    /* ── Typography ────────────────────────────────────────────────────────── */
-    --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    /* RGB Triplets for Concept Theme Compatibility */
+    --color-base-text: 16 32 47;
+    --color-base-highlight: 238 242 245;
+    --color-base-background: 255 255 255;
+    --color-base-button: 8 102 214;
+    --color-base-button-gradient: #0866D6;
+    --color-base-button-text: 255 255 255;
+    --color-keyboard-focus: 8 102 214;
+    --color-shadow: 6 43 73;
+    --color-price: 16 32 47;
+    --color-sale-price: 220 53 69;
+    --color-sale-tag: 220 53 69;
+    --color-sale-tag-text: 255 255 255;
+    --color-rating: 245 158 11;
+    --color-placeholder: 247 249 251;
+    --color-success-text: 25 135 84;
+    --color-success-background: 235 247 239;
+    --color-error-text: 220 53 69;
+    --color-error-background: 253 237 239;
+    --color-info-text: 8 102 214;
+    --color-info-background: 236 244 254;
+
+    /* Surface & Background Systems */
+    --color-bg-page: #FFFFFF;
+    --color-bg-section: #F7F9FB;
+    --color-bg-alt: #EEF2F5;
+    --color-bg-dark: #062B49;
+    --color-bg-dark-alt: #031C2F;
+
+    /* Text & Content Tokens */
+    --color-text: #10202F;
+    --color-text-primary: #10202F;
+    --color-text-secondary: #5E6B76;
+    --color-text-muted: #7C8791;
+    --color-text-inverse: #FFFFFF;
+    --color-text-light: #F7F9FB;
+    --color-white: #FFFFFF;
+    
+    /* Border & Divider Tokens */
+    --color-border: #DDE4EA;
+    --color-border-light: #EEF2F5;
+    --color-border-dark: rgba(255, 255, 255, 0.15);
+    --color-steel-light: #EEF2F5;
+
+    /* Alert / Feedback Tokens */
+    --color-success: #198754;
+    --color-warning: #F59E0B;
+    --color-error: #DC3545;
+
+    /* ── Typography Foundations ────────────────────────────────────────────── */
+    --font-heading: Inter, sans-serif;
+    --font-body: Inter, sans-serif;
+    --font-heading-family: Inter, sans-serif;
+    --font-heading-style: normal;
+    --font-heading-weight: 700;
+    --font-heading-line-height: 1.15;
+    --font-heading-letter-spacing: -0.025em;
+
+    --font-body-family: Inter, sans-serif;
+    --font-body-style: normal;
+    --font-body-weight: 400;
+    --font-body-line-height: 1.5;
+    --font-body-letter-spacing: 0.0em;
+
+    --font-navigation-family: var(--font-body-family);
+    --font-navigation-size: 0.9375rem; /* 15px */
+    --font-navigation-weight: 500;
+
+    --font-button-family: var(--font-body-family);
+    --font-button-size: 0.9375rem; /* 15px */
+    --font-button-weight: 600;
+
+    --font-product-family: var(--font-body-family);
+    --font-product-size: 1.125rem; /* 18px */
+    --font-product-weight: 700;
 
     --font-weight-normal: 400;
     --font-weight-medium: 500;
@@ -37,70 +106,87 @@
     --font-weight-bold: 700;
     --font-weight-extrabold: 800;
 
-    /* Modular Fluid Typography Scale (1.25 ratio) */
-    --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.8125rem);
-    --text-sm: clamp(0.85rem, 0.82rem + 0.15vw, 0.875rem);
-    --text-base: clamp(0.95rem, 0.92rem + 0.2vw, 1rem);
-    --text-lg: clamp(1.1rem, 1.05rem + 0.3vw, 1.15rem);
-    --text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.35rem);
-    --text-2xl: clamp(1.5rem, 1.35rem + 0.8vw, 1.75rem);
-    --text-3xl: clamp(1.85rem, 1.6rem + 1.2vw, 2.25rem);
-    --text-4xl: clamp(2.25rem, 1.9rem + 1.8vw, 2.85rem);
-    --text-5xl: clamp(2.75rem, 2.2rem + 2.8vw, 3.75rem);
+    /* Disciplined Typography Scale */
+    --text-caption: 0.75rem;    /* 12px */
+    --text-xs: 0.75rem;         /* 12px */
+    --text-sm: 0.875rem;        /* 14px */
+    --text-base: 1.0rem;        /* 16px */
+    --text-md: 1.125rem;        /* 18px */
+    --text-lg: 1.25rem;         /* 20px */
+    --text-xl: 1.375rem;        /* 22px */
+    --text-2xl: 1.5rem;         /* 24px - H4 */
+    --text-3xl: 1.875rem;       /* 30px - H3 */
+    --text-4xl: 2.375rem;       /* 38px - H2 */
+    --text-5xl: 3.125rem;       /* 50px - H1 */
+    --text-6xl: 3.75rem;        /* 60px - Display */
 
     --leading-tight: 1.15;
-    --leading-snug: 1.25;
-    --leading-normal: 1.5;
-    --leading-relaxed: 1.65;
+    --leading-normal: 1.4;
+    --leading-relaxed: 1.6;
 
     --tracking-tight: -0.025em;
     --tracking-normal: 0;
     --tracking-wide: 0.025em;
     --tracking-wider: 0.05em;
-    --tracking-widest: 0.1em;
 
-    /* ── Strict 8px Spatial Grid System ───────────────────────────────────── */
-    --space-1: 0.5rem;   /* 8px */
-    --space-2: 1rem;     /* 16px */
-    --space-3: 1.5rem;   /* 24px */
-    --space-4: 2rem;     /* 32px */
-    --space-5: 2.5rem;   /* 40px */
-    --space-6: 3rem;     /* 48px */
-    --space-8: 4rem;     /* 64px */
-    --space-10: 5rem;    /* 80px */
-    --space-12: 6rem;    /* 96px */
-    --space-16: 8rem;    /* 128px */
+    /* ── 8px Grid Spacing Scale ────────────────────────────────────────────── */
+    --sp-1: 0.5rem;     /* 8px */
+    --sp-2: 1.0rem;     /* 16px */
+    --sp-3: 1.5rem;     /* 24px */
+    --sp-4: 2.0rem;     /* 32px */
+    --sp-5: 2.5rem;     /* 40px */
+    --sp-6: 3.0rem;     /* 48px */
+    --sp-8: 4.0rem;     /* 64px */
+    --sp-10: 5.0rem;    /* 80px */
+    --sp-12: 6.0rem;    /* 96px */
+    --sp-15: 7.5rem;    /* 120px */
 
-    /* ── Layout ────────────────────────────────────────────────────────────── */
-    --container-width: {{ settings.container_width | default: 1280 }}px;
-    --container-padding: clamp(1rem, 3vw, 2rem);
+    /* Legacy Spacing Mappings */
+    --space-1: 0.5rem;  /* 8px */
+    --space-2: 1.0rem;  /* 16px */
+    --space-3: 1.5rem;  /* 24px */
+    --space-4: 2.0rem;  /* 32px */
+    --space-5: 2.5rem;  /* 40px */
+    --space-6: 3.0rem;  /* 48px */
+    --space-8: 4.0rem;  /* 64px */
+    --space-10: 5.0rem; /* 80px */
+    --space-12: 6.0rem; /* 96px */
+    --space-16: 7.5rem; /* 120px */
 
-    /* ── Border Radius Scale ────────────────────────────────────────────────── */
+    /* ── Layout & Container Widths ────────────────────────────────────────── */
+    --page-width: 1280px;
+    --container-width: 1280px;
+    --container-padding: clamp(1rem, 4vw, 3rem);
+    --page-padding: clamp(1rem, 4vw, 3rem);
+
+    /* ── Border Radius System (Structured Industrial) ─────────────────────── */
     --radius-xs: 4px;
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
-    --radius-xl: 24px;
-    --radius-2xl: 32px;
+    --radius-xl: 20px;
     --radius-full: 9999px;
 
-    /* ── Layered Elevation Shadows ────────────────────────────────────────── */
-    --shadow-sm: 0 2px 4px rgba(0, 31, 64, 0.03), 0 1px 2px rgba(0, 31, 64, 0.02);
-    --shadow-md: 0 6px 16px -2px rgba(0, 31, 64, 0.06), 0 2px 6px -1px rgba(0, 31, 64, 0.03);
-    --shadow-lg: 0 12px 28px -4px rgba(0, 31, 64, 0.09), 0 4px 10px -2px rgba(0, 31, 64, 0.04);
-    --shadow-xl: 0 20px 45px -6px rgba(0, 51, 102, 0.13), 0 8px 20px -4px rgba(0, 31, 64, 0.05);
-    --shadow-2xl: 0 32px 64px -12px rgba(0, 31, 64, 0.22);
-    --shadow-glow: 0 0 30px rgba(0, 102, 204, 0.35);
+    --rounded-button: 8px;
+    --rounded-input: 8px;
+    --rounded-card: 16px;
+    --rounded-block: 16px;
 
-    /* ── Transitions ───────────────────────────────────────────────────────── */
+    /* ── Elevation & Shadows (Subtle, Refined) ────────────────────────────── */
+    --shadow-sm: 0 2px 10px rgba(6, 43, 73, 0.04);
+    --shadow-md: 0 8px 24px rgba(6, 43, 73, 0.07);
+    --shadow-lg: 0 12px 32px rgba(6, 43, 73, 0.1);
+    --shadow-xl: 0 20px 40px rgba(6, 43, 73, 0.14);
+    --shadow-glow: 0 0 20px rgba(242, 140, 40, 0.3);
+
+    /* ── Motion & Transitions ────────────────────────────────────────────── */
     --duration-fast: 150ms;
     --duration-base: 250ms;
     --duration-slow: 400ms;
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --transition: var(--duration-base) var(--ease-out);
 
-    /* ── Z-Index Scale ─────────────────────────────────────────────────────── */
+    /* ── Z-Index Scale ───────────────────────────────────────────────────── */
     --z-negative: -1;
     --z-normal: 1;
     --z-dropdown: 100;
