@@ -12,10 +12,10 @@
 
 html {
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: var(--text-base);
   line-height: var(--leading-normal);
   color: var(--color-text);
-  background-color: #001730;
+  background-color: var(--color-surface-base, #000000);
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -28,7 +28,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  background-color: #001730;
+  background-color: var(--color-surface-base, #000000);
 }
 
 body.scroll-locked {
@@ -92,11 +92,11 @@ a {
   margin: 0;
   padding: 0;
   display: block;
-  background-color: #001730;
+  background-color: var(--color-surface-base, #000000);
 }
 
 .shopify-section-group-header-group {
-  background-color: #001730;
+  background-color: var(--color-surface-base, #000000);
   margin: 0;
   padding: 0;
 }
@@ -249,43 +249,50 @@ section[id] {
   transform: translateY(1px) scale(0.98);
 }
 
-/* Primary Button (Navy) */
+/* Primary Button (Riitek Black) */
 .btn--primary {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  color: var(--color-white);
-  box-shadow: 0 4px 14px rgba(0, 51, 102, 0.25);
+  background: #000000;
+  color: var(--color-text-secondary, #FFFFFF);
+  border: 1px solid #171717;
+  box-shadow: var(--shadow-sm);
 }
 
 .btn--primary:hover {
-  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
-  box-shadow: 0 8px 24px rgba(0, 51, 102, 0.35);
+  background: #171717;
+  color: var(--color-text-inverse, #E0A580);
+  border-color: #E0A580;
   transform: translateY(-2px);
 }
 
 /* Secondary Button (Outline) */
 .btn--secondary {
-  background-color: var(--color-white);
-  color: var(--color-primary);
-  border-color: var(--color-primary);
+  background-color: var(--color-white, #FFFFFF);
+  color: var(--color-text-primary, #171717);
+  border-color: #E5E5E5;
   box-shadow: var(--shadow-sm);
 }
 
 .btn--secondary:hover {
-  background-color: var(--color-primary-light);
+  background-color: #FAFAFA;
+  border-color: #171717;
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
-/* Accent Button (Orange Highlight) */
+/* Accent Button (Riitek Terracotta Highlight #E0A580) */
 .btn--accent {
-  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover));
-  color: var(--color-white);
+  background: #E0A580;
+  color: #000000;
+  border-color: #E0A580;
+  font-weight: 700;
   box-shadow: var(--shadow-glow);
 }
 
 .btn--accent:hover {
-  background: linear-gradient(135deg, var(--color-accent-hover), #003366);
-  box-shadow: 0 10px 30px rgba(0, 102, 204, 0.4);
+  background: #C98B63;
+  color: #000000;
+  border-color: #C98B63;
+  box-shadow: 0 10px 30px rgba(224, 165, 128, 0.4);
   transform: translateY(-2px);
 }
 
