@@ -1,9 +1,10 @@
 /* =========================================================================
-   KIOSK INDIA — ENTERPRISE INDUSTRIAL BASE CSS & UTILITIES
-   B2B Engineering & Manufacturing Design System
+   KIOSK INDIA — ULTRA MODERN HIGH-TECH INDUSTRIAL BASE STYLESHEET
+   B2B Engineering & Hardware Architecture
    ========================================================================= */
 
-/* ── CSS Reset & Normalization ────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap');
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -12,14 +13,12 @@
 
 html {
   font-family: var(--font-body);
-  font-size: var(--text-base);
-  line-height: var(--leading-relaxed);
+  font-size: 16px;
+  line-height: 1.5;
   color: var(--color-text);
-  background-color: var(--color-bg-page, #FFFFFF);
+  background-color: var(--color-bg-page);
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
 }
 
@@ -28,11 +27,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  background-color: var(--color-bg-page, #FFFFFF);
-}
-
-body.scroll-locked {
-  overflow: hidden !important;
+  background-color: var(--color-bg-page);
 }
 
 img, svg, video {
@@ -41,148 +36,72 @@ img, svg, video {
   display: block;
 }
 
-button, input, select, textarea {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-}
-
 a {
   color: inherit;
   text-decoration: none;
 }
 
-/* ── Accessibility ───────────────────────────────────────────────────────── */
-.skip-link {
-  position: absolute;
-  top: -100px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--color-blue-primary, #0866D6);
-  color: var(--color-white);
-  padding: var(--sp-2) var(--sp-4);
-  border-radius: var(--radius-sm);
-  z-index: 9999;
-  font-weight: var(--font-weight-bold);
-  transition: top var(--duration-fast) var(--ease-out);
-}
-
-.skip-link:focus {
-  top: var(--sp-2);
-}
-
-:focus-visible {
-  outline: 2px solid var(--color-blue-primary, #0866D6);
-  outline-offset: 3px;
-}
-
-/* ── Container Layout System ─────────────────────────────────────────────── */
+/* ── Container Layout ────────────────────────────────────────────────────── */
 .container {
   width: 100%;
   max-width: var(--container-width, 1280px);
   margin-inline: auto;
-  padding-inline: var(--container-padding, clamp(1rem, 4vw, 3rem));
-}
-
-.container--narrow {
-  max-width: 960px;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
 }
 
 #main-content {
-  margin: 0;
-  padding: 0;
   display: block;
-  background-color: var(--color-bg-page, #FFFFFF);
-}
-
-.shopify-section-group-header-group {
-  background-color: var(--color-navy-primary, #062B49);
-  margin: 0;
-  padding: 0;
-}
-
-/* ── Section Wrapper & Dynamic Controls ─────────────────────────────────── */
-.section {
-  padding-top: var(--section-pt, clamp(3.5rem, 6vw, 6.5rem));
-  padding-bottom: var(--section-pb, clamp(3.5rem, 6vw, 6.5rem));
-  background-color: var(--section-bg, transparent);
-  position: relative;
-}
-
-section[id] {
-  scroll-margin-top: 80px;
-}
-
-.section__bg-wrap {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.section__bg-image {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  background-color: var(--color-bg-page);
 }
 
-.section__overlay {
-  position: absolute;
-  inset: 0;
-  background-color: var(--color-navy-deep, #031C2F);
-  opacity: var(--section-overlay-opacity, 0);
-  z-index: 1;
-}
-
-.section > .container {
+/* ── High-Tech Section Base ──────────────────────────────────────────────── */
+.section {
+  padding-block: clamp(3.5rem, 6vw, 6rem);
   position: relative;
-  z-index: 2;
-}
-
-@media (max-width: 767px) {
-  .hide-mobile { display: none !important; }
-}
-
-@media (min-width: 768px) {
-  .hide-desktop { display: none !important; }
 }
 
 .section--alt {
-  background-color: var(--color-bg-section, #F7F9FB);
+  background-color: var(--color-bg-section, #F8FAFC);
 }
 
 .section--dark {
-  background: linear-gradient(135deg, var(--color-navy-deep, #031C2F) 0%, var(--color-navy-primary, #062B49) 100%);
+  background: radial-gradient(circle at 50% 0%, #0A192F 0%, #020C1B 100%);
   color: var(--color-white);
 }
 
-/* ── Eyebrow Pill Badge ───────────────────────────────────────────────────── */
+/* ── High-Tech Eyebrow Badge ─────────────────────────────────────────────── */
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: var(--sp-1);
-  font-size: var(--text-xs);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--tracking-wider);
+  gap: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-blue-primary, #0866D6);
-  background-color: rgba(8, 102, 214, 0.08);
+  color: var(--color-blue-primary, #0066FF);
+  background: rgba(0, 102, 255, 0.08);
   padding: 0.35rem 0.85rem;
   border-radius: var(--radius-full);
+  border: 1px solid rgba(0, 102, 255, 0.25);
   margin-bottom: var(--sp-2);
-  border: 1px solid rgba(8, 102, 214, 0.2);
 }
 
-.eyebrow--light {
-  color: var(--color-orange-accent, #F28C28);
-  background-color: rgba(242, 140, 40, 0.12);
-  border-color: rgba(242, 140, 40, 0.25);
+.eyebrow--cyan {
+  color: var(--color-cyan-glow, #00F0FF);
+  background: rgba(0, 240, 255, 0.1);
+  border-color: rgba(0, 240, 255, 0.3);
+}
+
+.eyebrow--orange {
+  color: var(--color-orange-accent, #FF6600);
+  background: rgba(255, 102, 0, 0.1);
+  border-color: rgba(255, 102, 0, 0.3);
 }
 
 /* ── Section Header Snippet Component ────────────────────────────────────── */
 .section-header {
-  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  margin-bottom: clamp(2.25rem, 4vw, 3.75rem);
 }
 
 .section-header--center {
@@ -195,12 +114,12 @@ section[id] {
 
 .section-header__heading {
   font-family: var(--font-heading);
-  font-size: clamp(1.75rem, 3.2vw, var(--text-4xl));
+  font-size: clamp(1.85rem, 3.5vw, 2.75rem);
   font-weight: 800;
-  letter-spacing: var(--tracking-tight);
-  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
   color: var(--color-text-primary);
-  margin-bottom: var(--sp-2);
+  margin-bottom: 0.5rem;
 }
 
 .section-header--dark .section-header__heading {
@@ -208,131 +127,104 @@ section[id] {
 }
 
 .section-header__subtitle {
-  font-size: var(--text-base);
+  font-size: 1.05rem;
   color: var(--color-text-secondary);
-  line-height: var(--leading-relaxed);
+  line-height: 1.6;
   max-width: 680px;
-  margin: 0;
 }
 
 .section-header--dark .section-header__subtitle {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.75);
 }
 
-/* ── Global Button System (Industrial Structured) ─────────────────────────── */
+/* ── Modern High-Tech Button System ───────────────────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--sp-1);
+  gap: 8px;
   padding: 0.85rem 1.75rem;
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--tracking-wide);
-  border-radius: var(--radius-sm, 8px);
-  border: 2px solid transparent;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-md, 10px);
+  border: 1.5px solid transparent;
   cursor: pointer;
   white-space: nowrap;
   user-select: none;
-  position: relative;
-  overflow: hidden;
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition),
-    background-color var(--transition),
-    border-color var(--transition),
-    color var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition);
 }
 
 .btn:active {
   transform: translateY(1px) scale(0.98);
 }
 
-/* Primary Button (Blue Action) */
 .btn--primary {
-  background: var(--color-blue-primary, #0866D6);
-  color: var(--color-white);
-  border-color: var(--color-blue-primary, #0866D6);
-  box-shadow: var(--shadow-sm);
+  background: var(--color-blue-primary, #0066FF);
+  color: #FFFFFF;
+  border-color: var(--color-blue-primary, #0066FF);
+  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.35);
 }
 
 .btn--primary:hover {
-  background: var(--color-blue-bright, #147BEF);
-  border-color: var(--color-blue-bright, #147BEF);
-  color: var(--color-white);
+  background: var(--color-blue-bright, #3385FF);
+  border-color: var(--color-blue-bright, #3385FF);
+  color: #FFFFFF;
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 24px rgba(0, 102, 255, 0.45);
 }
 
-/* Secondary Button (Navy Outline or Off-White) */
+.btn--accent {
+  background: var(--color-orange-accent, #FF6600);
+  color: #FFFFFF;
+  border-color: var(--color-orange-accent, #FF6600);
+  box-shadow: 0 4px 14px rgba(255, 102, 0, 0.35);
+}
+
+.btn--accent:hover {
+  background: #E05500;
+  border-color: #E05500;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 102, 0, 0.45);
+}
+
 .btn--secondary {
-  background-color: var(--color-white);
-  color: var(--color-navy-primary, #062B49);
-  border-color: var(--color-border, #DDE4EA);
+  background-color: #FFFFFF;
+  color: var(--color-navy-primary, #0A192F);
+  border-color: var(--color-border, #E2E8F0);
   box-shadow: var(--shadow-sm);
 }
 
 .btn--secondary:hover {
-  background-color: var(--color-bg-section, #F7F9FB);
-  border-color: var(--color-navy-primary, #062B49);
-  color: var(--color-navy-primary, #062B49);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-/* Accent Button (Orange Highlight) */
-.btn--accent {
-  background: var(--color-orange-accent, #F28C28);
-  color: var(--color-white);
-  border-color: var(--color-orange-accent, #F28C28);
-  font-weight: 700;
-  box-shadow: var(--shadow-glow);
-}
-
-.btn--accent:hover {
-  background: #E07B17;
-  border-color: #E07B17;
-  color: var(--color-white);
-  box-shadow: 0 10px 25px rgba(242, 140, 40, 0.4);
+  background-color: #F8FAFC;
+  border-color: var(--color-navy-primary, #0A192F);
   transform: translateY(-2px);
 }
 
-/* Navy Button */
-.btn--navy {
-  background: var(--color-navy-primary, #062B49);
-  color: var(--color-white);
-  border-color: var(--color-navy-primary, #062B49);
-}
-
-.btn--navy:hover {
-  background: var(--color-navy-deep, #031C2F);
-  border-color: var(--color-navy-deep, #031C2F);
-  color: var(--color-white);
-  transform: translateY(-2px);
-}
-
-/* Ghost Button */
-.btn--ghost {
+.btn--outline-light {
   background: transparent;
-  color: var(--color-text-primary);
-  padding-inline: var(--sp-2);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
-.btn--ghost:hover {
-  color: var(--color-blue-primary, #0866D6);
+.btn--outline-light:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #FFFFFF;
+  color: #FFFFFF;
+  transform: translateY(-2px);
 }
 
-/* Button Sizes */
 .btn--sm {
-  padding: 0.6rem 1.25rem;
-  font-size: var(--text-xs);
-  border-radius: var(--radius-sm);
+  padding: 0.55rem 1.15rem;
+  font-size: 0.82rem;
+  border-radius: var(--radius-sm, 6px);
 }
 
 .btn--lg {
-  padding: 1.1rem 2.25rem;
-  font-size: var(--text-base);
-  border-radius: var(--radius-md);
+  padding: 1.05rem 2.25rem;
+  font-size: 1.0rem;
+  border-radius: var(--radius-md, 10px);
 }
 
 .btn__icon {
@@ -345,159 +237,30 @@ section[id] {
   transform: translateX(4px);
 }
 
-/* ── Unified Card System ─────────────────────────────────────────────────── */
+/* ── Unified Custom Card System ───────────────────────────────────────────── */
 .card-base,
 .product-card,
 .industry-card,
 .project-card,
-.blog-card,
 .feature-card,
-.certification-card {
-  background-color: var(--color-white);
-  border: 1px solid var(--color-border, #DDE4EA);
-  border-radius: var(--radius-lg, 16px);
+.blog-card {
+  background: #FFFFFF;
+  border: 1px solid var(--color-border, #E2E8F0);
+  border-radius: var(--radius-lg, 14px);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition),
-    border-color var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 
 .card-base:hover,
 .product-card:hover,
 .industry-card:hover,
 .project-card:hover,
-.blog-card:hover,
 .feature-card:hover,
-.certification-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--color-blue-primary, #0866D6);
+.blog-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--color-blue-primary, #0066FF);
   box-shadow: var(--shadow-md);
-}
-
-/* ── Badges ───────────────────────────────────────────────────────────────── */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.65rem;
-  font-size: var(--text-xs);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--tracking-wider);
-  text-transform: uppercase;
-  border-radius: var(--radius-full);
-  line-height: 1;
-}
-
-.badge--primary {
-  background-color: rgba(8, 102, 214, 0.1);
-  color: var(--color-blue-primary);
-}
-
-.badge--accent {
-  background-color: rgba(242, 140, 40, 0.15);
-  color: var(--color-orange-accent);
-}
-
-/* ── Form Controls ───────────────────────────────────────────────────────── */
-.form-label {
-  display: block;
-  font-size: var(--text-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  margin-bottom: var(--sp-1);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-}
-
-.form-input,
-.form-textarea {
-  width: 100%;
-  padding: 0.85rem 1rem;
-  font-size: var(--text-sm);
-  color: var(--color-text-primary);
-  background-color: var(--color-white);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  transition: border-color var(--transition), box-shadow var(--transition);
-}
-
-.form-input:focus,
-.form-textarea:focus {
-  outline: none;
-  border-color: var(--color-blue-primary, #0866D6);
-  box-shadow: 0 0 0 4px rgba(8, 102, 214, 0.12);
-}
-
-/* ── Scroll Animations ([data-animate]) ──────────────────────────────────── */
-[data-animate] {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
-  will-change: opacity, transform;
-}
-
-[data-animate="fade-up"] { transform: translateY(24px); }
-[data-animate="fade-left"] { transform: translateX(24px); }
-[data-animate="fade-right"] { transform: translateX(-24px); }
-[data-animate="zoom-in"] { transform: scale(0.96); }
-
-[data-animate].is-visible {
-  opacity: 1;
-  transform: translate(0) scale(1);
-}
-
-/* ── Industrial Grid Background Utility ─────────────────────────────────── */
-.bg-industrial-grid {
-  background-image:
-    linear-gradient(to right, rgba(6, 43, 73, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(6, 43, 73, 0.04) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-.bg-industrial-grid-dark {
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-/* ── Tech Spec Pills & Badges ───────────────────────────────────────────── */
-.tech-spec-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.75rem;
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  background-color: var(--color-steel-light, #EEF2F5);
-  padding: 0.25rem 0.65rem;
-  border-radius: var(--radius-sm, 8px);
-  border: 1px solid var(--color-border, #DDE4EA);
-}
-
-/* ── Corporate Trust Bar ─────────────────────────────────────────────────── */
-.trust-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  gap: var(--sp-4);
-  padding: var(--sp-3) var(--sp-4);
-  background: var(--color-white);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-}
-
-.trust-bar__item {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-  font-size: var(--text-xs);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wider);
 }
 
 /* ── Floating WhatsApp Action Button ─────────────────────────────────────── */
@@ -505,33 +268,28 @@ section[id] {
   position: fixed;
   bottom: clamp(1.25rem, 3vw, 2rem);
   right: clamp(1.25rem, 3vw, 2rem);
-  z-index: calc(var(--z-sticky, 200) + 100);
+  z-index: 500;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 56px;
   height: 56px;
-  padding: 0;
   background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
   color: #FFFFFF !important;
   border-radius: var(--radius-full);
-  text-decoration: none;
-  box-shadow: 0 10px 25px -3px rgba(37, 211, 102, 0.4), 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
   transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
 }
 
 .whatsapp-float:hover {
   transform: translateY(-4px) scale(1.08);
-  box-shadow: 0 16px 32px -4px rgba(37, 211, 102, 0.55), 0 6px 16px rgba(0, 0, 0, 0.15);
-  color: #FFFFFF !important;
+  box-shadow: 0 16px 32px rgba(37, 211, 102, 0.55);
 }
 
 .whatsapp-float__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
 }
 
 .whatsapp-float__icon svg {

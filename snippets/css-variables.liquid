@@ -1,199 +1,109 @@
 {%- comment -%}
-  KIOSK INDIA DESIGN SYSTEM — CSS VARIABLES & TOKENS
-  Industrial B2B Theme Specification
-  WCAG 2.2 AA Compliant
+  KIOSK INDIA — ULTRA MODERN CUSTOM INDUSTRIAL DESIGN TOKENS
+  High-Performance B2B Hardware Design System
 {%- endcomment -%}
 
 <style>
   :root {
-    /* ── Kiosk India Primary Palette (Industrial B2B) ──────────────────────── */
-    --color-navy-primary: #062B49;
-    --color-navy-deep: #031C2F;
-    --color-blue-primary: #0866D6;
-    --color-blue-bright: #147BEF;
-    --color-orange-accent: #F28C28;
+    /* ── High-Contrast Industrial Palette ────────────────────────────────────── */
+    --color-navy-primary: #0A192F;
+    --color-navy-deep: #020C1B;
+    --color-blue-primary: #0066FF;
+    --color-blue-bright: #3385FF;
+    --color-cyan-glow: #00F0FF;
+    --color-orange-accent: #FF6600;
     
-    /* Concept & Standard Semantic Mappings */
-    --color-primary: #062B49;
-    --color-primary-dark: #031C2F;
-    --color-primary-light: #F7F9FB;
-    --color-secondary: #0866D6;
-    --color-secondary-hover: #147BEF;
-    --color-accent: #F28C28;
-    --color-accent-hover: #E07B17;
-    --color-accent-light: rgba(242, 140, 40, 0.12);
+    /* Semantic Palette Mappings */
+    --color-primary: #0A192F;
+    --color-primary-dark: #020C1B;
+    --color-primary-light: #F0F4F8;
+    --color-secondary: #0066FF;
+    --color-secondary-hover: #3385FF;
+    --color-accent: #FF6600;
+    --color-accent-hover: #E05500;
     --color-surface-base: #FFFFFF;
 
-    /* RGB Triplets for Concept Theme Compatibility */
-    --color-base-text: 16 32 47;
-    --color-base-highlight: 238 242 245;
+    /* RGB Triplets */
+    --color-base-text: 15 23 42;
+    --color-base-highlight: 240 244 248;
     --color-base-background: 255 255 255;
-    --color-base-button: 8 102 214;
-    --color-base-button-gradient: #0866D6;
+    --color-base-button: 0 102 255;
+    --color-base-button-gradient: #0066FF;
     --color-base-button-text: 255 255 255;
-    --color-keyboard-focus: 8 102 214;
-    --color-shadow: 6 43 73;
-    --color-price: 16 32 47;
-    --color-sale-price: 220 53 69;
-    --color-sale-tag: 220 53 69;
-    --color-sale-tag-text: 255 255 255;
-    --color-rating: 245 158 11;
-    --color-placeholder: 247 249 251;
-    --color-success-text: 25 135 84;
-    --color-success-background: 235 247 239;
-    --color-error-text: 220 53 69;
-    --color-error-background: 253 237 239;
-    --color-info-text: 8 102 214;
-    --color-info-background: 236 244 254;
+    --color-keyboard-focus: 0 240 255;
+    --color-shadow: 2 12 27;
 
     /* Surface & Background Systems */
     --color-bg-page: #FFFFFF;
-    --color-bg-section: #F7F9FB;
-    --color-bg-alt: #EEF2F5;
-    --color-bg-dark: #062B49;
-    --color-bg-dark-alt: #031C2F;
+    --color-bg-section: #F8FAFC;
+    --color-bg-alt: #F1F5F9;
+    --color-bg-dark: #0A192F;
+    --color-bg-dark-alt: #020C1B;
 
     /* Text & Content Tokens */
-    --color-text: #10202F;
-    --color-text-primary: #10202F;
-    --color-text-secondary: #5E6B76;
-    --color-text-muted: #7C8791;
+    --color-text: #0F172A;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-muted: #64748B;
     --color-text-inverse: #FFFFFF;
-    --color-text-light: #F7F9FB;
     --color-white: #FFFFFF;
     
     /* Border & Divider Tokens */
-    --color-border: #DDE4EA;
-    --color-border-light: #EEF2F5;
-    --color-border-dark: rgba(255, 255, 255, 0.15);
-    --color-steel-light: #EEF2F5;
+    --color-border: #E2E8F0;
+    --color-border-light: #F1F5F9;
+    --color-border-dark: rgba(255, 255, 255, 0.12);
+    --color-steel-light: #F1F5F9;
 
-    /* Alert / Feedback Tokens */
-    --color-success: #198754;
-    --color-warning: #F59E0B;
-    --color-error: #DC3545;
-
-    /* ── Typography Foundations ────────────────────────────────────────────── */
-    --font-heading: Inter, sans-serif;
+    /* Typography Scale */
+    --font-heading: 'Outfit', Inter, sans-serif;
     --font-body: Inter, sans-serif;
-    --font-heading-family: Inter, sans-serif;
-    --font-heading-style: normal;
-    --font-heading-weight: 700;
-    --font-heading-line-height: 1.15;
-    --font-heading-letter-spacing: -0.025em;
-
-    --font-body-family: Inter, sans-serif;
-    --font-body-style: normal;
-    --font-body-weight: 400;
-    --font-body-line-height: 1.5;
-    --font-body-letter-spacing: 0.0em;
-
-    --font-navigation-family: var(--font-body-family);
-    --font-navigation-size: 0.9375rem; /* 15px */
-    --font-navigation-weight: 500;
-
-    --font-button-family: var(--font-body-family);
-    --font-button-size: 0.9375rem; /* 15px */
-    --font-button-weight: 600;
-
-    --font-product-family: var(--font-body-family);
-    --font-product-size: 1.125rem; /* 18px */
-    --font-product-weight: 700;
-
+    
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
     --font-weight-extrabold: 800;
 
-    /* Disciplined Typography Scale */
-    --text-caption: 0.75rem;    /* 12px */
-    --text-xs: 0.75rem;         /* 12px */
-    --text-sm: 0.875rem;        /* 14px */
-    --text-base: 1.0rem;        /* 16px */
-    --text-md: 1.125rem;        /* 18px */
-    --text-lg: 1.25rem;         /* 20px */
-    --text-xl: 1.375rem;        /* 22px */
-    --text-2xl: 1.5rem;         /* 24px - H4 */
-    --text-3xl: 1.875rem;       /* 30px - H3 */
-    --text-4xl: 2.375rem;       /* 38px - H2 */
-    --text-5xl: 3.125rem;       /* 50px - H1 */
-    --text-6xl: 3.75rem;        /* 60px - Display */
+    --text-xs: 0.75rem;     /* 12px */
+    --text-sm: 0.875rem;    /* 14px */
+    --text-base: 1.0rem;    /* 16px */
+    --text-md: 1.125rem;    /* 18px */
+    --text-lg: 1.25rem;     /* 20px */
+    --text-xl: 1.5rem;      /* 24px */
+    --text-2xl: 2.0rem;     /* 32px */
+    --text-3xl: 2.5rem;     /* 40px */
+    --text-4xl: 3.25rem;    /* 52px */
 
-    --leading-tight: 1.15;
-    --leading-normal: 1.4;
-    --leading-relaxed: 1.6;
-
-    --tracking-tight: -0.025em;
-    --tracking-normal: 0;
-    --tracking-wide: 0.025em;
-    --tracking-wider: 0.05em;
-
-    /* ── 8px Grid Spacing Scale ────────────────────────────────────────────── */
+    /* 8px Spacing Scale */
     --sp-1: 0.5rem;     /* 8px */
     --sp-2: 1.0rem;     /* 16px */
     --sp-3: 1.5rem;     /* 24px */
     --sp-4: 2.0rem;     /* 32px */
-    --sp-5: 2.5rem;     /* 40px */
     --sp-6: 3.0rem;     /* 48px */
     --sp-8: 4.0rem;     /* 64px */
     --sp-10: 5.0rem;    /* 80px */
     --sp-12: 6.0rem;    /* 96px */
-    --sp-15: 7.5rem;    /* 120px */
 
-    /* Legacy Spacing Mappings */
-    --space-1: 0.5rem;  /* 8px */
-    --space-2: 1.0rem;  /* 16px */
-    --space-3: 1.5rem;  /* 24px */
-    --space-4: 2.0rem;  /* 32px */
-    --space-5: 2.5rem;  /* 40px */
-    --space-6: 3.0rem;  /* 48px */
-    --space-8: 4.0rem;  /* 64px */
-    --space-10: 5.0rem; /* 80px */
-    --space-12: 6.0rem; /* 96px */
-    --space-16: 7.5rem; /* 120px */
-
-    /* ── Layout & Container Widths ────────────────────────────────────────── */
-    --page-width: 1280px;
+    /* Layout & Radius */
     --container-width: 1280px;
-    --container-padding: clamp(1rem, 4vw, 3rem);
-    --page-padding: clamp(1rem, 4vw, 3rem);
-
-    /* ── Border Radius System (Structured Industrial) ─────────────────────── */
-    --radius-xs: 4px;
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 20px;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 18px;
     --radius-full: 9999px;
 
-    --rounded-button: 8px;
-    --rounded-input: 8px;
-    --rounded-card: 16px;
-    --rounded-block: 16px;
+    /* Elevation Shadows */
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.05);
+    --shadow-md: 0 10px 25px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 20px 40px rgba(15, 23, 42, 0.12);
+    --shadow-glow-blue: 0 0 25px rgba(0, 102, 255, 0.35);
+    --shadow-glow-cyan: 0 0 20px rgba(0, 240, 255, 0.4);
 
-    /* ── Elevation & Shadows (Subtle, Refined) ────────────────────────────── */
-    --shadow-sm: 0 2px 10px rgba(6, 43, 73, 0.04);
-    --shadow-md: 0 8px 24px rgba(6, 43, 73, 0.07);
-    --shadow-lg: 0 12px 32px rgba(6, 43, 73, 0.1);
-    --shadow-xl: 0 20px 40px rgba(6, 43, 73, 0.14);
-    --shadow-glow: 0 0 20px rgba(242, 140, 40, 0.3);
-
-    /* ── Motion & Transitions ────────────────────────────────────────────── */
+    /* Motion */
     --duration-fast: 150ms;
     --duration-base: 250ms;
     --duration-slow: 400ms;
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --transition: var(--duration-base) var(--ease-out);
-
-    /* ── Z-Index Scale ───────────────────────────────────────────────────── */
-    --z-negative: -1;
-    --z-normal: 1;
-    --z-dropdown: 100;
-    --z-sticky: 200;
-    --z-header: 300;
-    --z-overlay: 400;
-    --z-modal: 500;
-    --z-toast: 600;
   }
 </style>
