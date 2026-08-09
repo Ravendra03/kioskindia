@@ -20,10 +20,30 @@
         "heading": "Trending Products",
         "subtitle": "Browse our latest catalog."
       }
+    },
+    "industries": {
+      "type": "industries",
+      "settings": {
+        "eyebrow": "Industries",
+        "heading": "Deployed Across Key Sectors",
+        "subtitle": "Trusted B2B hardware solutions for high-footfall environments.",
+        "show_stats": true,
+        "cta_text": "Request Sector RFP"
+      }
+    },
+    "contact-cta": {
+      "type": "contact-cta",
+      "settings": {
+        "eyebrow": "Get In Touch",
+        "heading": "Ready to Build Your Custom Solution?",
+        "subtitle": "Send us your project specifications or request a custom quote from our engineering team."
+      }
     }
   },
   "order": [
     "product-image-slider",
-    "featured-products"
+    "featured-products",
+    "industries",
+    "contact-cta"
   ]
 }
