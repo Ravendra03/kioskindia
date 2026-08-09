@@ -1,41 +1,15 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "footer",
   "name": "Footer group",
-  "sections": {
-    "footer": {
-      "type": "footer",
-      "settings": {},
-      "blocks": {
-        "footer-menu-1": {
-          "type": "menu",
-          "settings": {
-            "title": "Products",
-            "menu": "footer"
-          }
-        },
-        "footer-menu-2": {
-          "type": "menu",
-          "settings": {
-            "title": "Quick Links",
-            "menu": "main-menu"
-          }
-        },
-        "footer-newsletter": {
-          "type": "newsletter",
-          "settings": {
-            "title": "Catalog & Updates",
-            "description": "Get direct access to our engineering datasheets and product updates."
-          }
-        }
-      },
-      "block_order": [
-        "footer-menu-1",
-        "footer-menu-2",
-        "footer-newsletter"
-      ]
-    }
-  },
-  "order": [
-    "footer"
-  ]
+  "sections": {},
+  "order": []
 }
