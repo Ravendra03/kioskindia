@@ -101,70 +101,7 @@
         {%- endif -%}
       </div>
 
-      {%- comment -%} Right Column: Product Hero Stage Card {%- endcomment -%}
-      <div class="hero__product-col" data-animate="fade-left" data-delay="300">
-        <div class="product-hero-card">
-          <div class="product-hero-card__badge-wrap">
-            <span class="product-hero-card__tag">Flagship Hardware</span>
-            <span class="product-hero-card__rating">
-              <span class="star">★</span> 4.9 (120+ B2B Deployments)
-            </span>
-          </div>
-
-          <div class="product-hero-card__stage">
-            {%- if section.settings.product_image != blank -%}
-              {{
-                section.settings.product_image
-                | image_url: width: 800
-                | image_tag:
-                  class: 'product-hero-card__image',
-                  alt: section.settings.product_title | default: 'Interactive Kiosk Pro',
-                  loading: 'eager',
-                  fetchpriority: 'high',
-                  width: 800
-              }}
-            {%- else -%}
-              <div class="product-hero-card__placeholder">
-                <svg width="120" height="180" viewBox="0 0 120 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="10" y="10" width="100" height="160" rx="12" fill="#062B49" stroke="#0866D6" stroke-width="3"/>
-                  <rect x="20" y="25" width="80" height="110" rx="6" fill="#031C2F" stroke="rgba(255,255,255,0.2)"/>
-                  <circle cx="60" cy="152" r="6" fill="#F28C28"/>
-                  <path d="M35 55L85 55M35 75L70 75M35 95L60 95" stroke="#0866D6" stroke-width="3" stroke-linecap="round"/>
-                </svg>
-              </div>
-            {%- endif -%}
-
-            <div class="product-hero-card__floating-spec">
-              <span class="spec-icon">⚡</span>
-              <span>IP65 Weatherproof Steel</span>
-            </div>
-          </div>
-
-          <div class="product-hero-card__body">
-            <h3 class="product-hero-card__title">
-              {{ section.settings.product_title | default: 'Interactive Touch Kiosk Pro 55"' }}
-            </h3>
-            <p class="product-hero-card__desc">
-              Custom dual-screen self-service terminal with thermal printer, POS reader, and scanner.
-            </p>
-
-            <div class="product-hero-card__specs-row">
-              <span class="tech-spec-pill">55" 4K Capacitive</span>
-              <span class="tech-spec-pill">Heavy Sheet Metal</span>
-              <span class="tech-spec-pill">Windows / Android</span>
-            </div>
-
-            <a
-              href="{{ section.settings.product_cta_url | default: '/collections/all' }}"
-              class="btn btn--primary btn--sm product-hero-card__cta"
-            >
-              {{ section.settings.product_cta_text | default: 'View Product Specifications' }}
-              {% render 'icon', name: 'arrow-right', size: 16 %}
-            </a>
-          </div>
-
-        </div>
-      </div>
+      {%- comment -%} Right Column: Removed as requested {%- endcomment -%}
 
     </div>
   </div>
@@ -259,9 +196,11 @@
 
   .hero__grid {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: var(--space-12);
-    align-items: flex-start;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    align-items: center;
+    text-align: center;
+    justify-items: center;
   }
 
   .eyebrow__dot {
