@@ -10,6 +10,13 @@
 {
   "type": "footer",
   "name": "Footer group",
-  "sections": {},
-  "order": []
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {}
+    }
+  },
+  "order": [
+    "footer"
+  ]
 }

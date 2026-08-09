@@ -8,6 +8,40 @@
  * ------------------------------------------------------------
  */
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "Riitek Storefront",
+        "heading": "Clean, Token-Driven E-Commerce Framework",
+        "subheading": "Implementation-ready UI guidance optimized for consistency, accessibility, and performance.",
+        "cta_primary_text": "Explore Collection",
+        "cta_secondary_text": "View Guidelines",
+        "overlay_opacity": 80,
+        "min_height": 90,
+        "show_trust_badges": false
+      }
+    },
+    "product-categories": {
+      "type": "product-categories",
+      "settings": {
+        "eyebrow": "Categories",
+        "heading": "Shop by Category",
+        "subtitle": "Explore our product collections."
+      }
+    },
+    "featured-products": {
+      "type": "featured-products",
+      "settings": {
+        "eyebrow": "Featured",
+        "heading": "Trending Products",
+        "subtitle": "Browse our latest catalog."
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "product-categories",
+    "featured-products"
+  ]
 }

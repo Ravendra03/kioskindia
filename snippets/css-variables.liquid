@@ -1,109 +1,92 @@
 {%- comment -%}
-  KIOSK INDIA — ULTRA MODERN CUSTOM INDUSTRIAL DESIGN TOKENS
-  High-Performance B2B Hardware Design System
+  RIITEK DESIGN SYSTEM TOKENS
+  Clean, Functional, Token-Driven UI Framework
 {%- endcomment -%}
 
 <style>
   :root {
-    /* ── High-Contrast Industrial Palette ────────────────────────────────────── */
-    --color-navy-primary: #0A192F;
-    --color-navy-deep: #020C1B;
-    --color-blue-primary: #0066FF;
-    --color-blue-bright: #3385FF;
-    --color-cyan-glow: #00F0FF;
-    --color-orange-accent: #FF6600;
+    /* ── Riitek Color Palette ────────────────────────────────────────────────── */
+    --color-text-primary: #171717;
+    --color-text-secondary: #ffffff;
+    --color-text-tertiary: #fafafa;
+    --color-text-inverse: #e0a580;
+    --color-surface-base: #000000;
     
-    /* Semantic Palette Mappings */
-    --color-primary: #0A192F;
-    --color-primary-dark: #020C1B;
-    --color-primary-light: #F0F4F8;
-    --color-secondary: #0066FF;
-    --color-secondary-hover: #3385FF;
-    --color-accent: #FF6600;
-    --color-accent-hover: #E05500;
-    --color-surface-base: #FFFFFF;
+    /* Semantic Compatibility Tokens */
+    --color-primary: #000000;
+    --color-primary-dark: #000000;
+    --color-secondary: #171717;
+    --color-accent: #e0a580;
+    --color-accent-hover: #c88f6b;
+    --color-bg-page: #000000;
+    --color-bg-section: #171717;
+    --color-text: #ffffff;
+    --color-border: rgba(255, 255, 255, 0.15);
 
     /* RGB Triplets */
-    --color-base-text: 15 23 42;
-    --color-base-highlight: 240 244 248;
-    --color-base-background: 255 255 255;
-    --color-base-button: 0 102 255;
-    --color-base-button-gradient: #0066FF;
-    --color-base-button-text: 255 255 255;
-    --color-keyboard-focus: 0 240 255;
-    --color-shadow: 2 12 27;
+    --color-base-text: 255 255 255;
+    --color-base-background: 0 0 0;
+    --color-base-button: 224 165 128;
+    --color-base-button-text: 23 23 23;
 
-    /* Surface & Background Systems */
-    --color-bg-page: #FFFFFF;
-    --color-bg-section: #F8FAFC;
-    --color-bg-alt: #F1F5F9;
-    --color-bg-dark: #0A192F;
-    --color-bg-dark-alt: #020C1B;
-
-    /* Text & Content Tokens */
-    --color-text: #0F172A;
-    --color-text-primary: #0F172A;
-    --color-text-secondary: #475569;
-    --color-text-muted: #64748B;
-    --color-text-inverse: #FFFFFF;
-    --color-white: #FFFFFF;
+    /* ── Riitek Typography Scale ─────────────────────────────────────────────── */
+    --font-family-primary: Inter, sans-serif;
+    --font-family-stack: Inter, sans-serif;
     
-    /* Border & Divider Tokens */
-    --color-border: #E2E8F0;
-    --color-border-light: #F1F5F9;
-    --color-border-dark: rgba(255, 255, 255, 0.12);
-    --color-steel-light: #F1F5F9;
+    --font-size-base: 16px;
+    --font-weight-base: 400;
+    --font-lineHeight-base: normal;
 
-    /* Typography Scale */
-    --font-heading: 'Outfit', Inter, sans-serif;
-    --font-body: Inter, sans-serif;
-    
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
-    --font-weight-extrabold: 800;
+    --font-size-xs: 10px;
+    --font-size-sm: 12px;
+    --font-size-md: 13px;
+    --font-size-lg: 14px;
+    --font-size-xl: 15px;
+    --font-size-2xl: 15.02px;
+    --font-size-3xl: 16px;
+    --font-size-4xl: 16.03px;
 
-    --text-xs: 0.75rem;     /* 12px */
-    --text-sm: 0.875rem;    /* 14px */
-    --text-base: 1.0rem;    /* 16px */
-    --text-md: 1.125rem;    /* 18px */
-    --text-lg: 1.25rem;     /* 20px */
-    --text-xl: 1.5rem;      /* 24px */
-    --text-2xl: 2.0rem;     /* 32px */
-    --text-3xl: 2.5rem;     /* 40px */
-    --text-4xl: 3.25rem;    /* 52px */
+    /* Legacy Type Tokens */
+    --text-xs: var(--font-size-xs);
+    --text-sm: var(--font-size-sm);
+    --text-base: var(--font-size-3xl);
+    --text-lg: var(--font-size-4xl);
 
-    /* 8px Spacing Scale */
-    --sp-1: 0.5rem;     /* 8px */
-    --sp-2: 1.0rem;     /* 16px */
-    --sp-3: 1.5rem;     /* 24px */
-    --sp-4: 2.0rem;     /* 32px */
-    --sp-6: 3.0rem;     /* 48px */
-    --sp-8: 4.0rem;     /* 64px */
-    --sp-10: 5.0rem;    /* 80px */
-    --sp-12: 6.0rem;    /* 96px */
+    /* ── Riitek Spacing Scale ────────────────────────────────────────────────── */
+    --space-1: 5px;
+    --space-2: 10px;
+    --space-3: 12px;
+    --space-4: 14px;
+    --space-5: 15.36px;
+    --space-6: 16px;
+    --space-7: 18px;
+    --space-8: 20px;
 
-    /* Layout & Radius */
-    --container-width: 1280px;
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
-    --radius-xl: 18px;
+    --sp-1: var(--space-1);
+    --sp-2: var(--space-2);
+    --sp-3: var(--space-3);
+    --sp-4: var(--space-4);
+    --sp-5: var(--space-5);
+    --sp-6: var(--space-6);
+    --sp-7: var(--space-7);
+    --sp-8: var(--space-8);
+
+    /* ── Riitek Radius Scale ─────────────────────────────────────────────────── */
+    --radius-xs: 13.48px;
+    --radius-sm: 20.2px;
+    --radius-md: 25px;
+    --radius-lg: 60px;
+    --radius-xl: 9999px;
     --radius-full: 9999px;
 
-    /* Elevation Shadows */
-    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.05);
-    --shadow-md: 0 10px 25px rgba(15, 23, 42, 0.08);
-    --shadow-lg: 0 20px 40px rgba(15, 23, 42, 0.12);
-    --shadow-glow-blue: 0 0 25px rgba(0, 102, 255, 0.35);
-    --shadow-glow-cyan: 0 0 20px rgba(0, 240, 255, 0.4);
+    --rounded-button: var(--radius-xl);
+    --rounded-card: var(--radius-md);
 
-    /* Motion */
-    --duration-fast: 150ms;
-    --duration-base: 250ms;
-    --duration-slow: 400ms;
-    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-    --transition: var(--duration-base) var(--ease-out);
+    /* ── Riitek Shadow & Motion Tokens ───────────────────────────────────────── */
+    --shadow-1: rgba(168, 232, 226, 0) 0px 0px 0px 0px;
+    --motion-duration-instant: 500ms;
+    --transition: var(--motion-duration-instant) cubic-bezier(0.16, 1, 0.3, 1);
+
+    --container-width: 1280px;
   }
 </style>

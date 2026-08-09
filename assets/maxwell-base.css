@@ -1,9 +1,9 @@
 /* =========================================================================
-   KIOSK INDIA — ULTRA MODERN HIGH-TECH INDUSTRIAL BASE STYLESHEET
-   B2B Engineering & Hardware Architecture
+   RIITEK THEME BASE STYLESHEET
+   Clean, Token-Driven E-Commerce Framework
    ========================================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -12,11 +12,12 @@
 }
 
 html {
-  font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.5;
-  color: var(--color-text);
-  background-color: var(--color-bg-page);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-base);
+  line-height: var(--font-lineHeight-base);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface-base);
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
@@ -27,7 +28,8 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  background-color: var(--color-bg-page);
+  background-color: var(--color-surface-base);
+  color: var(--color-text-secondary);
 }
 
 img, svg, video {
@@ -46,254 +48,145 @@ a {
   width: 100%;
   max-width: var(--container-width, 1280px);
   margin-inline: auto;
-  padding-inline: clamp(1rem, 4vw, 2.5rem);
+  padding-inline: var(--space-6);
 }
 
 #main-content {
   display: block;
   width: 100%;
-  background-color: var(--color-bg-page);
+  background-color: var(--color-surface-base);
 }
 
-/* ── High-Tech Section Base ──────────────────────────────────────────────── */
+/* ── Accessibility & Focus Visible ────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-text-inverse);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-text-inverse);
+  color: var(--color-text-primary);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  z-index: 9999;
+  font-weight: 700;
+  transition: top var(--motion-duration-instant) ease;
+}
+
+.skip-link:focus {
+  top: var(--space-2);
+}
+
+/* ── Section Layout ──────────────────────────────────────────────────────── */
 .section {
-  padding-block: clamp(3.5rem, 6vw, 6rem);
+  padding-block: var(--space-8);
   position: relative;
+  background-color: var(--color-surface-base);
 }
 
 .section--alt {
-  background-color: var(--color-bg-section, #F8FAFC);
+  background-color: var(--color-text-primary);
 }
 
-.section--dark {
-  background: radial-gradient(circle at 50% 0%, #0A192F 0%, #020C1B 100%);
-  color: var(--color-white);
-}
-
-/* ── High-Tech Eyebrow Badge ─────────────────────────────────────────────── */
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-blue-primary, #0066FF);
-  background: rgba(0, 102, 255, 0.08);
-  padding: 0.35rem 0.85rem;
-  border-radius: var(--radius-full);
-  border: 1px solid rgba(0, 102, 255, 0.25);
-  margin-bottom: var(--sp-2);
-}
-
-.eyebrow--cyan {
-  color: var(--color-cyan-glow, #00F0FF);
-  background: rgba(0, 240, 255, 0.1);
-  border-color: rgba(0, 240, 255, 0.3);
-}
-
-.eyebrow--orange {
-  color: var(--color-orange-accent, #FF6600);
-  background: rgba(255, 102, 0, 0.1);
-  border-color: rgba(255, 102, 0, 0.3);
-}
-
-/* ── Section Header Snippet Component ────────────────────────────────────── */
-.section-header {
-  margin-bottom: clamp(2.25rem, 4vw, 3.75rem);
-}
-
-.section-header--center {
-  text-align: center;
-}
-
-.section-header--center .section-header__subtitle {
-  margin-inline: auto;
-}
-
-.section-header__heading {
-  font-family: var(--font-heading);
-  font-size: clamp(1.85rem, 3.5vw, 2.75rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: var(--color-text-primary);
-  margin-bottom: 0.5rem;
-}
-
-.section-header--dark .section-header__heading {
-  color: var(--color-white);
-}
-
-.section-header__subtitle {
-  font-size: 1.05rem;
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-  max-width: 680px;
-}
-
-.section-header--dark .section-header__subtitle {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-/* ── Modern High-Tech Button System ───────────────────────────────────────── */
+/* ── Buttons (Riitek Token System) ────────────────────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 0.85rem 1.75rem;
-  font-size: 0.92rem;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-7);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-3xl);
   font-weight: 600;
-  letter-spacing: 0.02em;
-  border-radius: var(--radius-md, 10px);
-  border: 1.5px solid transparent;
+  border-radius: var(--radius-xl);
+  border: 1px solid transparent;
   cursor: pointer;
   white-space: nowrap;
   user-select: none;
-  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition);
+  transition: transform var(--transition), background-color var(--transition), border-color var(--transition), color var(--transition);
 }
 
 .btn:active {
-  transform: translateY(1px) scale(0.98);
+  transform: scale(0.98);
 }
 
 .btn--primary {
-  background: var(--color-blue-primary, #0066FF);
-  color: #FFFFFF;
-  border-color: var(--color-blue-primary, #0066FF);
-  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.35);
+  background-color: var(--color-text-inverse);
+  color: var(--color-text-primary);
+  border-color: var(--color-text-inverse);
 }
 
 .btn--primary:hover {
-  background: var(--color-blue-bright, #3385FF);
-  border-color: var(--color-blue-bright, #3385FF);
-  color: #FFFFFF;
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  color: var(--color-text-primary);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 102, 255, 0.45);
-}
-
-.btn--accent {
-  background: var(--color-orange-accent, #FF6600);
-  color: #FFFFFF;
-  border-color: var(--color-orange-accent, #FF6600);
-  box-shadow: 0 4px 14px rgba(255, 102, 0, 0.35);
-}
-
-.btn--accent:hover {
-  background: #E05500;
-  border-color: #E05500;
-  color: #FFFFFF;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 102, 0, 0.45);
 }
 
 .btn--secondary {
-  background-color: #FFFFFF;
-  color: var(--color-navy-primary, #0A192F);
-  border-color: var(--color-border, #E2E8F0);
-  box-shadow: var(--shadow-sm);
+  background-color: var(--color-text-primary);
+  color: var(--color-text-secondary);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .btn--secondary:hover {
-  background-color: #F8FAFC;
-  border-color: var(--color-navy-primary, #0A192F);
-  transform: translateY(-2px);
-}
-
-.btn--outline-light {
-  background: transparent;
-  color: #FFFFFF;
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.btn--outline-light:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #FFFFFF;
-  color: #FFFFFF;
+  background-color: #262626;
+  border-color: rgba(255, 255, 255, 0.4);
   transform: translateY(-2px);
 }
 
 .btn--sm {
-  padding: 0.55rem 1.15rem;
-  font-size: 0.82rem;
-  border-radius: var(--radius-sm, 6px);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-lg);
+  border-radius: var(--radius-sm);
 }
 
 .btn--lg {
-  padding: 1.05rem 2.25rem;
-  font-size: 1.0rem;
-  border-radius: var(--radius-md, 10px);
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-4xl);
+  border-radius: var(--radius-lg);
 }
 
-.btn__icon {
-  display: flex;
-  align-items: center;
-  transition: transform var(--transition);
-}
-
-.btn:hover .btn__icon {
-  transform: translateX(4px);
-}
-
-/* ── Unified Custom Card System ───────────────────────────────────────────── */
+/* ── Cards (Riitek Token System) ─────────────────────────────────────────── */
 .card-base,
 .product-card,
-.industry-card,
-.project-card,
-.feature-card,
-.blog-card {
-  background: #FFFFFF;
-  border: 1px solid var(--color-border, #E2E8F0);
-  border-radius: var(--radius-lg, 14px);
+.category-card {
+  background-color: var(--color-text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  transition: transform var(--transition), border-color var(--transition);
 }
 
 .card-base:hover,
 .product-card:hover,
-.industry-card:hover,
-.project-card:hover,
-.feature-card:hover,
-.blog-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--color-blue-primary, #0066FF);
-  box-shadow: var(--shadow-md);
+.category-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-text-inverse);
 }
 
-/* ── Floating WhatsApp Action Button ─────────────────────────────────────── */
+/* ── Floating WhatsApp Trigger ───────────────────────────────────────────── */
 .whatsapp-float {
   position: fixed;
-  bottom: clamp(1.25rem, 3vw, 2rem);
-  right: clamp(1.25rem, 3vw, 2rem);
+  bottom: var(--space-8);
+  right: var(--space-8);
   z-index: 500;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  width: 52px;
+  height: 52px;
+  background: #25D366;
   color: #FFFFFF !important;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-xl);
   box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
-  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+  transition: transform var(--transition);
 }
 
 .whatsapp-float:hover {
   transform: translateY(-4px) scale(1.08);
-  box-shadow: 0 16px 32px rgba(37, 211, 102, 0.55);
-}
-
-.whatsapp-float__icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.whatsapp-float__icon svg {
-  width: 28px;
-  height: 28px;
-  fill: currentColor;
 }
