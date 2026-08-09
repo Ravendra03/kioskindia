@@ -877,19 +877,19 @@
   },
   "order": [
     "hero",
-    "company-overview",
-    "product-categories",
-    "industries",
-    "featured-products",
-    "manufacturing-process",
-    "why-choose-us",
-    "projects",
     "clients",
-    "testimonials",
+    "product-categories",
+    "featured-products",
+    "company-overview",
+    "why-choose-us",
+    "industries",
+    "manufacturing-process",
+    "projects",
     "certifications",
+    "testimonials",
+    "latest-blogs",
     "faq",
     "contact-cta",
-    "latest-blogs",
     "google-map"
   ]
 }

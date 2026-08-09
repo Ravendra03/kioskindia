@@ -1,79 +1,77 @@
 {%- comment -%}
-  RIITEK DESIGN SYSTEM — EXACT SCREENSHOT COLOR TOKENS
-  Pixel-Perfect Match of riitek.in Screenshots
+  KIOSK INDIA DESIGN SYSTEM — CSS VARIABLES & TOKENS
+  Industrial B2B Theme Specification
   WCAG 2.2 AA Compliant
 {%- endcomment -%}
 
 <style>
   :root {
-    /* ── Riitek Core Palette (from Screenshots) ──────────────────────────── */
-    --color-orange-primary: #FF6B00;
-    --color-orange-hover: #E05D00;
-    --color-warm-beige: #F5EFEA;
-    --color-warm-beige-alt: #F0EAE1;
-    --color-charcoal-dark: #171717;
-    --color-sale-red: #E51D48;
-    --color-star-gold: #F59E0B;
+    /* ── Kiosk India Primary Palette (Industrial B2B) ──────────────────────── */
+    --color-navy-primary: #062B49;
+    --color-navy-deep: #031C2F;
+    --color-blue-primary: #0866D6;
+    --color-blue-bright: #147BEF;
+    --color-orange-accent: #F28C28;
     
     /* Concept & Standard Semantic Mappings */
-    --color-primary: #FF6B00;
-    --color-primary-dark: #E05D00;
-    --color-primary-light: #F5EFEA;
-    --color-secondary: #171717;
-    --color-secondary-hover: #000000;
-    --color-accent: #FF6B00;
-    --color-accent-hover: #E05D00;
-    --color-accent-light: rgba(255, 107, 0, 0.12);
+    --color-primary: #062B49;
+    --color-primary-dark: #031C2F;
+    --color-primary-light: #F7F9FB;
+    --color-secondary: #0866D6;
+    --color-secondary-hover: #147BEF;
+    --color-accent: #F28C28;
+    --color-accent-hover: #E07B17;
+    --color-accent-light: rgba(242, 140, 40, 0.12);
     --color-surface-base: #FFFFFF;
 
     /* RGB Triplets for Concept Theme Compatibility */
-    --color-base-text: 23 23 23;
-    --color-base-highlight: 245 239 234;
+    --color-base-text: 16 32 47;
+    --color-base-highlight: 238 242 245;
     --color-base-background: 255 255 255;
-    --color-base-button: 255 107 0;
-    --color-base-button-gradient: #FF6B00;
+    --color-base-button: 8 102 214;
+    --color-base-button-gradient: #0866D6;
     --color-base-button-text: 255 255 255;
-    --color-keyboard-focus: 255 107 0;
-    --color-shadow: 23 23 23;
-    --color-price: 23 23 23;
-    --color-sale-price: 229 29 72;
-    --color-sale-tag: 229 29 72;
+    --color-keyboard-focus: 8 102 214;
+    --color-shadow: 6 43 73;
+    --color-price: 16 32 47;
+    --color-sale-price: 220 53 69;
+    --color-sale-tag: 220 53 69;
     --color-sale-tag-text: 255 255 255;
     --color-rating: 245 158 11;
-    --color-placeholder: 245 239 234;
+    --color-placeholder: 247 249 251;
     --color-success-text: 25 135 84;
     --color-success-background: 235 247 239;
-    --color-error-text: 229 29 72;
+    --color-error-text: 220 53 69;
     --color-error-background: 253 237 239;
-    --color-info-text: 255 107 0;
-    --color-info-background: 255 245 238;
+    --color-info-text: 8 102 214;
+    --color-info-background: 236 244 254;
 
     /* Surface & Background Systems */
     --color-bg-page: #FFFFFF;
-    --color-bg-section: #F5EFEA;
-    --color-bg-alt: #F0EAE1;
-    --color-bg-dark: #171717;
-    --color-bg-dark-alt: #000000;
+    --color-bg-section: #F7F9FB;
+    --color-bg-alt: #EEF2F5;
+    --color-bg-dark: #062B49;
+    --color-bg-dark-alt: #031C2F;
 
     /* Text & Content Tokens */
-    --color-text: #171717;
-    --color-text-primary: #171717;
-    --color-text-secondary: #666666;
+    --color-text: #10202F;
+    --color-text-primary: #10202F;
+    --color-text-secondary: #5E6B76;
     --color-text-muted: #7C8791;
     --color-text-inverse: #FFFFFF;
-    --color-text-light: #F5EFEA;
+    --color-text-light: #F7F9FB;
     --color-white: #FFFFFF;
     
     /* Border & Divider Tokens */
-    --color-border: #E8E2DC;
-    --color-border-light: #F5EFEA;
+    --color-border: #DDE4EA;
+    --color-border-light: #EEF2F5;
     --color-border-dark: rgba(255, 255, 255, 0.15);
-    --color-steel-light: #F5EFEA;
+    --color-steel-light: #EEF2F5;
 
     /* Alert / Feedback Tokens */
     --color-success: #198754;
     --color-warning: #F59E0B;
-    --color-error: #E51D48;
+    --color-error: #DC3545;
 
     /* ── Typography Foundations ────────────────────────────────────────────── */
     --font-heading: Inter, sans-serif;
@@ -91,15 +89,15 @@
     --font-body-letter-spacing: 0.0em;
 
     --font-navigation-family: var(--font-body-family);
-    --font-navigation-size: 0.9375rem;
+    --font-navigation-size: 0.9375rem; /* 15px */
     --font-navigation-weight: 500;
 
     --font-button-family: var(--font-body-family);
-    --font-button-size: 0.9375rem;
+    --font-button-size: 0.9375rem; /* 15px */
     --font-button-weight: 600;
 
     --font-product-family: var(--font-body-family);
-    --font-product-size: 1.125rem;
+    --font-product-size: 1.125rem; /* 18px */
     --font-product-weight: 700;
 
     --font-weight-normal: 400;
@@ -109,18 +107,18 @@
     --font-weight-extrabold: 800;
 
     /* Disciplined Typography Scale */
-    --text-caption: 0.75rem;
-    --text-xs: 0.75rem;
-    --text-sm: 0.875rem;
-    --text-base: 1.0rem;
-    --text-md: 1.125rem;
-    --text-lg: 1.25rem;
-    --text-xl: 1.375rem;
-    --text-2xl: 1.5rem;
-    --text-3xl: 1.875rem;
-    --text-4xl: 2.375rem;
-    --text-5xl: 3.125rem;
-    --text-6xl: 3.75rem;
+    --text-caption: 0.75rem;    /* 12px */
+    --text-xs: 0.75rem;         /* 12px */
+    --text-sm: 0.875rem;        /* 14px */
+    --text-base: 1.0rem;        /* 16px */
+    --text-md: 1.125rem;        /* 18px */
+    --text-lg: 1.25rem;         /* 20px */
+    --text-xl: 1.375rem;        /* 22px */
+    --text-2xl: 1.5rem;         /* 24px - H4 */
+    --text-3xl: 1.875rem;       /* 30px - H3 */
+    --text-4xl: 2.375rem;       /* 38px - H2 */
+    --text-5xl: 3.125rem;       /* 50px - H1 */
+    --text-6xl: 3.75rem;        /* 60px - Display */
 
     --leading-tight: 1.15;
     --leading-normal: 1.4;
@@ -131,28 +129,29 @@
     --tracking-wide: 0.025em;
     --tracking-wider: 0.05em;
 
-    /* ── Spacing Scale ─────────────────────────────────────────────────────── */
-    --sp-1: 0.5rem;
-    --sp-2: 1.0rem;
-    --sp-3: 1.5rem;
-    --sp-4: 2.0rem;
-    --sp-5: 2.5rem;
-    --sp-6: 3.0rem;
-    --sp-8: 4.0rem;
-    --sp-10: 5.0rem;
-    --sp-12: 6.0rem;
-    --sp-15: 7.5rem;
+    /* ── 8px Grid Spacing Scale ────────────────────────────────────────────── */
+    --sp-1: 0.5rem;     /* 8px */
+    --sp-2: 1.0rem;     /* 16px */
+    --sp-3: 1.5rem;     /* 24px */
+    --sp-4: 2.0rem;     /* 32px */
+    --sp-5: 2.5rem;     /* 40px */
+    --sp-6: 3.0rem;     /* 48px */
+    --sp-8: 4.0rem;     /* 64px */
+    --sp-10: 5.0rem;    /* 80px */
+    --sp-12: 6.0rem;    /* 96px */
+    --sp-15: 7.5rem;    /* 120px */
 
-    --space-1: 0.5rem;
-    --space-2: 1.0rem;
-    --space-3: 1.5rem;
-    --space-4: 2.0rem;
-    --space-5: 2.5rem;
-    --space-6: 3.0rem;
-    --space-8: 4.0rem;
-    --space-10: 5.0rem;
-    --space-12: 6.0rem;
-    --space-16: 7.5rem;
+    /* Legacy Spacing Mappings */
+    --space-1: 0.5rem;  /* 8px */
+    --space-2: 1.0rem;  /* 16px */
+    --space-3: 1.5rem;  /* 24px */
+    --space-4: 2.0rem;  /* 32px */
+    --space-5: 2.5rem;  /* 40px */
+    --space-6: 3.0rem;  /* 48px */
+    --space-8: 4.0rem;  /* 64px */
+    --space-10: 5.0rem; /* 80px */
+    --space-12: 6.0rem; /* 96px */
+    --space-16: 7.5rem; /* 120px */
 
     /* ── Layout & Container Widths ────────────────────────────────────────── */
     --page-width: 1280px;
@@ -160,25 +159,25 @@
     --container-padding: clamp(1rem, 4vw, 3rem);
     --page-padding: clamp(1rem, 4vw, 3rem);
 
-    /* ── Border Radius System (Riitek Pill & Rounded Cards) ──────────────── */
-    --radius-xs: 8px;
-    --radius-sm: 12px;
-    --radius-md: 16px;
-    --radius-lg: 20px;
-    --radius-xl: 24px;
-    --radius-full: 50px;
+    /* ── Border Radius System (Structured Industrial) ─────────────────────── */
+    --radius-xs: 4px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-full: 9999px;
 
-    --rounded-button: 50px;
+    --rounded-button: 8px;
     --rounded-input: 8px;
-    --rounded-card: 24px;
-    --rounded-block: 24px;
+    --rounded-card: 16px;
+    --rounded-block: 16px;
 
-    /* ── Elevation & Shadows ──────────────────────────────────────────────── */
-    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.04);
-    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.07);
-    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.14);
-    --shadow-glow: 0 0 20px rgba(255, 107, 0, 0.35);
+    /* ── Elevation & Shadows (Subtle, Refined) ────────────────────────────── */
+    --shadow-sm: 0 2px 10px rgba(6, 43, 73, 0.04);
+    --shadow-md: 0 8px 24px rgba(6, 43, 73, 0.07);
+    --shadow-lg: 0 12px 32px rgba(6, 43, 73, 0.1);
+    --shadow-xl: 0 20px 40px rgba(6, 43, 73, 0.14);
+    --shadow-glow: 0 0 20px rgba(242, 140, 40, 0.3);
 
     /* ── Motion & Transitions ────────────────────────────────────────────── */
     --duration-fast: 150ms;
