@@ -9,14 +9,6 @@
  */
 {
   "sections": {
-    "product-categories": {
-      "type": "product-categories",
-      "settings": {
-        "eyebrow": "Categories",
-        "heading": "Shop by Category",
-        "subtitle": "Explore our product collections."
-      }
-    },
     "featured-products": {
       "type": "featured-products",
       "settings": {
@@ -27,7 +19,6 @@
     }
   },
   "order": [
-    "product-categories",
     "featured-products"
   ]
 }
