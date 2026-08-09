@@ -101,53 +101,112 @@
         {%- endif -%}
       </div>
 
-      {%- comment -%} Right Column: Floating Stats Card {%- endcomment -%}
-      {%- if stat_blocks.size > 0 -%}
-        <div class="hero__stats-col" data-animate="fade-left" data-delay="300">
-          <div class="hero__stats-card">
+      {%- comment -%} Right Column: Product Hero Stage Card {%- endcomment -%}
+      <div class="hero__product-col" data-animate="fade-left" data-delay="300">
+        <div class="product-hero-card">
+          <div class="product-hero-card__badge-wrap">
+            <span class="product-hero-card__tag">Flagship Hardware</span>
+            <span class="product-hero-card__rating">
+              <span class="star">★</span> 4.9 (120+ B2B Deployments)
+            </span>
+          </div>
 
-            <div class="hero__stats-card-header">
-              <div class="hero__stats-card-icon" aria-hidden="true">
-                {% render 'icon', name: 'award', size: 24 %}
+          <div class="product-hero-card__stage">
+            {%- if section.settings.product_image != blank -%}
+              {{
+                section.settings.product_image
+                | image_url: width: 800
+                | image_tag:
+                  class: 'product-hero-card__image',
+                  alt: section.settings.product_title | default: 'Interactive Kiosk Pro',
+                  loading: 'eager',
+                  fetchpriority: 'high',
+                  width: 800
+              }}
+            {%- else -%}
+              <div class="product-hero-card__placeholder">
+                <svg width="120" height="180" viewBox="0 0 120 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="10" y="10" width="100" height="160" rx="12" fill="#062B49" stroke="#0866D6" stroke-width="3"/>
+                  <rect x="20" y="25" width="80" height="110" rx="6" fill="#031C2F" stroke="rgba(255,255,255,0.2)"/>
+                  <circle cx="60" cy="152" r="6" fill="#F28C28"/>
+                  <path d="M35 55L85 55M35 75L70 75M35 95L60 95" stroke="#0866D6" stroke-width="3" stroke-linecap="round"/>
+                </svg>
               </div>
-              <div class="hero__stats-card-meta">
-                <span class="hero__stats-card-label">{{ section.settings.stats_card_label | default: 'Our Achievements' }}</span>
-                <span class="hero__stats-card-sub">Industrial Hardware Manufacturing</span>
-              </div>
-            </div>
-
-            <div class="hero__stats-grid">
-              {%- for block in stat_blocks -%}
-                <div class="hero__stat" {{ block.shopify_attributes }}>
-                  <span
-                    class="hero__stat-number"
-                    data-counter="{{ block.settings.number }}"
-                    data-suffix="{{ block.settings.suffix }}"
-                  >
-                    0
-                  </span>
-                  <span class="hero__stat-label">{{ block.settings.label }}</span>
-                </div>
-              {%- endfor -%}
-            </div>
-
-            {%- if section.settings.stats_cta_text != blank -%}
-              <a
-                href="{{ section.settings.stats_cta_url | default: '/pages/about' }}"
-                class="hero__stats-cta"
-              >
-                <span>{{ section.settings.stats_cta_text }}</span>
-                {% render 'icon', name: 'arrow-right', size: 16 %}
-              </a>
             {%- endif -%}
 
+            <div class="product-hero-card__floating-spec">
+              <span class="spec-icon">⚡</span>
+              <span>IP65 Weatherproof Steel</span>
+            </div>
           </div>
+
+          <div class="product-hero-card__body">
+            <h3 class="product-hero-card__title">
+              {{ section.settings.product_title | default: 'Interactive Touch Kiosk Pro 55"' }}
+            </h3>
+            <p class="product-hero-card__desc">
+              Custom dual-screen self-service terminal with thermal printer, POS reader, and scanner.
+            </p>
+
+            <div class="product-hero-card__specs-row">
+              <span class="tech-spec-pill">55" 4K Capacitive</span>
+              <span class="tech-spec-pill">Heavy Sheet Metal</span>
+              <span class="tech-spec-pill">Windows / Android</span>
+            </div>
+
+            <a
+              href="{{ section.settings.product_cta_url | default: '/collections/all' }}"
+              class="btn btn--primary btn--sm product-hero-card__cta"
+            >
+              {{ section.settings.product_cta_text | default: 'View Product Specifications' }}
+              {% render 'icon', name: 'arrow-right', size: 16 %}
+            </a>
+          </div>
+
         </div>
-      {%- endif -%}
+      </div>
 
     </div>
   </div>
 
+  {%- comment -%} Product Lines Quick-Switch Strip ───────────────────────────────── {%- endcomment -%}
+  <div class="hero__product-strip" data-animate="fade-up" data-delay="500">
+    <div class="container">
+      <div class="product-strip__grid">
+        <a href="/collections/interactive-kiosks" class="product-strip__item">
+          <div class="product-strip__icon">{% render 'icon', name: 'monitor', size: 20 %}</div>
+          <div class="product-strip__meta">
+            <span class="product-strip__title">Interactive Kiosks</span>
+            <span class="product-strip__sub">Self-Service & Payment</span>
+          </div>
+        </a>
+
+        <a href="/collections/digital-signages" class="product-strip__item">
+          <div class="product-strip__icon">{% render 'icon', name: 'grid', size: 20 %}</div>
+          <div class="product-strip__meta">
+            <span class="product-strip__title">Digital Signages</span>
+            <span class="product-strip__sub">Indoor & Outdoor Totems</span>
+          </div>
+        </a>
+
+        <a href="/collections/ip65-enclosures" class="product-strip__item">
+          <div class="product-strip__icon">{% render 'icon', name: 'shield', size: 20 %}</div>
+          <div class="product-strip__meta">
+            <span class="product-strip__title">IP65 Enclosures</span>
+            <span class="product-strip__sub">Weatherproof Metal</span>
+          </div>
+        </a>
+
+        <a href="/collections/smart-lockers" class="product-strip__item">
+          <div class="product-strip__icon">{% render 'icon', name: 'package', size: 20 %}</div>
+          <div class="product-strip__meta">
+            <span class="product-strip__title">Smart Lockers</span>
+            <span class="product-strip__sub">Automated Storage</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
 
 </section>
 
@@ -262,23 +321,196 @@
     color: var(--color-accent);
   }
 
-  /* Right Stats Card */
-  .hero__stats-col {
+  /* Product Hero Stage Styling */
+  .hero__product-col {
     display: flex;
     justify-content: flex-end;
-    align-self: flex-start;
   }
 
-  .hero__stats-card {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: var(--radius-xl);
-    padding: var(--space-4) var(--space-5);
+  .product-hero-card {
+    background: #FFFFFF;
+    border-radius: var(--radius-xl, 20px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: var(--space-4);
     width: 100%;
-    max-width: 350px;
-    box-shadow: var(--shadow-xl);
+    max-width: 420px;
+    box-shadow: 0 20px 40px rgba(3, 28, 47, 0.4);
+    color: var(--color-text-primary, #10202F);
+    position: relative;
+  }
+
+  .product-hero-card__badge-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-3);
+  }
+
+  .product-hero-card__tag {
+    font-size: 0.7rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    background-color: rgba(8, 102, 214, 0.1);
+    color: var(--color-blue-primary, #0866D6);
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-full);
+  }
+
+  .product-hero-card__rating {
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+  }
+
+  .product-hero-card__rating .star {
+    color: #F59E0B;
+  }
+
+  .product-hero-card__stage {
+    position: relative;
+    background: radial-gradient(circle at 50% 50%, #F7F9FB 0%, #EEF2F5 100%);
+    border-radius: var(--radius-lg, 16px);
+    padding: var(--space-4);
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-3);
+    border: 1px solid var(--color-border, #DDE4EA);
+    overflow: hidden;
+  }
+
+  .product-hero-card__image {
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform var(--duration-slow) var(--ease-out);
+  }
+
+  .product-hero-card:hover .product-hero-card__image {
+    transform: scale(1.05);
+  }
+
+  .product-hero-card__floating-spec {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(6, 43, 73, 0.9);
+    color: #FFFFFF;
+    font-size: 0.7rem;
+    font-weight: var(--font-weight-semibold);
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    backdrop-filter: blur(8px);
+  }
+
+  .product-hero-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .product-hero-card__title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--color-text-primary);
+    line-height: 1.25;
+  }
+
+  .product-hero-card__desc {
+    font-size: 0.82rem;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+  }
+
+  .product-hero-card__specs-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-block: 4px;
+  }
+
+  .product-hero-card__cta {
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  /* Product Strip Below Hero */
+  .hero__product-strip {
+    margin-top: var(--space-8);
+    padding-top: var(--space-5);
+    padding-bottom: var(--space-5);
+    background: rgba(3, 28, 47, 0.7);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .product-strip__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+  }
+
+  .product-strip__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md, 12px);
+    color: #FFFFFF;
+    transition: transform var(--transition), background-color var(--transition), border-color var(--transition);
+  }
+
+  .product-strip__item:hover {
+    background: rgba(8, 102, 214, 0.2);
+    border-color: var(--color-blue-primary, #0866D6);
+    transform: translateY(-2px);
+  }
+
+  .product-strip__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    background: var(--color-blue-primary, #0866D6);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .product-strip__meta {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-strip__title {
+    font-size: 0.88rem;
+    font-weight: var(--font-weight-bold);
+    color: #FFFFFF;
+    line-height: 1.2;
+  }
+
+  .product-strip__sub {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  @media (max-width: 991px) {
+    .product-strip__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 575px) {
+    .product-strip__grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   .hero__stats-card-header {
